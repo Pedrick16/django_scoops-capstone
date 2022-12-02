@@ -1,0 +1,12 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+   <!-- {{ user }}  -->
+   {% if user.is_authenticated %}
+     <p>welcome {{ user }}</p> 
+   {% else %} 
+     <label>Wecome Guest</label> 
+   {% endif %}
+{% endblock content %}
+    

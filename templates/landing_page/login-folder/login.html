@@ -1,0 +1,33 @@
+{%  extends 'landing_page/base.html' %} 
+
+<style>
+   body{
+      height: 100vh;
+   }
+</style>
+{% block content %}
+<!-- <div class=" justify-content-center"> -->
+   <h1 class="text-center">Welcome To Login</h1>
+   <form action="{% url 'landing_page:login' %}" method="POST">
+      {% csrf_token %}
+
+      {% for messsage in messages  %}
+      <p class='alert alert-success mt-3'>{{messsage}}</p>
+      {% endfor %}
+       
+     
+    <label for="">Username</label>
+    <input type="text" name="username" class="form-control" placeholder="Enter your Username">
+    <br>
+
+    <label for="">Password</label>
+    <input type="password" name="password" class="form-control" placeholder="Enter your Password">
+    <br>
+
+  
+    <button type="submit" name="submit"class="btn btn-dark">Login</button>
+    <br>
+   </form>
+<!-- </div> -->
+{% endblock content %}
+    

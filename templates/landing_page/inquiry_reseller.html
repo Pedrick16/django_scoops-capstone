@@ -1,0 +1,53 @@
+{%  extends 'landing_page/base.html' %} 
+
+        {% block content%}
+        <form action="{% url 'admin_site:process_inquiry' %}" method="POST"  class="text-center">
+            {% csrf_token %}
+
+            <h1 >Inquiry form</h1>
+                
+                {% for messsage in messages  %}
+                <p class='alert alert-success mt-3'>{{messsage}}</p>
+                {% endfor %}
+                
+        
+        
+            <input type="text"class="form-control" name="fname" placeholder="Enter your Name" required>
+            <br>
+        
+            <input type="text" class="form-control" name="mname" placeholder="Enter your Middle Name" required>
+            <br>
+        
+            <input type="text"class="form-control" name="lname"  placeholder="Enter your Last Name" required>
+            <br>
+        
+            <select name="gender" class="form-control" id="gender" required>
+                <option></option>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+            </select>
+            <br>
+        
+            <input type="text" class="form-control" name="cnum" placeholder="Enter your Number" required>
+             
+            <br>
+            <textarea name="address" class="form-control" placeholder="Enter your address" required></textarea>
+            <br>
+    
+            <input type="email" class="form-control"name="email" placeholder="Enter your Email" required>
+            <br>
+    
+            <input type="File" class="form-control" name="valid-ID" accept=".jpg, .jpeg, .png" required>
+            <br>
+            <button class="btn btn-primary"  type="submit" name="submit" >Submit</button>
+            </form>
+            <br>
+            
+
+{% endblock %}
+            
+         
+     
+         
+     
+              

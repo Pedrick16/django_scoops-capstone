@@ -1,0 +1,43 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+
+
+    {% if list_inquiry %}
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+                <th>First Name</th>
+                <th>Middle Name</th>
+                <th>Last Name</th>
+                <th>Gender</th>
+                <th>Contact No</th>
+                <th>Address</th>
+                <th>Email</th>
+                <th>Valid ID</th>
+                <th>Status</th>
+                <th>action</th>
+            </tr>
+            <tbody>
+                
+                {% for list in list_inquiry %}
+                <tr>
+                    <td>{{ list.reseller_fname }}</td>
+                    <td>{{ list.reseller_mname }}</td>
+                    <td>{{ list.reseller_lname }}</td>
+                    <td>{{ list.reseller_gender }}</td>
+                    <td>{{ list.reseller_contact }}</td>
+                    <td>{{ list.reseller_address }}</td>
+                    <td>{{ list.reseller_email }}</td>
+                    <td><img src="/media/image_path/dog.jpg" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                    <td>{{ list.reseller_status }}</td>
+                    <td><input type="button" name="submit" class="btn btn-dark" value="Approved"></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+    {% endif %}
+{% endblock content %}
+
+    
