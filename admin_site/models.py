@@ -51,3 +51,16 @@ class Product(models.Model):
     product_stock =  models.CharField(max_length=200, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
     product_expiry =  models.DateField( null=True, default=timezone.now, verbose_name='Expiry Date')
+
+class Pos(models.Model):
+    pos_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
+    pos_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
+    pos_category =  models.CharField(max_length=200, verbose_name='Category')
+    pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
+    pos_size =  models.CharField(max_length=200, verbose_name='Size')
+    pos_price =  models.CharField(max_length=200, verbose_name='Price')
+    pos_amount =  models.IntegerField(verbose_name='Amount')
+
+
+    
+

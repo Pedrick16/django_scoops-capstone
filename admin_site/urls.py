@@ -22,6 +22,9 @@ urlpatterns = [
     path('inventory/', views.inventory, name='inventory'),
     path('process-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
 
+    path('pos/', views.pos ,name='pos'),
+    path('pos/all-products/', views.all_products ,name='all_products'),
+
 
     
 

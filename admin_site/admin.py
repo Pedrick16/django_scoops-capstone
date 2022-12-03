@@ -8,5 +8,13 @@ class ResellerAdminView(admin.ModelAdmin):
 class ProductAdminView(admin.ModelAdmin):
     list_display = ['product_code', 'product_category', 'product_name', 'product_size','product_price','product_stock','product_status','product_expiry']
     search_fields = ['product_code', 'product_category', 'product_name', 'product_size','product_price','product_stock','product_status','product_expiry']
+
+class PosAdminView(admin.ModelAdmin):
+    list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_amount']
+    search_fields = ['pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_amount']
+
+
+
 admin.site.register(Reseller, ResellerAdminView),
 admin.site.register(Product, ProductAdminView),
+admin.site.register(Pos, PosAdminView),

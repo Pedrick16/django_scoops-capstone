@@ -116,6 +116,17 @@ def update_inventory(request, productid):
         messages.info(request,("Successfully Updated"))
     return redirect('admin_site:inventory')  
 
+def pos(request):
+    list_pos = Pos.objects.order_by('-id')
+    context = {'list_pos':list_pos}
+    return render(request, 'admin_site/pos/pos_admin.html', context)
+
+#all products for pos
+def all_products(request):
+    list_products = Product.objects.order_by('-id')
+    context = {'list_products':list_products}
+    return render(request, 'admin_site/pos/all-products.html', context)  
+
 # def register(request):
 #     return render(request,'admin_site/user/register_user.html')
 
