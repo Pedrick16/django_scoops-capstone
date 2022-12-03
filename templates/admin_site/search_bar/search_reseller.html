@@ -1,0 +1,65 @@
+{% extends 'admin_site/base.html' %}
+
+
+
+{% block content %}
+<form action="{% url 'admin_site:search_reseller' %}" method="get" class="my-2">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="search" required>
+        <div class="input-group-append">
+            <button class="btn btn-success">Search</button>
+        </div>
+    </div>
+
+</form>
+
+<h2>Search Results:</h2>
+
+{% for message in  messages %}
+<p class="alert alert-success mt-3"> {{ message }}</p>
+{% endfor %}
+    
+
+
+{% if list_reseller %}   
+<table class="table table-hover text-center">
+    <thead>
+        <tr>
+            <th>First Name</th>
+            <th>Middle Name</th>
+            <th>Last Name</th>
+            <th>Gender</th>
+            <th>Contact No</th>
+            <th>Address</th>
+            <th>Email</th>
+            <th>Valid ID</th>
+            <th>Status</th>
+            <th>action</th>
+        </tr>
+        <tbody>
+            
+            {% for list in list_reseller %}
+            <tr>
+                <td>{{ list.reseller_fname }}</td>
+                <td>{{ list.reseller_mname }}</td>
+                <td>{{ list.reseller_lname }}</td>
+                <td>{{ list.reseller_gender }}</td>
+                <td>{{ list.reseller_contact }}</td>
+                <td>{{ list.reseller_address }}</td>
+                <td>{{ list.reseller_email }}</td>
+                <td><img src="/media/image_path/dog.jpg" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                <td>{{ list.reseller_status }}</td>
+                <td><a href="{% url 'admin_site:archive_reseller'  list.id %}" class="btn btn-danger">Archive</a></td>
+            </tr>
+            {% endfor %}
+    
+        </tbody>
+    </thead>
+</table>
+{% endif %}
+
+{% endblock content %}
+
+    
+    

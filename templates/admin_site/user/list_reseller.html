@@ -2,6 +2,23 @@
 
 {% block content %}
 
+{% for messsage in messages  %}
+<p class='alert alert-success mt-3'>{{messsage}}</p>
+{% endfor %}
+
+<form action="{% url 'admin_site:search_reseller' %}" method="get" class="my-2">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="search" required>
+        <div class="input-group-append">
+            <button class="btn btn-success">Search</button>
+        </div>
+    </div>
+
+</form>
+
+    
+
 
     {% if list_reseller %}
     <table class="table table-hover text-center">
@@ -31,7 +48,7 @@
                     <td>{{ list.reseller_email }}</td>
                     <td><img src="/media/image_path/dog.jpg" alt="Valid-ID" width="50" class="rounded-circle"></td>
                     <td>{{ list.reseller_status }}</td>
-                    <td><input type="button" name="submit" class="btn btn-dark" value="Archived"></td>
+                    <td><a href="{% url 'admin_site:archive_reseller'  list.id %}" class="btn btn-danger">Archive</a></td>
                 </tr>
                 {% endfor %}
             </tbody>

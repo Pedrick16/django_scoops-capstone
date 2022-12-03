@@ -8,6 +8,7 @@ now = timezone.now()
 # Create your models here.
 
 
+
 def image_path(instance, filename):
     basefilename, file_extension = os.path.splitext(filename)
     chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890'
@@ -38,3 +39,15 @@ class Reseller(models.Model):
     def __str__(self):
         return self.reseller_email
 
+
+
+class Product(models.Model):
+    STATUS = (("available","available"),("n/a","n/a"))
+    product_code =  models.CharField(unique=True, max_length=200, verbose_name='Product Code')
+    product_category =  models.CharField(max_length=200, verbose_name='Category')
+    product_name=  models.CharField(max_length=200, verbose_name='Product Name')
+    product_size =  models.CharField(max_length=200, verbose_name='Size')
+    product_price =  models.CharField(max_length=200, verbose_name='Price')
+    product_stock =  models.CharField(max_length=200, verbose_name='Available Stock')
+    product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
+    product_expiry =  models.DateField( null=True, default=timezone.now, verbose_name='Expiry Date')

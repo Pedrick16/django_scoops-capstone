@@ -31,7 +31,7 @@
                     <td>{{ list.reseller_email }}</td>
                     <td><img src="/media/image_path/dog.jpg" alt="Valid-ID" width="50" class="rounded-circle"></td>
                     <td>{{ list.reseller_status }}</td>
-                    <td><input type="button" name="submit" class="btn btn-dark" value="Approved"></td>
+                    <td><a href="{% url 'landing_page:register_user' %}" class="btn btn-dark">Approved</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
