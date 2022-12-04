@@ -4,12 +4,33 @@
 {% block content %}
     <br>
     <a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
+    <br>
+    <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
+        {% csrf_token %}
+        <div class="input-group">
+            <input type="text" class="form-control" name="search" placeholder="search" required>
+            <div class="input-group-append">
+                <button class="btn btn-success">Search</button>
+            </div>
+        </div>
+    </form>
     
+    
+    {% for message in messages %}
+    <p class="alert alert-success mt-3">{{ message }}</p>
+    {% endfor %}
+        
+        
+    
+  
+    {% if list_pos %}
+
     <table class="table table-hover text-center">
         <thead>
             <tr>
                 <th>Product ID</th>
-                <th>Description</th>
+                <th>Category</th>
+                <th>Product Name</th>
                 <th>Size</th>
                 <th>Price</th>
                 <th>Quantity</th>
@@ -17,17 +38,53 @@
                 <th>action</th>
             </tr>
             <tbody>
+                
+                {% for list in  list_pos %}       
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td><button class="btn btn-dark">Cancel</button></td>
+                    <td>{{ list.pos_pcode }}</td>
+                    <td>{{ list.pos_category }}</td>
+                    <td>{{ list.pos_name }}</td>
+                    <td>{{ list.pos_size }}</td>
+                    <td>{{ list.pos_price }}</td>
+                    <td>{{ list.pos_quantity }}</td>
+                    <td>{{ list.pos_amount }}</td>
+
+                    <form action="{% url 'admin_site:pos_cancel' list.id %}" method="POST">
+                         {% csrf_token %}
+                         <td><button class="btn btn-dark" name="cancel" type="submit">Cancel</button></td>
+                    </form>
+
                 </tr>
+                {% endfor %}
             </tbody>
         </thead>
     </table>
+    {% endif %}
+    <br>
+
+    <form action="{% url 'admin_site:pos_compute' %}" method="POST">
+        {% csrf_token %}
+        
+        <label for="">Total Amount:</label>
+        <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
+        <input type="text" name="total" value="50" class="form-control" >
+        <label for="">Cash</label>
+        <input type="text" name="cash" class="form-control">
+         <br>
+
+         
+         {% for message in messages %}
+            <p class="alert alert-danger">{{ message }}</p>
+         {% endfor %}
+            
+      
+         <label for="">Change</label>
+         <p>{{ total_change }}</p>
+        <input type="submit" class="btn btn-success " name="submit">
+        <br>
+
+    </form>
+    
+   
 {% endblock content %}
     

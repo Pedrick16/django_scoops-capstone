@@ -12,6 +12,11 @@
     </div>
 </form>
 
+{% for messsage in messages  %}
+<p class='alert alert-success mt-3'>{{messsage}}</p>
+{% endfor %}
+    
+
 {% if list_products %}     
 <table class="table table-hover text-center">
     
@@ -43,10 +48,16 @@
         <td>{{ list.product_status }}</td>
         <td>{{ list.product_expiry }}</td>
 
-        <form action="" method="POST">
+        <form action="{% url 'admin_site:cart_products' list.id %}" method="POST">
             {% csrf_token %}
-        <td><input type="text" style="text-align:right;" placeholder="0" required></td>
+        <td><input type="text"name="quantity" style="text-align:right;" placeholder="0" required></td>
         <td><button class="btn btn-dark" type="submit" name="cart">Cart</button></td>
+        <input type="hidden" name="stock" value="{{ list.product_stock }}">
+        <input type="hidden" name="product_code" value="{{ list.product_code }}">
+        <input type="hidden" name="product_category" value="{{ list.product_category }}">
+        <input type="hidden" name="product_name" value="{{ list.product_name}}">
+        <input type="hidden" name="product_size" value="{{ list.product_size }}">
+        <input type="hidden" name="product_price" value="{{ list.product_price }}">
         </form>
        
     </tr>

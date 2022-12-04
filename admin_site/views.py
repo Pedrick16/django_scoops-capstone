@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Q
+from django.db.models import Sum
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -117,15 +117,70 @@ def update_inventory(request, productid):
     return redirect('admin_site:inventory')  
 
 def pos(request):
-    list_pos = Pos.objects.order_by('-id')
-    context = {'list_pos':list_pos}
+    current_user = request.user
+    list_pos = Pos.objects.order_by('-id').filter(pos_user = current_user)
+    sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))
+    context = {
+        'list_pos':list_pos,
+        'sum_amount':sum_amount
+        }
     return render(request, 'admin_site/pos/pos_admin.html', context)
+
+def pos_cancel(request,productid):
+    cancel = Pos.objects.get(id =productid)
+    cancel.delete()
+    messages.success(request,("Successfully cancelled"))
+    return redirect('admin_site:pos')
+
+
+# def pos_compute(request):
+#     if request.method == "POST":
+#         total_amount = int(request.POST['total'])
+#         cash = int(request.POST['cash'])
+
+           
+#         if cash < total_amount:
+#              messages.success(request,("Invalid Payment"))
+#         else:
+#             c = total_amount - cash
+#             render(request,' admin_site/pos/pos_admin.html', {'c':c})      
+         
+#     return render(request,' admin_site/pos/pos_admin.html', {'c':c})        
 
 #all products for pos
 def all_products(request):
     list_products = Product.objects.order_by('-id')
     context = {'list_products':list_products}
-    return render(request, 'admin_site/pos/all-products.html', context)  
+    return render(request, 'admin_site/pos/all-products.html', context)
+
+def cart_products(request, productid):
+    if request.method =="POST":
+        # coming from  input type
+        product = Product.objects.get(id = productid)
+        qty = int(request.POST['quantity'])
+        p_stock = int(request.POST['stock'])
+        pcode = request.POST['product_code']
+        p_price = int(request.POST['product_price'])
+        p_size = request.POST['product_size']
+        p_category = request.POST['product_category']
+        p_name = request.POST['product_name']
+         
+        # session,  getting  user name
+        current_user = request.user
+        
+        # minus or adding to the stock
+        diff = p_stock -  qty 
+        amount_cart = p_price * qty
+
+        #updating product stock
+        product.product_stock = diff
+        product.save()
+
+        #inserting product in pos table
+        pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_size= p_size, pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart)
+        pos.save()
+        messages.info(request,("Successfully carting Products"))
+    return redirect('admin_site:all_products')
 
 # def register(request):
 #     return render(request,'admin_site/user/register_user.html')

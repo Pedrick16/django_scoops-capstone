@@ -59,6 +59,7 @@ class Pos(models.Model):
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
     pos_size =  models.CharField(max_length=200, verbose_name='Size')
     pos_price =  models.CharField(max_length=200, verbose_name='Price')
+    pos_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
     pos_amount =  models.IntegerField(verbose_name='Amount')
 
 
