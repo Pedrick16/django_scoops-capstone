@@ -1,8 +1,15 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.forms import UserCreationForm
+
 from django.contrib import messages
 from .models import *
+from admin_site.models import *
+from .forms import RegisterForm
+
+
+
+
+
 
 # Create your views here.
 
@@ -17,19 +24,23 @@ def loginView(request):
         username = request.POST['username']
         password = request.POST['password']
         user =  authenticate(request,username=username, password=password)
-
+        activity = "Logging-in"
+    
         if user is not None:
             # current_user =  User.objects.get(pk=user.pk)
             login(request, user)  
+            activity_log = Activity_log(user_name = username, activity = activity)
+            activity_log.save()
 
             if user.role == "admin": 
                 return redirect('landing_page:dashboard_admin') 
             elif user.role == "reseller":
-                return redirect('scoops_admin:reseller_site')
+                return redirect('landing_page:dashboard_admin')
             elif user.role == "rider":    
                 return redirect('scoops_admin:list_reseller')
             else:    
-                return redirect('landing_page:dashboard_staff')    
+                return redirect('landing_page:dashboard_admin') 
+                # return redirect('landing_page:dashboard_staff')    
         
         else:
             messages.success(request, ("There Was An Error Logging In, Try Again ..."))
@@ -38,21 +49,14 @@ def loginView(request):
         return render(request, 'landing_page/login-folder/login.html')
 
 
-def register(request):
-    if request.method =="POST":
-        form = UserCreationForm(request.POST)
+def registerUser(request):
+    form = RegisterForm()
+    if request.method == "POST":
+        form = RegisterForm(request.POST)
         if form.is_valid():
-            form.save
-            username = form.cleaned_data['username']
-            password = form.cleaned_data['password1']
-            user = authenticate(username=username, password=password)
-            login(request,user)
-            messages.success(request, ("added Successfully"))
-            return redirect('admin_site:list_inquiry')
-    else:      
-        form = UserCreationForm()  
-
-    return render(request, 'admin_site/user/register_user.html', {'form':form})     
+            form.save()
+            return redirect('admin_site:list_reseller')
+    return render(request, 'admin_site/user/register_user.html',{'form':form})     
 
 
        
@@ -88,7 +92,11 @@ def register(request):
 
 # logout session here.
 def logoutView(request):
+    current_user = request.user
+    activity = "logging-out"
     logout(request)
+    activity_log = Activity_log(user_name =current_user, activity = activity)
+    activity_log.save()
     return render(request, 'landing_page/login-folder/login.html')
 
 # for inquiry here.

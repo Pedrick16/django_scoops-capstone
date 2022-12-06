@@ -1,10 +1,11 @@
-{%  extends 'landing_page/base.html' %} 
+{%  extends 'admin_site/base.html' %} 
 
         {% block content%}
-        <form action="{% url 'admin_site:process_inquiry' %}" method="POST"  class="text-center">
+        <form action="{% url 'admin_site:add_reseller' %}" method="POST"  class="text-center">
             {% csrf_token %}
-
-            <h1 >Inquiry form</h1>
+            
+        
+            <h1 >Add Reseller</h1>
                 
                 {% for messsage in messages  %}
                 <p class='alert alert-success mt-3'>{{messsage}}</p>
@@ -36,14 +37,14 @@
     
             <input type="email" class="form-control"name="email" placeholder="Enter your Email" required>
             <br>
-    
-            
-          
             <label for="">Valid ID</label>
+    
             <input type="File" class="form-control" name="valid-ID" accept=".jpg, .jpeg, .png" required>
             <br>
-            
             <label for="">Business Permit</label>
+            <br>
+
+            <input type="File" class="form-control" name="Business-permit" accept=".jpg, .jpeg, .png" required>
             <br>
             <button class="btn btn-primary"  type="submit" name="submit" >Submit</button>
             </form>
@@ -51,6 +52,8 @@
             
 
 {% endblock %}
+            
+         
      
          
      

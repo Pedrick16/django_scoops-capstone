@@ -64,26 +64,51 @@
 
     <form action="{% url 'admin_site:pos_compute' %}" method="POST">
         {% csrf_token %}
+          
+    
         
         <label for="">Total Amount:</label>
         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
-        <input type="text" name="total" value="50" class="form-control" >
+        {% if user.role == "admin"%}
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control">
          <br>
-
-         
-         {% for message in messages %}
-            <p class="alert alert-danger">{{ message }}</p>
-         {% endfor %}
-            
-      
          <label for="">Change</label>
-         <p>{{ total_change }}</p>
-        <input type="submit" class="btn btn-success " name="submit">
+         <input type="text" value="{{ c }}">
+         <input type="submit" class="btn btn-success " name="submit">
+         {% elif user.role == "staff" %}
+         <label for="">Cash</label>
+         <input type="text" name="cash" class="form-control">
+         <br>
+         <label for="">Change</label>
+         <input type="text" value="{{ c }}">
+         <input type="submit" class="btn btn-success " name="submit">
+         {% endif %}
         <br>
 
     </form>
+    
+    {% if user.role == "reseller" %}
+    <form action="">
+        <h1 class="text-center">Information</h1>
+        <input type="text" placeholder="Enter your First Name" class="form-control">
+        <br>
+        <input type="text" placeholder="Enter your Last Name" class="form-control">
+        <br>
+        <input type="text" placeholder="Enter your Address" class="form-control">
+        <br>
+
+        <select name="" id="" class="form-control">
+            <option   >dsadasdas </option>
+            <option value="">CODdas</option>
+            <option value="">dsadasdsa</option>
+        </select>
+
+
+       <button type="submit" class="btn btn-success text-center">Submit</button>
+        <br>
+    </form>
+    {% endif %}
     
    
 {% endblock content %}

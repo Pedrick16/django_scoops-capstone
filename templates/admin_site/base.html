@@ -19,6 +19,10 @@
               <li class="nav-item">
                 <a class="nav-link active" aria-current="page" href="{% url 'landing_page:dashboard_admin'%}">Dashboard</a>
               </li>
+
+
+
+              {% if user.role == "admin"%}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Users list
@@ -28,21 +32,78 @@
                   <li><a class="dropdown-item" href="{% url 'admin_site:list_inquiry'%}">Inquiry</a></li>
                 </ul>
               </li>
+              {% endif %}
+
+
+
+
+              {% if user.role == "admin"%}
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'admin_site:list_product' %}">Product</a>
               </li>
+              {% elif user.role == "staff"%}
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'admin_site:list_product' %}">Product</a>
+              </li>
+              {% elif user.role == "reseller" %}
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'admin_site:list_product' %}">product</a>
+              </li>
+              {% endif %}
+
+              {% if user.role == "reseller"%}
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_site:pos'  %}">Cart</a>
+              </li>
+              {% endif %}
+
+
+
+              {% if user.role == "reseller"%}
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'admin_site:list_product' %}">Profile</a>
+              </li>
+              {% endif %}
+
+
+
+
+
+              {% if user.role == "admin"%}
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'admin_site:inventory' %}">Inventory</a>
               </li>
+              {% elif user.role == "staff"%}
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'admin_site:inventory' %}">Inventory</a>
+              </li>
+              {% endif %}
+
+    
+
           
               
-      
+              
+              {% if user.role == "admin"%}
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'admin_site:pos' %}">POS</a>
               </li>
+              {% elif user.role == "staff"%}
+              <li class="nav-item">
+                <a class="nav-link" href="{%url 'admin_site:pos' %}">POS</a>
+              </li>
+              {% endif %}
+              
+
+
+              {% if user.role == "admin"%}
               <li class="nav-item">
                 <a class="nav-link" href="../transaction/transaction.php">Transaction</a>
               </li>
+              {% endif %}
+
+
+              {% if user.role == "admin"%}
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Reports
@@ -53,19 +114,27 @@
                   <li><a class="dropdown-item" href="../reports-admin/users-list.php">Users List</a></li>
                 </ul>
               </li>
+              {% endif %}
+
+          
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                   Settings
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="">Theme</a></li>
+                  {% if user.role == "admin"%}
                   <li><a class="dropdown-item" href="../settings-admin/archive.php">Archive Account</a></li>
+                  {% endif %}
+
+                  
                   <li><a class="dropdown-item" href="../settings-admin/change-password.php">Change Password</a></li>
                 </ul>
               </li>
+
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                   Admin
+                   {{ user }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>

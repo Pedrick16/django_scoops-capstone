@@ -30,7 +30,8 @@ class Reseller(models.Model):
     reseller_contact =models.CharField(max_length = 12, verbose_name='Contact Number')
     reseller_address =models.CharField(max_length=200, verbose_name='Address')
     reseller_email =models.EmailField(unique=True, max_length=200, verbose_name='Email')
-    reseller_id =models.ImageField( upload_to="image_path",default="image_path/dog.jpg")
+    reseller_id =models.ImageField( upload_to="image_path",default="image_path/dog.jpg",verbose_name='Valid ID')
+    reseller_businessp =models.ImageField( upload_to="image_path",default="image_path/dog.jpg",verbose_name='Business Permit')
     reseller_status =models.CharField(max_length=200, null=True, choices=STATUS, verbose_name='Status')
 
     def __image_tag__(self):
@@ -63,5 +64,9 @@ class Pos(models.Model):
     pos_amount =  models.IntegerField(verbose_name='Amount')
 
 
+class Activity_log(models.Model):
+    user_name = models.CharField(max_length=250, verbose_name=' Username')
+    activity = models.CharField(max_length=250, verbose_name='Activity')
+    date_time =  models.DateTimeField(default=timezone.now, verbose_name='Date and Time')
     
 
