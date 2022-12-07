@@ -24,7 +24,7 @@ def loginView(request):
         username = request.POST['username']
         password = request.POST['password']
         user =  authenticate(request,username=username, password=password)
-        activity = "Logging-in"
+        activity = "signed-in"
     
         if user is not None:
             # current_user =  User.objects.get(pk=user.pk)
@@ -93,7 +93,7 @@ def registerUser(request):
 # logout session here.
 def logoutView(request):
     current_user = request.user
-    activity = "logging-out"
+    activity = "signed-out"
     logout(request)
     activity_log = Activity_log(user_name =current_user, activity = activity)
     activity_log.save()

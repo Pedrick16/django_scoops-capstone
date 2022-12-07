@@ -20,7 +20,6 @@
 
     
 
-    <a href="{% url 'admin_site:add_reseller' %}" class="btn btn-dark">Add Reseller</a>
     {% if list_reseller %}
     <table class="table table-hover text-center">
         <thead>
@@ -48,13 +47,10 @@
                     <td>{{ list.reseller_contact }}</td>
                     <td>{{ list.reseller_address }}</td>
                     <td>{{ list.reseller_email }}</td>
-                   
-                   
-                 
-                    <td><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
-                    <td><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                    <td><img src="/media/image_path/dog.jpg" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                    <td><img src="/media/image_path/dog.jpg" alt="Business-Permit" width="50" class="rounded-circle"></td>
                     <td>{{ list.reseller_status }}</td>
-                    <td><a href="{% url 'admin_site:archive_reseller'  list.id %}" class="btn btn-danger">Archive</a></td>
+                    <td><a href="{% url 'admin_site:retrieve_reseller'  list.id %}" class="btn btn-danger">Retrieve</a></td>
                 </tr>
                 {% endfor %}
             </tbody>
@@ -64,3 +60,4 @@
 {% endblock content %}
 
     
+  

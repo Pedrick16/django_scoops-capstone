@@ -14,6 +14,7 @@ def dashboard_admin(request):
 
 @login_required(login_url='landing_page:login')
 #list reseller
+
 def list_reseller(request):
     list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "active") 
     context = {'list_reseller':list_reseller}
@@ -21,11 +22,42 @@ def list_reseller(request):
 
 #archiving reseller
 def archive_reseller(request,resellerid):
+    # changing status to inactice
     reseller = Reseller.objects.get(id = resellerid)
-    reseller.delete()
+    # reseller.delete()
+
+    status = "inactive"
+    reseller.reseller_status = status
+    reseller.save()
     messages.success(request,("Successfully Archiving Reseller info"))
     return redirect('admin_site:list_reseller')
 
+def list_archive(request):
+    list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "inactive") 
+    context = {'list_reseller':list_reseller}
+    return render(request, 'admin_site/user/archive.html', context)    
+
+def retrieve_reseller(request,resellerid):
+    # changing status to actice
+    reseller = Reseller.objects.get(id = resellerid)
+    status = "active"
+    reseller.reseller_status = status
+    reseller.save()
+    messages.success(request,("Successfully Retrieved"))
+    return redirect('admin_site:list_archive')    
+
+        
+
+
+
+
+
+
+
+
+
+
+   
 
 # def search(request):
 #     return render(request,'admin_site/search_bar/search_reseller.html')
@@ -82,7 +114,7 @@ def process_inquiry(request):
         address = request.POST['address']
         email = request.POST['email']
         valid_id = request.POST['valid-ID']
-        business_permit = request.POST['Business-permit']
+        business_permit = request.POST['Business_permit']
         #inserting to database
         reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
         reseller.save()
@@ -90,6 +122,7 @@ def process_inquiry(request):
     else:
         pass    
     return render(request, 'landing_page/inquiry_reseller.html')
+
 
 #adding reseller to table 
 def add_reseller(request):
@@ -139,6 +172,30 @@ def list_products(request):
     context = {'list_products':list_products}
     return render(request, 'admin_site/products/product.html', context)
 
+#adding product for tbl product
+def add_product(request):
+    if request.method == "POST":
+        pcode = request.POST['product_code']
+        pcategory = request.POST['category']
+        pname = request.POST['product_name']
+        psize = request.POST['size']
+        pprice = request.POST['price']
+        pstock = request.POST['stock']
+        pstatus = request.POST['status']
+        pexpiry = request.POST['expiry_date']
+        
+        #inserting to database 
+        product = Product(product_code = pcode, product_category = pcategory, product_name = pname, product_size =psize, product_price = pprice, product_stock = pstock, product_status = pstatus,product_expiry = pexpiry)
+        product.save()
+        messages.success(request,("Successfully Product added"))
+        return redirect('admin_site:add_product')
+        
+    return render(request, 'admin_site/products/add_product.html')    
+  
+       
+    
+      
+
 #list inventory 
 def inventory(request):
     list_products = Product.objects.order_by('-id')
@@ -181,6 +238,44 @@ def pos(request):
         }
     return render(request, 'admin_site/pos/pos_admin.html', context)
 
+def minus_qty(request, productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty - 1
+    pos.pos_quantity = result
+    pos.save()
+
+    current_amount = int(pos.pos_amount)
+    current_price = int(pos.pos_price)
+    result = current_amount - current_price
+    pos.pos_amount = result
+    pos.save()
+    return redirect('admin_site:pos')
+
+     
+   
+
+
+
+def add_qty(request,productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty + 1
+    pos.pos_quantity = result
+    pos.save()
+
+    current_amount = int(pos.pos_amount)
+    current_price = int(pos.pos_price)
+    result = current_amount + current_price
+    pos.pos_amount = result
+    pos.save()
+    return redirect('admin_site:pos')
+
+
+    return redirect('admin_site:pos')
+    
+
+
 def pos_cancel(request,productid):
     cancel = Pos.objects.get(id =productid)
     cancel.delete()
@@ -192,7 +287,7 @@ def pos_compute(request):
     if request.method == "POST":
         current_user = request.user
         cash = int(request.POST['cash'])
-        sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))    
+        sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =int(Sum('pos_amount')))    
         total_amount = int(sum_amount)   
         if cash > total_amount:
             c =  total_amount - cash
@@ -259,6 +354,9 @@ def cart_products(request, productid):
         # error trapping for low stock
         elif avail_stock <  qty:
             messages.success(request,("sorry available stock not enough"))
+            return redirect('admin_site:all_products')
+        elif product.product_status =="n/a":
+            messages.success(request,("Sorry, this Product is not Available"))
             return redirect('admin_site:all_products')
         else:
 

@@ -1,13 +1,13 @@
 from django.db import models
 from datetime import datetime
 from django.utils import timezone
-from django.utils.safestring import mark_safe
-import os, random 
+import os , random
+
+
+
 
 now = timezone.now()
 # Create your models here.
-
-
 
 def image_path(instance, filename):
     basefilename, file_extension = os.path.splitext(filename)
@@ -15,7 +15,11 @@ def image_path(instance, filename):
     randomstr = ''.join((random.choice(chars)) for x in range(10))
     _now = datetime.now()
 
-    return 'valid_id/{year}-{month}-{imageid}-{basename}-{randomstring}{ext}'.format(imageid = instance,basename=basefilename, randomstring=randomstr, ext = file_extension, year=now.strftime('%Y'), month= _now.strftime('%m'),day=_now.strftime('$d'))
+    return 'image_path/{year}-{month}-{imageid}-{basename}-{randomstring}{ext}'.format(imageid = instance,basename=basefilename, randomstring=randomstr, ext = file_extension, year=now.strftime('%Y'), month= _now.strftime('%m'),day=_now.strftime('$d'))
+
+
+
+
 
 class Reseller(models.Model):
 
@@ -30,15 +34,15 @@ class Reseller(models.Model):
     reseller_contact =models.CharField(max_length = 12, verbose_name='Contact Number')
     reseller_address =models.CharField(max_length=200, verbose_name='Address')
     reseller_email =models.EmailField(unique=True, max_length=200, verbose_name='Email')
-    reseller_id =models.ImageField( upload_to="image_path",default="image_path/dog.jpg",verbose_name='Valid ID')
-    reseller_businessp =models.ImageField( upload_to="image_path",default="image_path/dog.jpg",verbose_name='Business Permit')
+    reseller_id =models.ImageField( upload_to=image_path, verbose_name='valid id')
+    reseller_businessp =models.ImageField( upload_to=image_path,verbose_name='business id')
     reseller_status =models.CharField(max_length=200, null=True, choices=STATUS, verbose_name='Status')
 
-    def __image_tag__(self):
-        return mark_safe('<img src="dashboard/media/%s" width="50" height="50" />'%(self.reseller_id))
 
     def __str__(self):
         return self.reseller_email
+
+   
 
 
 
@@ -51,7 +55,7 @@ class Product(models.Model):
     product_price =  models.CharField(max_length=200, verbose_name='Price')
     product_stock =  models.CharField(max_length=200, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
-    product_expiry =  models.DateField( null=True, default=timezone.now, verbose_name='Expiry Date')
+    product_expiry =  models.DateField( null=True, default=None, verbose_name='Expiry Date')
 
 class Pos(models.Model):
     pos_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
@@ -63,10 +67,11 @@ class Pos(models.Model):
     pos_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
     pos_amount =  models.IntegerField(verbose_name='Amount')
 
-
 class Activity_log(models.Model):
     user_name = models.CharField(max_length=250, verbose_name=' Username')
     activity = models.CharField(max_length=250, verbose_name='Activity')
     date_time =  models.DateTimeField(default=timezone.now, verbose_name='Date and Time')
+
+
     
 

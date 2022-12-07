@@ -2,6 +2,12 @@ from django.contrib import admin
 from .models import *
 
 # Register your models here.
+admin.site.site_header = "Scooups4U"
+admin.site.site_title ="Scoops4U Admin Area"
+admin.site.index_title ="Welcome to the Scoops4u Admin Area"
+
+
+
 class ResellerView(admin.ModelAdmin):
     list_display = ['reseller_fname', 'reseller_mname', 'reseller_lname', 'reseller_gender','reseller_contact','reseller_address','reseller_email','reseller_id','reseller_businessp','reseller_status']
     search_fields = ['reseller_fname','reseller_mname','reseller_lname','reseller_status']

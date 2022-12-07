@@ -124,7 +124,7 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="">Theme</a></li>
                   {% if user.role == "admin"%}
-                  <li><a class="dropdown-item" href="../settings-admin/archive.php">Archive Account</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:list_archive' %}">Archive Account</a></li>
                   {% endif %}
 
                   
