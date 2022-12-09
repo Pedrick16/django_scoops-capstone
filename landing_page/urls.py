@@ -16,8 +16,10 @@ urlpatterns = [
 
 
     # admin view site
-    path('dashboard/', views.dashboard_admin, name='dashboard_admin'),
+    path('admin-dashboard/', views.dashboard_admin, name='dashboard_admin'),
 
     # staff view site
-    path('dashboard/staff', views.dashboard_staff, name='dashboard_staff'),
+    path('staff-dashboard/', views.dashboard_staff, name='dashboard_staff'),
+
+    path('reseller-dashboard', views.dashboard_reseller, name='dashboard_reseller'),
 ]

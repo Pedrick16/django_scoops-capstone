@@ -3,5 +3,8 @@ from reseller_site import views
 
 app_name = 'reseller_site'
 urlpatterns = [
-    # path('', views.landing, name='landing_site')
+    path('', views.landing, name='landing_reseller'),
+    path('orders/', views.orders_reseller, name='orders_reseller'),
+    path('cart/', views.cart_reseller, name='cart_reseller'),
+    path('checkout/', views.checkout, name='checkout'),
 ]

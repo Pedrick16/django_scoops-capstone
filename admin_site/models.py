@@ -52,7 +52,7 @@ class Product(models.Model):
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
     product_size =  models.CharField(max_length=200, verbose_name='Size')
-    product_price =  models.CharField(max_length=200, verbose_name='Price')
+    product_price =  models.FloatField( null=True, verbose_name='Price')
     product_stock =  models.CharField(max_length=200, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
     product_expiry =  models.DateField( null=True, default=None, verbose_name='Expiry Date')
@@ -63,9 +63,23 @@ class Pos(models.Model):
     pos_category =  models.CharField(max_length=200, verbose_name='Category')
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
     pos_size =  models.CharField(max_length=200, verbose_name='Size')
-    pos_price =  models.CharField(max_length=200, verbose_name='Price')
+    pos_price =  models.FloatField( null=True, verbose_name='Price')
     pos_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
-    pos_amount =  models.IntegerField(verbose_name='Amount')
+    pos_amount =  models.FloatField( null=True,verbose_name='Amount')
+
+
+class Transaction(models.Model):
+    ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
+    DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
+    transaction_user = models.CharField(max_length=250, null=True, verbose_name='Transaction User')
+    transaction_fullname = models.CharField(max_length=250, null=True, verbose_name='Full Name') 
+    transaction_address = models.TextField(null=False, verbose_name='Address') 
+    transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
+    transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
+    transaction_totalprice = models.FloatField( null=True, verbose_name='Total Price')
+    transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
+    created_at =models.DateTimeField(default=timezone.now)
+
 
 class Activity_log(models.Model):
     user_name = models.CharField(max_length=250, verbose_name=' Username')

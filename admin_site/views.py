@@ -2,19 +2,22 @@ from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
 from django.db.models import Sum
+from django.core.mail import send_mail
+from django.conf import settings
 
 from django.contrib.auth.decorators import login_required, permission_required
 
 
 
 # Create your views here.
+@login_required(login_url='landing_page:login')
 def dashboard_admin(request):
     return render(request, 'admin_site/dashboard/index.html')
 
 
-@login_required(login_url='landing_page:login')
-#list reseller
 
+#list reseller
+@login_required(login_url='landing_page:login')
 def list_reseller(request):
     list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "active") 
     context = {'list_reseller':list_reseller}
@@ -44,7 +47,27 @@ def retrieve_reseller(request,resellerid):
     reseller.reseller_status = status
     reseller.save()
     messages.success(request,("Successfully Retrieved"))
-    return redirect('admin_site:list_archive')    
+    return redirect('admin_site:list_archive')
+
+def send_email(request, inquiryid):
+    if request.method == "POST":
+        reseller = Reseller.objects.get(id = inquiryid)
+        status = "active"
+        tile_email = "your inquiry successfully approved"
+        # tile_email = request.POST['name']
+        email = request.POST['email']
+        message = request.POST['message']
+        send_mail(
+            tile_email,
+            message,
+            'settings.EMAIL_HOST_USER',
+            [email],
+            fail_silently=False)
+        reseller.reseller_status = status  
+        reseller.save()
+        return redirect('admin_site:list_reseller')
+
+    return render(request, 'admin_site/user/send_email.html')        
 
         
 
@@ -253,6 +276,7 @@ def minus_qty(request, productid):
     return redirect('admin_site:pos')
 
      
+
    
 
 
@@ -272,7 +296,7 @@ def add_qty(request,productid):
     return redirect('admin_site:pos')
 
 
-    return redirect('admin_site:pos')
+    
     
 
 
@@ -326,12 +350,13 @@ def cart_products(request, productid):
     if request.method =="POST":
         # getting id 
         product = Product.objects.get(id = productid)
+       
 
         # coming from  input type
         qty = int(request.POST['quantity'])
         p_stock = int(request.POST['stock'])
         pcode = request.POST['product_code']
-        p_price = int(request.POST['product_price'])
+        p_price = float(request.POST['product_price'])
         p_size = request.POST['product_size']
         p_category = request.POST['product_category']
         p_name = request.POST['product_name']
@@ -346,8 +371,14 @@ def cart_products(request, productid):
         #converting the data of product stock to integer
         avail_stock = int(product.product_stock)
 
-         # error trapping for 0 stock    
-        if  product.product_stock == "0":
+        #checking if have already product in the cart
+        
+
+        # error trapping for 0 stock    
+        if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
+            messages.success(request,("you already have on the cart"))
+            return redirect('admin_site:all_products')
+        elif  product.product_stock == "0":
             messages.success(request,("Sorry, No Available Stock"))
             return redirect('admin_site:all_products')
 

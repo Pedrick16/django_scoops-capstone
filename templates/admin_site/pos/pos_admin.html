@@ -24,7 +24,7 @@
         
     
   
-    {% if list_pos %}
+  
 
     <table class="table table-hover text-center">
         <thead>
@@ -40,6 +40,7 @@
                 <th></th>
              
             </tr>
+            {% if list_pos %}
             <tbody>
                 
                 {% for list in  list_pos %}       
@@ -49,7 +50,7 @@
                     <td>{{ list.pos_name }}</td>
                     <td>{{ list.pos_size }}</td>
                     <td>{{ list.pos_price }}</td>
-                    <td>{{ list.pos_quantity }} <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a>  <a href="{% url 'admin_site:add_qty' list.id  %}" class="btn btn-dark">+</a></td>
+                    <td><a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button class="btn btn-success" >{{ list.pos_quantity }}</button>  <a href="{% url 'admin_site:add_qty' list.id  %}" class="btn btn-dark">+</a></td>
                     <td>{{ list.pos_amount }} </td>
                     <td><a href="{% url 'admin_site:pos_cancel' list.id %}" class="btn btn-dark">Cancel</a>  </td>
                    
@@ -57,20 +58,24 @@
                 </tr>
                 {% endfor %}
             </tbody>
+            {% endif %}
         </thead>
     </table>
-    {% endif %}
+
     <br>
 
     
+  
+    
+    {% if list_pos %}         
     <form action="{% url 'admin_site:pos_compute' %}" method="POST">
         {% csrf_token %}
           
     
-        
+        {% if user.role == "admin"%}
         <label for="">Total Amount:</label>
         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
-        {% if user.role == "admin"%}
+
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control">
          <br>
@@ -78,6 +83,9 @@
          <input type="text" value="{{ c }}">
          <input type="submit" class="btn btn-success " name="submit">
          {% elif user.role == "staff" %}
+         <label for="">Total Amount:</label>
+         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
+ 
          <label for="">Cash</label>
          <input type="text" name="cash" class="form-control">
          <br>
@@ -87,35 +95,21 @@
          {% endif %}
         <br>
     </form>
+    {% endif %}
     
+    
+    {% if list_pos %}
 
     {% if user.role == "reseller" %}
-    <form action="">
-        <h1 class="text-center">Information</h1>
-        <label for="">Full Name</label>
-        <input type="text" placeholder="Enter your Full Name" class="form-control">
-        <br> 
-        <label for="">Address</label>
-        <input type="text" placeholder="Enter your Address" class="form-control">
-   
-        <br>
-        <label for="">contact No</label>
-        <input type="text" placeholder="Enter your contact number" class="form-control">
-
-        <br> 
-        <label for="">Delivery option</label>
-        <select name="" id="" class="form-control">
-            <option></option>
-            <option value="">Pickup</option>
-            <option value="">Delivery</option>
-        </select>
-        <br>
-       <button type="submit" class="btn btn-success text-center">Submit</button>
-        <br>
-    </form>
+    <div class="text-end">
+    <a href="{% url 'reseller_site:checkout' %}" class="text-end  btn btn-dark">Checkout</a>
+    </div>
     {% endif %}
 
+    {% endif %}
     
+
+   
    
 {% endblock content %}
     

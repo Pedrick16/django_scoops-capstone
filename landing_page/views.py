@@ -1,6 +1,7 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
 
+
 from django.contrib import messages
 from .models import *
 from admin_site.models import *
@@ -35,18 +36,21 @@ def loginView(request):
             if user.role == "admin": 
                 return redirect('landing_page:dashboard_admin') 
             elif user.role == "reseller":
-                return redirect('landing_page:dashboard_admin')
+                return redirect('landing_page:dashboard_reseller')
             elif user.role == "rider":    
                 return redirect('scoops_admin:list_reseller')
-            else:    
-                return redirect('landing_page:dashboard_admin') 
-                # return redirect('landing_page:dashboard_staff')    
-        
+            elif user.role == "staff": 
+                return redirect('landing_page:dashboard_admin')
+            else: 
+                messages.success(request, ("There Was An Error Logging In, Try Again ..."))
+                return redirect('landing_page:login') 
+
+           
         else:
             messages.success(request, ("There Was An Error Logging In, Try Again ..."))
-            return render(request,'landing_page/login-folder/login.html')
-    else:
-        return render(request, 'landing_page/login-folder/login.html')
+            return redirect('landing_page:login') 
+    
+    return render(request, 'landing_page/login-folder/login.html')
 
 
 def registerUser(request):
@@ -110,3 +114,6 @@ def dashboard_admin(request):
 # dashboard for staff_site.
 def dashboard_staff(request):
     return render(request, 'staff_site/dashboard/index.html')
+
+def dashboard_reseller(request):
+    return render(request, 'reseller_site/dashboard/index.html')    

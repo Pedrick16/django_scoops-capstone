@@ -19,6 +19,9 @@ urlpatterns = [
     path('search/product/', views.search_product, name='search_product'),
     path('search/product/', views.search_inventory, name='search_product'),
 
+    path('send-email/<int:inquiryid>', views.send_email, name='send_email'),
+
+
   
     path('process/inquiry', views.process_inquiry, name='process_inquiry'),
 
