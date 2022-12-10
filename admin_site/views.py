@@ -1,9 +1,10 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum
+from django.db.models import Sum, Count
 from django.core.mail import send_mail
 from django.conf import settings
+
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -255,6 +256,7 @@ def pos(request):
     list_pos = Pos.objects.order_by('-id').filter(pos_user = current_user)
     sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))
     
+  
     context = {
         'list_pos':list_pos,
         'sum_amount':sum_amount
@@ -301,30 +303,32 @@ def add_qty(request,productid):
 
 
 def pos_cancel(request,productid):
-    cancel = Pos.objects.get(id =productid)
-    cancel.delete()
-    messages.success(request,("Successfully cancelled"))
-    return redirect('admin_site:pos')
+    if request.method == "POST":
+        cancel = Pos.objects.get(id =productid)
+        current_pcode = request.POST['current_pcode']
+        product = Product.objects.get(product_code = current_pcode)
+
+        current_qty = int(request.POST['current_qty'])
+        current_stock = int(product.product_stock)
+
+        return_stock = current_stock + current_qty
+
+        product.product_stock = return_stock
+        product.save()
+
+        cancel.delete()
+        messages.success(request,("Successfully cancelled"))
+        return redirect('admin_site:pos')
+
 
 
 def pos_compute(request):
     if request.method == "POST":
-        current_user = request.user
-        cash = int(request.POST['cash'])
-        sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =int(Sum('pos_amount')))    
-        total_amount = int(sum_amount)   
-        if cash > total_amount:
-            c =  total_amount - cash
-            messages.success(request,("Successfully"))
-            return redirect('admin_site:pos')
-        else:
-            messages.success(request,("Invalid Payment"))
-            return redirect('admin_site:pos')
-    else:
-        context={
-            'c':c
-        }
-        return render(request,'admin_site/pos/pos_admin.html',context)
+        amount = float(request.POST['amount'])
+        cash = float(request.POST['cash'])
+        result = amount - cash
+   
+    return render(request,'admin_site/pos/pos_admin.html', {'result':result})
       
 # def pos_compute(request):
 #     if request.method == "POST":

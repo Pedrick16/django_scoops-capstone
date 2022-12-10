@@ -52,8 +52,14 @@
                     <td>{{ list.pos_price }}</td>
                     <td><a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button class="btn btn-success" >{{ list.pos_quantity }}</button>  <a href="{% url 'admin_site:add_qty' list.id  %}" class="btn btn-dark">+</a></td>
                     <td>{{ list.pos_amount }} </td>
-                    <td><a href="{% url 'admin_site:pos_cancel' list.id %}" class="btn btn-dark">Cancel</a>  </td>
-                   
+
+                    <form action="{% url 'admin_site:pos_cancel' list.id %}" method="POST">
+                        {% csrf_token %}
+                    <td><button type="submit" class="btn btn-dark">Cancel</button></td>
+                    <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
+                    <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
+                    
+                    </form>
 
                 </tr>
                 {% endfor %}
@@ -70,17 +76,19 @@
     {% if list_pos %}         
     <form action="{% url 'admin_site:pos_compute' %}" method="POST">
         {% csrf_token %}
-          
+
     
-        {% if user.role == "admin"%}
+          
+   
+        {% if user.role == "admin"%} 
         <label for="">Total Amount:</label>
-        <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
+        <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" >
 
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control">
          <br>
          <label for="">Change</label>
-         <input type="text" value="{{ c }}">
+         <input type="text" value="{{ result }}">
          <input type="submit" class="btn btn-success " name="submit">
          {% elif user.role == "staff" %}
          <label for="">Total Amount:</label>
@@ -91,8 +99,8 @@
          <br>
          <label for="">Change</label>
          <input type="text" value="{{ c }}">
-         <input type="submit" class="btn btn-success " name="submit">
-         {% endif %}
+         <input type="submit" class="btn btn-success " name="submit"> 
+        {% endif %}
         <br>
     </form>
     {% endif %}
@@ -102,7 +110,7 @@
 
     {% if user.role == "reseller" %}
     <div class="text-end">
-    <a href="{% url 'reseller_site:checkout' %}" class="text-end  btn btn-dark">Checkout</a>
+    <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>
     </div>
     {% endif %}
 

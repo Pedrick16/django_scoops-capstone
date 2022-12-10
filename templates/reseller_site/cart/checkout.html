@@ -38,8 +38,9 @@
     <br>
 
 
-    <form >
+    <form action="{% url 'reseller_site:checkout' %}" method="POST">
         {% csrf_token %}
+        <input type="hidden" name="total_amount"value="{{ sum_amount.data }}">
         <h1 class="text-center">Basic Details</h1>
         <label for="">Full Name</label>
         <input type="text" placeholder="Enter your Full Name" class="form-control" name="fullname" required>
@@ -53,10 +54,10 @@
 
         <br> 
         <label for="">Delivery option</label>
-        <select name="delivery_option" id="" class="form-control" required>
+        <select name="option"  class="form-control" required>
             <option></option>
-            <option value="">Pickup</option>
-            <option value="">Delivery</option>
+            <option value="pickup">Pickup</option>
+            <option value="delivery">Delivery</option>
         </select>
         <br>
         <input type="submit" class="btn btn-success" value="COD | Place Order">
