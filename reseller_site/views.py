@@ -2,18 +2,22 @@ from django.shortcuts import render, redirect
 from admin_site.models import *
 from django.db.models import Sum
 from django.contrib import messages
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
+@login_required(login_url='landing_page:login')
 def landing(request):
     return render(request, 'reseller_site/landing.html')
 
+@login_required(login_url='landing_page:login')
 def orders_reseller(request):
-    list_transaction = Transaction.objects.filter(transaction_user = request.user)
+    list_transaction = Transaction.objects.filter(transaction_user = request.user).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }
     return render(request, 'reseller_site/orders/orders.html',context)
 
+@login_required(login_url='landing_page:login')
 def cart_reseller(request):
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(data =Sum('pos_amount'))
@@ -23,6 +27,7 @@ def cart_reseller(request):
     }
     return render(request, 'reseller_site/cart/checkout.html', context)
 
+@login_required(login_url='landing_page:login')
 def checkout(request):
     if request.method == "POST":
         current_user = request.user

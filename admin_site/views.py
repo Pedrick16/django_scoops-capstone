@@ -25,6 +25,7 @@ def list_reseller(request):
     return render(request, 'admin_site/user/list_reseller.html', context)
 
 #archiving reseller
+@login_required(login_url='landing_page:login')
 def archive_reseller(request,resellerid):
     # changing status to inactice
     reseller = Reseller.objects.get(id = resellerid)
@@ -36,11 +37,13 @@ def archive_reseller(request,resellerid):
     messages.success(request,("Successfully Archiving Reseller info"))
     return redirect('admin_site:list_reseller')
 
+@login_required(login_url='landing_page:login')
 def list_archive(request):
     list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "inactive") 
     context = {'list_reseller':list_reseller}
     return render(request, 'admin_site/user/archive.html', context)    
 
+@login_required(login_url='landing_page:login')
 def retrieve_reseller(request,resellerid):
     # changing status to actice
     reseller = Reseller.objects.get(id = resellerid)
@@ -50,6 +53,7 @@ def retrieve_reseller(request,resellerid):
     messages.success(request,("Successfully Retrieved"))
     return redirect('admin_site:list_archive')
 
+@login_required(login_url='landing_page:login')
 def send_email(request, inquiryid):
     if request.method == "POST":
         reseller = Reseller.objects.get(id = inquiryid)
@@ -85,6 +89,7 @@ def send_email(request, inquiryid):
 
 # def search(request):
 #     return render(request,'admin_site/search_bar/search_reseller.html')
+@login_required(login_url='landing_page:login')
 def search_reseller(request):
     if request.method == "GET":
         search = request.GET.get('search')
@@ -96,6 +101,7 @@ def search_reseller(request):
            return render(request,'admin_site/search_bar/search_reseller.html',{})
 
 # seaching
+@login_required(login_url='landing_page:login')
 def search_product(request):
     if request.method == "GET":
         search = request.GET.get('search')
@@ -107,6 +113,7 @@ def search_product(request):
            return render(request,'admin_site/search_bar/search_product.html',{})
 
 # seaching
+@login_required(login_url='landing_page:login')
 def search_inventory(request):
     if request.method == "GET":
         search = request.GET.get('search')
@@ -127,6 +134,7 @@ def list_inquiry(request):
 
 
 #process inquiry for reseller
+@login_required(login_url='landing_page:login')
 def process_inquiry(request):
     if request.method =="POST":
         status= "pending"
@@ -138,7 +146,7 @@ def process_inquiry(request):
         address = request.POST['address']
         email = request.POST['email']
         valid_id = request.POST['valid-ID']
-        business_permit = request.POST['Business_permit']
+        business_permit = request.POST['business_permit']
         #inserting to database
         reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
         reseller.save()
@@ -149,6 +157,7 @@ def process_inquiry(request):
 
 
 #adding reseller to table 
+@login_required(login_url='landing_page:login')
 def add_reseller(request):
     if request.method =="POST":
 
@@ -191,12 +200,14 @@ def add_reseller(request):
     return render(request, 'admin_site/user/add_reseller.html')
 
 #list inventory 
+@login_required(login_url='landing_page:login')
 def list_products(request):
     list_products = Product.objects.order_by('-id')
     context = {'list_products':list_products}
     return render(request, 'admin_site/products/product.html', context)
 
 #adding product for tbl product
+@login_required(login_url='landing_page:login')
 def add_product(request):
     if request.method == "POST":
         pcode = request.POST['product_code']
@@ -221,12 +232,14 @@ def add_product(request):
       
 
 #list inventory 
+@login_required(login_url='landing_page:login')
 def inventory(request):
     list_products = Product.objects.order_by('-id')
     context = {'list_products':list_products}
     return render(request, 'admin_site/inventory/add-stock.html', context)   
 
 #updating inventory
+@login_required(login_url='landing_page:login')
 def update_inventory(request, productid):
     if request.method == "POST":
         #to get the latest id
@@ -251,6 +264,7 @@ def update_inventory(request, productid):
         messages.info(request,("Successfully Updated"))
     return redirect('admin_site:inventory')  
 
+@login_required(login_url='landing_page:login')
 def pos(request):
     current_user = request.user
     list_pos = Pos.objects.order_by('-id').filter(pos_user = current_user)
@@ -263,6 +277,7 @@ def pos(request):
         }
     return render(request, 'admin_site/pos/pos_admin.html', context)
 
+@login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
     pos = Pos.objects.get(id =productid)
     current_qty = int(pos.pos_quantity)
@@ -282,7 +297,7 @@ def minus_qty(request, productid):
    
 
 
-
+@login_required(login_url='landing_page:login')
 def add_qty(request,productid):
     pos = Pos.objects.get(id =productid)
     current_qty = int(pos.pos_quantity)
@@ -301,7 +316,7 @@ def add_qty(request,productid):
     
     
 
-
+@login_required(login_url='landing_page:login')
 def pos_cancel(request,productid):
     if request.method == "POST":
         cancel = Pos.objects.get(id =productid)
@@ -343,11 +358,13 @@ def pos_cancel(request,productid):
 #     return render(request,' admin_site/pos/pos_admin.html', {'c':c})        
 
 #all products for pos
+@login_required(login_url='landing_page:login')
 def all_products(request):
     list_products = Product.objects.order_by('-id')
     context = {'list_products':list_products}
     return render(request, 'admin_site/pos/all-products.html', context)
 
+@login_required(login_url='landing_page:login')
 def cart_products(request, productid):
     if request.method =="POST":
         # getting id 

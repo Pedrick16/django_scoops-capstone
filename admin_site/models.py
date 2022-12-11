@@ -71,7 +71,9 @@ class Pos(models.Model):
 class Transaction(models.Model):
     ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
-    transaction_user = models.CharField(max_length=250, null=True, verbose_name='Transaction User')
+
+    transaction_no =  models.CharField(max_length=200, null=False,verbose_name='Transaction Number')
+    transaction_user = models.CharField(max_length=250, null=True, verbose_name='List Username')
     transaction_fname = models.CharField(max_length=250, null=True, verbose_name='First Name') 
     transaction_lname = models.CharField(max_length=250, null=True, verbose_name='Last Name') 
     transaction_address = models.TextField(null=False, verbose_name='Address') 
@@ -80,11 +82,16 @@ class Transaction(models.Model):
     transaction_totalprice = models.FloatField( null=True, verbose_name='Total Price')
     created_at =models.DateTimeField(default=timezone.now)
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
-    transaction_delivered = models.DateTimeField(null=True, verbose_name='Delivered Time')
+    transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
+
+
+  
+
 
 
 class OrderItem(models.Model):
-    OrderItem_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
+    OrderItem_transactionNo =  models.CharField(max_length=200, null=True,  verbose_name='Transaction Number')
+    OrderItem_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List Username')
     OrderItem_category =  models.CharField(max_length=200, verbose_name='Category')
     OrderItem_name=  models.CharField(max_length=200, verbose_name='Product Name')
     OrderItem_size =  models.CharField(max_length=200, verbose_name='Size')

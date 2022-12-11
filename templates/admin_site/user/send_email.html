@@ -9,9 +9,26 @@
         <br>
         <!-- <input type="text" name="name" class="form-control" placeholder="Title of the Email" required>
         <br> -->
+
         <input type="email" name="email" class="form-control"placeholder="The reseller Email"  required>
         <br>
-        <textarea name="message"  cols="30" rows="10" class="form-control" placeholder="Message to deliver"  required></textarea>
+        <textarea name="message"  cols="30" rows="10" class="form-control" placeholder="Message to deliver"  required>
+            Mr/Mrs/Ms, {{ user }}
+
+            Your request for being a reseller is approved. You can now login as a Reseller
+
+            Here's your account
+    
+            Username:
+            Password:
+         
+           Thanks, Admin
+
+
+
+
+          
+        </textarea>
         <br>
         <input type="submit" name="submit" class="btn btn-dark">
     </form>

@@ -1,5 +1,6 @@
 from django.shortcuts import render,redirect
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 
 
 from django.contrib import messages
@@ -42,17 +43,18 @@ def loginView(request):
             elif user.role == "staff": 
                 return redirect('landing_page:dashboard_staff')
             else: 
-                messages.success(request, ("There Was An Error Logging In, Try Again ..."))
+                messages.success(request, ("There was an error logging in, Try Again ..."))
                 return redirect('landing_page:login') 
 
            
         else:
-            messages.success(request, ("There Was An Error Logging In, Try Again ..."))
+            messages.success(request, ("There was an error logging in, Try Again ..."))
             return redirect('landing_page:login') 
     
     return render(request, 'landing_page/login-folder/login.html')
 
 
+@login_required(login_url='landing_page:login')
 def registerUser(request):
     form = RegisterForm()
     if request.method == "POST":
@@ -95,6 +97,7 @@ def registerUser(request):
 #         return render(request, 'landing_page/login-folder/login.html')    
 
 # logout session here.
+@login_required(login_url='landing_page:login')
 def logoutView(request):
     current_user = request.user
     activity = "signed-out"
@@ -104,19 +107,24 @@ def logoutView(request):
     return render(request, 'landing_page/login-folder/login.html')
 
 # for inquiry here.
+@login_required(login_url='landing_page:login')
 def inquiry_reseller(request):
     return render(request, 'landing_page/inquiry_reseller.html')    
 
 # dashboard for admin_site.
+@login_required(login_url='landing_page:login')
 def dashboard_admin(request):
     return render(request, 'admin_site/dashboard/index.html')
 
 # dashboard for staff_site.
+@login_required(login_url='landing_page:login')
 def dashboard_staff(request):
     return render(request, 'staff_site/dashboard/index.html')
 
+@login_required(login_url='landing_page:login')
 def dashboard_reseller(request):
     return render(request, 'reseller_site/dashboard/index.html')    
 
+@login_required(login_url='landing_page:login')
 def dashboard_rider(request):
     return render(request, 'rider_site/dashboard/index.html')       
