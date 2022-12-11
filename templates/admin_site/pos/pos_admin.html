@@ -24,7 +24,7 @@
         
     
   
-  
+
 
     <table class="table table-hover text-center">
         <thead>
@@ -74,7 +74,7 @@
   
     
     {% if list_pos %}         
-    <form action="{% url 'admin_site:pos_compute' %}" method="POST">
+
         {% csrf_token %}
 
     
@@ -82,27 +82,28 @@
    
         {% if user.role == "admin"%} 
         <label for="">Total Amount:</label>
-        <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" >
-
+        <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+         
         <label for="">Cash</label>
-        <input type="text" name="cash" class="form-control">
+        <input type="text" name="cash" class="form-control" id="cash">
          <br>
          <label for="">Change</label>
-         <input type="text" value="{{ result }}">
-         <input type="submit" class="btn btn-success " name="submit">
+         <p id="result"></p>
+         <input type="submit" class="btn btn-success " name="compute" id="compute">
+
          {% elif user.role == "staff" %}
          <label for="">Total Amount:</label>
-         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" disabled>
+         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
  
          <label for="">Cash</label>
          <input type="text" name="cash" class="form-control">
          <br>
          <label for="">Change</label>
-         <input type="text" value="{{ c }}">
+         <p id="result"></p>
          <input type="submit" class="btn btn-success " name="submit"> 
         {% endif %}
         <br>
-    </form>
+
     {% endif %}
     
     
@@ -116,8 +117,27 @@
 
     {% endif %}
     
+     <!-- <script type="text/javascript">
+        $(document).ready(function(){
+            $("#compute").click(function(){
+                var total_amount =parseInt($("#total_amount").val());
+                var cash =parseInt($("#cash").val());
+                var compute = $("#result").text(total_amount - cash);
+                console.log(compute)
+
+            })
+        })
+    </script>  -->
+    <!-- <script>
+        // alert("hello")
+        let name = "pedrick"
+        name = "bebeboy"
+        console.log(name)
+    </script> -->
+    
 
    
    
 {% endblock content %}
+
     

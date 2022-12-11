@@ -22,4 +22,6 @@ urlpatterns = [
     path('staff-dashboard/', views.dashboard_staff, name='dashboard_staff'),
 
     path('reseller-dashboard', views.dashboard_reseller, name='dashboard_reseller'),
+
+    path('reseller-dashboard', views.dashboard_rider, name='dashboard_rider'),
 ]

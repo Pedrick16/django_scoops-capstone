@@ -8,7 +8,11 @@ def landing(request):
     return render(request, 'reseller_site/landing.html')
 
 def orders_reseller(request):
-    return render(request, 'reseller_site/orders/order.html')
+    list_transaction = Transaction.objects.filter(transaction_user = request.user)
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'reseller_site/orders/orders.html',context)
 
 def cart_reseller(request):
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
@@ -24,7 +28,8 @@ def checkout(request):
         current_user = request.user
         pos = Pos.objects.filter(pos_user = current_user )
 
-        fullname = request.POST['fullname']
+        fname = request.POST['fname']
+        lname = request.POST['lname']
         address = request.POST['address']
         contact_no = request.POST['contact_no']
         delivery_option = request.POST['option']
@@ -33,12 +38,26 @@ def checkout(request):
 
         status = "Pending"
 
-        transaction = Transaction(transaction_user = current_user, transaction_fullname = fullname, transaction_address = address, transaction_contactno = contact_no, transaction_doption =delivery_option,  transaction_totalprice = total_amount, transaction_orderstatus = status)
+        transaction = Transaction(transaction_user = current_user, transaction_fname = fname,transaction_lname = lname, transaction_address = address, transaction_contactno = contact_no, transaction_doption =delivery_option,  transaction_totalprice = total_amount, transaction_orderstatus = status)
         transaction.save()
-        pos.delete()
-        messages.success(request, ("Please wait your order"))
-        return redirect('admin_site:pos')
+        
+        NewOrderItems = Pos.objects.filter(pos_user = request.user)
+        for item in NewOrderItems:
+            OrderItem.objects.create(
+                OrderItem_user = item.pos_user,
+                OrderItem_category = item.pos_category,
+                OrderItem_name = item.pos_name,
+                OrderItem_size = item.pos_size,
+                OrderItem_quantity  = item.pos_quantity,
+                OrderItem_amount= item.pos_amount
+            )
+            pos.delete()
+    messages.success(request, ("Please wait for your order"))
+    return redirect('admin_site:pos')
   
+
+      
+
        
 
 

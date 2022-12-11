@@ -72,13 +72,25 @@ class Transaction(models.Model):
     ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
     transaction_user = models.CharField(max_length=250, null=True, verbose_name='Transaction User')
-    transaction_fullname = models.CharField(max_length=250, null=True, verbose_name='Full Name') 
+    transaction_fname = models.CharField(max_length=250, null=True, verbose_name='First Name') 
+    transaction_lname = models.CharField(max_length=250, null=True, verbose_name='Last Name') 
     transaction_address = models.TextField(null=False, verbose_name='Address') 
     transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
     transaction_totalprice = models.FloatField( null=True, verbose_name='Total Price')
-    transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     created_at =models.DateTimeField(default=timezone.now)
+    transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
+    transaction_delivered = models.DateTimeField(null=True, verbose_name='Delivered Time')
+
+
+class OrderItem(models.Model):
+    OrderItem_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
+    OrderItem_category =  models.CharField(max_length=200, verbose_name='Category')
+    OrderItem_name=  models.CharField(max_length=200, verbose_name='Product Name')
+    OrderItem_size =  models.CharField(max_length=200, verbose_name='Size')
+    OrderItem_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
+    OrderItem_amount =  models.FloatField( null=True,verbose_name='Amount')
+
 
 
 class Activity_log(models.Model):

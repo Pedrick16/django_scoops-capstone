@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, Count
+from django.db.models import Sum, F
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -322,13 +322,11 @@ def pos_cancel(request,productid):
 
 
 
-def pos_compute(request):
-    if request.method == "POST":
-        amount = float(request.POST['amount'])
-        cash = float(request.POST['cash'])
-        result = amount - cash
+
+
+        
    
-    return render(request,'admin_site/pos/pos_admin.html', {'result':result})
+    
       
 # def pos_compute(request):
 #     if request.method == "POST":

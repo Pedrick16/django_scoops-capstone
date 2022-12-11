@@ -43,7 +43,7 @@ urlpatterns = [
     path('add-qty/<int:productid>/', views.add_qty ,name='add_qty'),
 
     path('pos/cancel/<int:productid>/', views.pos_cancel,name='pos_cancel'),
-    path('pos/compute/', views.pos_compute, name='pos_compute'),
+
     path('pos/all-products/', views.all_products ,name='all_products'),
     path('cart/all-products/<int:productid>', views.cart_products ,name='cart_products'),
 

@@ -19,8 +19,13 @@ class PosView(admin.ModelAdmin):
     list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_quantity','pos_amount']
     search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_amount']
 class TransactionView(admin.ModelAdmin):
-    list_display = ['transaction_user','transaction_fullname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','transaction_orderstatus','created_at']
-    search_fields = ['transaction_user','transaction_fullname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','transaction_orderstatus','created_at']
+    list_display = ['transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
+    search_fields = ['transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
+
+class OrderItemView(admin.ModelAdmin):
+    list_display = ['OrderItem_user', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
+    search_fields =  ['OrderItem_user', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
+    
 
 
 
@@ -38,4 +43,5 @@ admin.site.register(Reseller, ResellerView),
 admin.site.register(Product, ProductView),
 admin.site.register(Pos, PosView),
 admin.site.register(Transaction, TransactionView),
+admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),

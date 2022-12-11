@@ -1,0 +1,42 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+    <table class="table table-hover text-center" >
+        <thead>
+            <tr>
+               <th>Order ID</th>
+               <th>First Name</th>
+               <th>Last Name</th>
+               <th>Address</th>
+               <th>Contact No</th>
+               <th>Dellivery Option</th>
+               <th>Total Amount</th>
+               <th>Date</th>
+               <th>Status</th>
+               <th>Delivered date/time</th>
+        
+            </tr>
+        </thead>
+        
+        {% if list_transaction %} 
+        <tbody>
+            {% for list in list_transaction %}
+            <tr>
+                <td>{{ list.id }}</td>
+                <td>{{ list.transaction_fname }}</td>
+                <td>{{ list.transaction_lname }}</td>
+                <td>{{ list.transaction_address }}</td>
+                <td>{{ list.transaction_contactno }}</td>
+                <td>{{ list.transaction_doption }}</td>
+                <td>{{ list.transaction_totalprice }}</td>
+                <td>{{ list.created_at}}</td>
+                <td>{{ list.transaction_orderstatus }}</td>
+                <td>{{ list.transaction_delivered }}</td>
+           
+            </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+{% endblock content %}

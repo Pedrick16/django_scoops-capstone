@@ -38,9 +38,9 @@ def loginView(request):
             elif user.role == "reseller":
                 return redirect('landing_page:dashboard_reseller')
             elif user.role == "rider":    
-                return redirect('scoops_admin:list_reseller')
+                return redirect('landing_page:dashboard_rider')
             elif user.role == "staff": 
-                return redirect('landing_page:dashboard_admin')
+                return redirect('landing_page:dashboard_staff')
             else: 
                 messages.success(request, ("There Was An Error Logging In, Try Again ..."))
                 return redirect('landing_page:login') 
@@ -117,3 +117,6 @@ def dashboard_staff(request):
 
 def dashboard_reseller(request):
     return render(request, 'reseller_site/dashboard/index.html')    
+
+def dashboard_rider(request):
+    return render(request, 'rider_site/dashboard/index.html')       
