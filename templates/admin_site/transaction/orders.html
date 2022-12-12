@@ -2,12 +2,13 @@
 
 
 {% block content %}
-<form action="" method="get" class="my-3 ">
+{% if list_transaction %} 
+<form action="{% url 'admin_site:search_transaction' %}" method="GET" class="my-3 ">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>
         <div class="input-group-append">
-            <button class="btn btn-success">Search</button>
+            <button class="btn btn-success" type="submit">Search</button>
         </div>
     </div>
 </form>
@@ -32,7 +33,7 @@
             </tr>
         </thead>
         
-        {% if list_transaction %} 
+
         <tbody>
             {% for list in list_transaction %}
             <tr>
@@ -46,10 +47,9 @@
                 <td>{{ list.created_at}}</td>
                 <td>{{ list.transaction_orderstatus }}</td>
            
-           
             </tr>
             {% endfor %}
         </tbody>
-        {% endif %}
     </table>
+    {% endif %}
 {% endblock content %}

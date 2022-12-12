@@ -3,13 +3,17 @@
 
 {% block content %}
 
+{% for message in  messages %}
+<p class="alert alert-success  mt-3">{{ message }}</p>
+{% endfor %}
 
-<form action="{% url 'admin_site:search_product' %}" method="get" class="my-2">
+
+<form action="{% url 'admin_site:search_product' %}" method="GET" class="my-2">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>
         <div class="input-group-append">
-            <button class="btn btn-success">Search</button>
+            <button class="btn btn-success" type="submit">Search</button>
         </div>
     </div>
 </form>

@@ -23,11 +23,30 @@ def orders_completed(request, orderid):
         transaction = Transaction.objects.get(id = orderid)
         now = datetime.now()
         status = "Completed"
+        activity = "Delivered"
         transaction.transaction_delivered = now
         transaction.transaction_orderstatus = status
         transaction.save()
+        
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.activity = activity 
+        NewActLog.date_time = now
+        NewActLog.save()
+
+
         messages.success(request, ("Successfully Delivered"))
         return redirect('rider_site:deliver_orders')
+
+
+@login_required(login_url='landing_page:login')
+def report_deliver(request):
+    list_transaction = Transaction.objects.filter(transaction_orderstatus = "Completed").order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'rider_site/report/index.html',context)
+
 
 
 

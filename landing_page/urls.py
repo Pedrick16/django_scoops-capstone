@@ -15,9 +15,7 @@ urlpatterns = [
     path('inquiry/', views.inquiry_reseller, name='inquiry_reseller'),
 
 
-    # admin view site
-    # staff view site
-    path('staff-dashboard/', views.dashboard_staff, name='dashboard_staff'),
+  
 
 
 

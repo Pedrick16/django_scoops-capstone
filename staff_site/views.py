@@ -1,4 +1,7 @@
 from django.shortcuts import render
-from admin_site.models import *
+
 
 # Create your views here.
+def dashboard(request):
+    return render(request, 'staff_site/dashboard/index.html')
+

@@ -35,7 +35,7 @@ def checkout(request):
         pos = Pos.objects.filter(pos_user = current_user )
 
         status = "Pending"
-        trackno = 'SCOOPS'+str(random.randint(1111111,9999999))
+        trackno = 'S4U'+str(random.randint(1111111,9999999))
 
         NewTransaction = Transaction()
         NewTransaction.transaction_user = request.user
@@ -48,7 +48,7 @@ def checkout(request):
         NewTransaction.transaction_orderstatus = status
 
         while Transaction.objects.filter(transaction_no = trackno) is None:
-            trackno = 'SCOOPS'+str(random.randint(1111111,9999999))
+            trackno = 'S4U'+str(random.randint(1111111,9999999))
 
         NewTransaction.transaction_no = trackno   
         NewTransaction.save()
@@ -70,9 +70,8 @@ def checkout(request):
     messages.success(request, ("Please wait for your order"))
     return redirect('admin_site:pos')
 
-@login_required(login_url='landing_page:login')
-def profile_reseller(request):
-    return render(request, 'reseller_site/profile/index.html')
+
+
 
   
 

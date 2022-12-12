@@ -15,9 +15,7 @@ urlpatterns = [
     path('list-archive-reseller/', views.list_archive, name='list_archive'),
     path('retrieve-reseller/<int:resellerid>/', views.retrieve_reseller, name='retrieve_reseller'),
 
-    path('search-reseller/', views.search_reseller, name='search_reseller'),
-    path('search/product/', views.search_product, name='search_product'),
-    path('search/product/', views.search_inventory, name='search_product'),
+
 
     path('send-email/<int:inquiryid>', views.send_email, name='send_email'),
 
@@ -50,6 +48,11 @@ urlpatterns = [
     path('transaction-orders/', views.Transaction_orders ,name='transaction_orders'),
 
     path('reports/', views.reports ,name='reports'),
+
+    path('search-reseller/', views.search_reseller, name='search_reseller'),
+    path('search-product/', views.search_product, name='search_product'),
+    path('search-inventory/', views.search_inventory, name='search_inventory'),
+    path('search-transaction/', views.search_transaction, name='search_transaction'),
 
 
 

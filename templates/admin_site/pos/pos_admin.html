@@ -3,8 +3,12 @@
 
 
 {% block content %}
-    <br>
-    <a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
+{% for message in messages %}
+<p class="alert alert-success mt-3">{{ message }}</p>
+{% endfor %}
+<a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
+{% if list_pos %}
+   
     <br>
     <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
         {% csrf_token %}
@@ -15,12 +19,10 @@
             </div>
         </div>
     </form>
+
     
     
-    {% for message in messages %}
-    <p class="alert alert-success mt-3">{{ message }}</p>
-    {% endfor %}
-        
+    
         
     
   
@@ -40,7 +42,7 @@
                 <th></th>
              
             </tr>
-            {% if list_pos %}
+         
             <tbody>
                 
                 {% for list in  list_pos %}       
@@ -64,9 +66,10 @@
                 </tr>
                 {% endfor %}
             </tbody>
-            {% endif %}
+        
         </thead>
     </table>
+    {% endif %}
 
     <br>
 
@@ -83,7 +86,7 @@
           
    
         {% if user.role == "admin"%} 
-        <label for="">Total Amount:</label>
+        <label style="font-weight: bolder;">Total Amount:</label>
         <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
          
         <label for="">Cash</label>
@@ -94,8 +97,8 @@
          <input type="submit" class="btn btn-success " name="compute" id="compute">
 
          {% elif user.role == "staff" %}
-         <label for="">Total Amount:</label>
-         <input type="text" name="total_amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
+         <label style="font-weight: bolder;">Total Amount:</label>
+         <input type="text" style="font-weight: bolder;" name="total_amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
  
          <label for="">Cash</label>
          <input type="text" name="cash" class="form-control">
@@ -112,8 +115,8 @@
     {% if list_pos %}
 
     {% if user.role == "reseller" %}
-    <label for="">Total Amount:</label>
-    <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+    <label style="font-weight: bolder;">Total Amount:</label>
+    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
     <br>
     <div class="text-end">
     <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>

@@ -41,7 +41,7 @@ def loginView(request):
             elif user.role == "rider":    
                 return redirect('rider_site:dashboard')
             elif user.role == "staff": 
-                return redirect('landing_page:dashboard_staff')
+                return redirect('staff_site:dashboard')
             else: 
                 messages.success(request, ("There was an error logging in, Try Again ..."))
                 return redirect('landing_page:login') 
@@ -117,9 +117,7 @@ def inquiry_reseller(request):
 
 
 # dashboard for staff_site.
-@login_required(login_url='landing_page:login')
-def dashboard_staff(request):
-    return render(request, 'staff_site/dashboard/index.html')
+
 
  
 

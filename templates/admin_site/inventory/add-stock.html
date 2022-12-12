@@ -8,12 +8,12 @@
 {% for messsage in messages  %}
 <p class='alert alert-success mt-3'>{{messsage}}</p>
 {% endfor %}
-<form action="{% url 'admin_site:search_product' %}" method="get" class="my-2">
+<form action="{% url 'admin_site:search_inventory' %}" method="GET" class="my-2">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>
         <div class="input-group-append">
-            <button class="btn btn-success">Search</button>
+            <button class="btn btn-success" type="submit">Search</button>
         </div>
     </div>
 </form>
@@ -52,7 +52,7 @@
 
         <form action="{% url 'admin_site:update_inventory' list.id %}" method="POST">
         {% csrf_token %}
-        <td><input type="text" name="quantity" style="text-align:right;" placeholder="0" required></td>
+        <td><input type="number" name="quantity" style="text-align:right;" placeholder="0" required></td>
         <td><input type="submit" name="submit" class="btn btn-dark" value="Add Stock"></td>
         <input type="hidden" name="stock" value="{{ list.product_stock }}">
         </form>

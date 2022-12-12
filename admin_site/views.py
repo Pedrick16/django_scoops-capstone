@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, F
+from django.db.models import Sum, F, Q
 from django.core.mail import send_mail
 from django.conf import settings
 
@@ -27,6 +27,57 @@ def list_reseller(request):
     list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "active") 
     context = {'list_reseller':list_reseller}
     return render(request, 'admin_site/user/list_reseller.html', context)
+
+#showing to the table data 
+@login_required(login_url='landing_page:login')
+def list_inquiry(request):
+    list_inquiry = Reseller.objects.order_by('-id').filter(reseller_status = "pending")
+    context = {'list_inquiry':list_inquiry}
+    return render(request, 'admin_site/user/list_inquiry.html', context)
+
+#adding reseller to table 
+@login_required(login_url='landing_page:login')
+def add_reseller(request):
+    if request.method =="POST":
+
+        #activity log function
+        current_user = request.user
+        activity = "Adding Reseller"
+        status= "active"
+        
+        #coming from input fields
+        f_name = request.POST['fname']
+        m_name = request.POST['mname']
+        l_name = request.POST['lname']
+        gender = request.POST['gender']
+        contact_num= request.POST['cnum']
+        address = request.POST['address']
+        email = request.POST['email']
+        valid_id = request.POST['valid-ID']
+        business_permit = request.POST['Business-permit']
+
+
+        #finding if email already exist
+        if Reseller.objects.filter(reseller_email =  email):
+            messages.success(request,("Email already exist"))
+            return redirect('admin_site:add_reseller')
+        else:
+            #if none then saving to the database
+            reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
+            reseller.save()
+
+            #saving to activity log
+            activity_log = Activity_log(user_name = current_user, activity = activity)
+            activity_log.save()
+
+            #showing message
+            messages.info(request,"Successfully")
+            return redirect('admin_site:add_reseller')
+    else:
+        pass
+
+    return render(request, 'admin_site/user/add_reseller.html')
+
 
 #archiving reseller
 @login_required(login_url='landing_page:login')
@@ -78,65 +129,6 @@ def send_email(request, inquiryid):
 
     return render(request, 'admin_site/user/send_email.html')        
 
-        
-
-
-
-
-
-
-
-
-
-
-   
-
-# def search(request):
-#     return render(request,'admin_site/search_bar/search_reseller.html')
-@login_required(login_url='landing_page:login')
-def search_reseller(request):
-    if request.method == "GET":
-        search = request.GET.get('search')
-        if search:
-            list_reseller = Reseller.objects.filter(reseller_fname__contains=search, reseller_status ="active") 
-            return render(request,'admin_site/search_bar/search_reseller.html', {'list_reseller':list_reseller})
-        else:
-           messages.success(request,("No records found!"))   
-           return render(request,'admin_site/search_bar/search_reseller.html',{})
-
-# seaching
-@login_required(login_url='landing_page:login')
-def search_product(request):
-    if request.method == "GET":
-        search = request.GET.get('search')
-        if search:
-            list_products = Product.objects.filter(product_name__contains=search) 
-            return render(request,'admin_site/search_bar/search_product.html', {'list_products':list_products})
-        else:
-           messages.success(request,("No records found!"))   
-           return render(request,'admin_site/search_bar/search_product.html',{})
-
-# seaching
-@login_required(login_url='landing_page:login')
-def search_inventory(request):
-    if request.method == "GET":
-        search = request.GET.get('search')
-        if search:
-            list_products = Product.objects.filter(product_name__contains=search) 
-            return render(request,'admin_site/search_bar/search_product.html', {'list_products':list_products})
-        else:
-           messages.success(request,("No records found!"))   
-           return render(request,'admin_site/search_bar/search_product.html',{})
-   
-    
-#showing to the table data 
-@login_required(login_url='landing_page:login')
-def list_inquiry(request):
-    list_inquiry = Reseller.objects.order_by('-id').filter(reseller_status = "pending")
-    context = {'list_inquiry':list_inquiry}
-    return render(request, 'admin_site/user/list_inquiry.html', context)
-
-
 #process inquiry for reseller
 @login_required(login_url='landing_page:login')
 def process_inquiry(request):
@@ -160,53 +152,23 @@ def process_inquiry(request):
     return render(request, 'landing_page/inquiry_reseller.html')
 
 
-#adding reseller to table 
-@login_required(login_url='landing_page:login')
-def add_reseller(request):
-    if request.method =="POST":
-
-        #activity log function
-        current_user = request.user
-        activity = "Adding Reseller"
-        status= "active"
-        
-        #coming from input fields
-        f_name = request.POST['fname']
-        m_name = request.POST['mname']
-        l_name = request.POST['lname']
-        gender = request.POST['gender']
-        contact_num= request.POST['cnum']
-        address = request.POST['address']
-        email = request.POST['email']
-        valid_id = request.POST['valid-ID']
-        business_permit = request.POST['Business-permit']
 
 
-        #finding if email already exist
-        if Reseller.objects.filter(reseller_email =  email):
-            messages.success(request,("Email already exist"))
-            return redirect('admin_site:add_reseller')
-        else:
-            #if none then saving to the database
-            reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
-            reseller.save()
 
-            #saving to activity log
-            activity_log = Activity_log(user_name = current_user, activity = activity)
-            activity_log.save()
 
-            #showing message
-            messages.info(request,"Successfully")
-            return redirect('admin_site:add_reseller')
-    else:
-        pass
 
-    return render(request, 'admin_site/user/add_reseller.html')
+
+
+
+
+
+
+#FOR PRODUCT FEATURES
 
 #list inventory 
 @login_required(login_url='landing_page:login')
 def list_products(request):
-    list_products = Product.objects.order_by('-id')
+    list_products = Product.objects.all()
     context = {'list_products':list_products}
     return render(request, 'admin_site/products/product.html', context)
 
@@ -230,15 +192,28 @@ def add_product(request):
         return redirect('admin_site:add_product')
         
     return render(request, 'admin_site/products/add_product.html')    
+
+
+
+
+
+
+
+
+
+
+
+
+
+
   
        
-    
+#FOR INVENTORY FEATURES
       
-
 #list inventory 
 @login_required(login_url='landing_page:login')
 def inventory(request):
-    list_products = Product.objects.order_by('-id')
+    list_products = Product.objects.all()
     context = {'list_products':list_products}
     return render(request, 'admin_site/inventory/add-stock.html', context)   
 
@@ -268,6 +243,26 @@ def update_inventory(request, productid):
         messages.info(request,("Successfully Updated"))
     return redirect('admin_site:inventory')  
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# FOR POS FEATURES
+
+#list Products
 @login_required(login_url='landing_page:login')
 def pos(request):
     current_user = request.user
@@ -297,10 +292,6 @@ def minus_qty(request, productid):
     return redirect('admin_site:pos')
 
      
-
-   
-
-
 @login_required(login_url='landing_page:login')
 def add_qty(request,productid):
     pos = Pos.objects.get(id =productid)
@@ -316,9 +307,6 @@ def add_qty(request,productid):
     pos.save()
     return redirect('admin_site:pos')
 
-
-    
-    
 
 @login_required(login_url='landing_page:login')
 def pos_cancel(request,productid):
@@ -339,28 +327,8 @@ def pos_cancel(request,productid):
         messages.success(request,("Successfully cancelled"))
         return redirect('admin_site:pos')
 
-
-
-
-
-        
-   
     
       
-# def pos_compute(request):
-#     if request.method == "POST":
-#         total_amount = int(request.POST['total'])
-#         cash = int(request.POST['cash'])
-
-           
-#         if cash < total_amount:
-#              messages.success(request,("Invalid Payment"))
-#         else:
-#             c = total_amount - cash
-#             render(request,' admin_site/pos/pos_admin.html', {'c':c})      
-         
-#     return render(request,' admin_site/pos/pos_admin.html', {'c':c})        
-
 #all products for pos
 @login_required(login_url='landing_page:login')
 def all_products(request):
@@ -368,6 +336,8 @@ def all_products(request):
     context = {'list_products':list_products}
     return render(request, 'admin_site/pos/all-products.html', context)
 
+
+#adding to pos cart
 @login_required(login_url='landing_page:login')
 def cart_products(request, productid):
     if request.method =="POST":
@@ -425,14 +395,39 @@ def cart_products(request, productid):
             return redirect('admin_site:all_products')
 
 
+
+
+
+
+
+
+
+
+#FOR TRANSACTION FEATURES
+
+#transaction VIEW
 @login_required(login_url='landing_page:login') 
 def Transaction_orders(request):
-    list_transaction = Transaction.objects.filter(transaction_orderstatus = "Pending").order_by('-id')
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Pending")).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }
     return render(request, 'admin_site/transaction/orders.html', context)
 
+
+
+
+
+
+
+
+
+
+
+
+#FOR REPORTS FEATURES
+
+#reports VIEW
 @login_required(login_url='landing_page:login') 
 def reports(request):
     list_reports = Activity_log.objects.all().order_by('-id')
@@ -445,6 +440,65 @@ def reports(request):
 
 
 
-# def register(request):
-#     return render(request,'admin_site/user/register_user.html')
+
+
+
+
+
+
+
+
+
+
+
+#SEARCH FEATURES
+
+#search bar for reseller
+@login_required(login_url='landing_page:login')
+def search_reseller(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_reseller = Reseller.objects.filter(Q(reseller_status = "active"), Q(reseller_fname__contains=search) | Q(reseller_mname__contains=search) |Q(reseller_lname__contains=search) | Q(reseller_gender__contains=search) | Q(reseller_address__contains=search)| Q(reseller_email__contains=search)) 
+            return render(request,'admin_site/user/list_reseller.html', {'list_reseller': list_reseller})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/user/list_reseller.html')
+
+#search bar for inventory
+@login_required(login_url='landing_page:login')
+def search_inventory(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_products = Product.objects.filter(Q(product_code__icontains = search) | Q(product_category__icontains = search) | Q(product_name__icontains = search)| Q(product_size__icontains = search) | Q(product_stock__icontains = search)| Q(product_status = search)) 
+            return render(request,'admin_site/inventory/add-stock.html', {'list_products':list_products})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/inventory/add-stock.html')
+
+#search bar for Products             
+@login_required(login_url='landing_page:login')
+def search_product(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_products = Product.objects.filter(Q(product_code__icontains = search) | Q(product_category__icontains = search) | Q(product_name__icontains = search)| Q(product_size__icontains = search)| Q(product_stock__icontains = search)| Q(product_status__icontains = search) ) 
+            return render(request,'admin_site/products/product.html', {'list_products':list_products})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/products/product.html')
+
+#search bar for Products             
+@login_required(login_url='landing_page:login')
+def search_transaction(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_transaction= Transaction.objects.filter(Q(transaction_orderstatus = "Pending"),    Q(transaction_no__icontains = search) | Q(transaction_fname__icontains = search) ) 
+            return render(request,'admin_site/transaction/orders.html', {'list_transaction':list_transaction})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/transaction/orders.html')
+
 
