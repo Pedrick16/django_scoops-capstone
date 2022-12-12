@@ -13,7 +13,11 @@ from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard_admin(request):
-    return render(request, 'admin_site/dashboard/index.html')
+    transaction_sales = Transaction.objects.all().aggregate(data=Sum('transaction_totalprice'))
+    context = {
+        'transaction_sales':transaction_sales  
+    }
+    return render(request, 'admin_site/dashboard/index.html', context)
 
 
 
@@ -419,6 +423,26 @@ def cart_products(request, productid):
             pos.save()
             messages.info(request,("Successfully carting Products"))
             return redirect('admin_site:all_products')
+
+
+@login_required(login_url='landing_page:login') 
+def Transaction_orders(request):
+    list_transaction = Transaction.objects.filter(transaction_orderstatus = "Pending").order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'admin_site/transaction/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def reports(request):
+    list_reports = Activity_log.objects.all().order_by('-id')
+    context = {
+        'list_reports':list_reports
+    }
+    return render(request, 'admin_site/reports/reports.html', context)
+
+
+
 
 
 # def register(request):

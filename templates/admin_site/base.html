@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Admin</title>
+    <title>Scoops4u</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
 </head>
 <body>
@@ -19,11 +19,11 @@
           <div class="collapse navbar-collapse" id="navbarNavDropdown">
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
               <li class="nav-item">
-                <a class="nav-link active" aria-current="page" href="{% url 'landing_page:dashboard_admin'%}">Dashboard</a>
+                <a class="nav-link active" aria-current="page" href="{% url 'admin_site:dashboard'%}">Dashboard</a>
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Users list
+                  List Reseller 
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'admin_site:list_reseller'%}">Reseller</a></li>
@@ -40,18 +40,12 @@
                 <a class="nav-link" href="{%url 'admin_site:pos' %}">POS</a>
               </li>
               <li class="nav-item">
-                <a class="nav-link" href="../transaction/transaction.php">Transaction</a>
+                <a class="nav-link" href="{% url 'admin_site:transaction_orders' %}">Transaction</a>
               </li>
-              <li class="nav-item dropdown">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  Reports
-                </a>
-                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="../reports-admin/act-log.php">activity-logged-in</a></li>
-                  <li><a class="dropdown-item" href="../reports-admin/act-logged-out.php">activity-logged-out</a></li>
-                  <li><a class="dropdown-item" href="../reports-admin/users-list.php">Users List</a></li>
-                </ul>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'admin_site:reports' %}">Reports</a>
               </li>
+              
               
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -141,7 +135,7 @@
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
           <li class="nav-item">
-            <a class="nav-link active" aria-current="page" href="{% url 'landing_page:dashboard_reseller'%}">Dashboard</a>
+            <a class="nav-link active" aria-current="page" href="{% url 'reseller_site:dashboard'%}">Dashboard</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="{% url 'reseller_site:orders_reseller'  %}">Orders</a>
@@ -149,6 +143,9 @@
          
           <li class="nav-item">
             <a class="nav-link" href="{% url 'admin_site:pos'  %}">Cart</a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link" href="{% url 'reseller_site:profile_reseller'  %}">Profile</a>
           </li>
 
           <li class="nav-item dropdown">

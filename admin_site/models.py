@@ -57,6 +57,9 @@ class Product(models.Model):
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
     product_expiry =  models.DateField( null=True, default=None, verbose_name='Expiry Date')
 
+    def __str__(self):
+        return self.product_code
+
 class Pos(models.Model):
     pos_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
     pos_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
@@ -67,12 +70,17 @@ class Pos(models.Model):
     pos_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
     pos_amount =  models.FloatField( null=True,verbose_name='Amount')
 
+    def __str__(self):
+        return self.pos_user
+
+   
+
 
 class Transaction(models.Model):
     ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
 
-    transaction_no =  models.CharField(max_length=200, null=False,verbose_name='Transaction Number')
+    transaction_no =  models.CharField(unique=True, max_length=200, null=False,verbose_name='Transaction Number')
     transaction_user = models.CharField(max_length=250, null=True, verbose_name='List Username')
     transaction_fname = models.CharField(max_length=250, null=True, verbose_name='First Name') 
     transaction_lname = models.CharField(max_length=250, null=True, verbose_name='Last Name') 
@@ -83,6 +91,9 @@ class Transaction(models.Model):
     created_at =models.DateTimeField(default=timezone.now)
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
+
+    def __str__(self):
+        return self.transaction_no
 
 
   
@@ -98,12 +109,18 @@ class OrderItem(models.Model):
     OrderItem_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
     OrderItem_amount =  models.FloatField( null=True,verbose_name='Amount')
 
+    def __str__(self):
+        return self.OrderItem_user
+
 
 
 class Activity_log(models.Model):
     user_name = models.CharField(max_length=250, verbose_name=' Username')
     activity = models.CharField(max_length=250, verbose_name='Activity')
     date_time =  models.DateTimeField(default=timezone.now, verbose_name='Date and Time')
+
+    def __str__(self):
+        return self.user_name
 
 
     

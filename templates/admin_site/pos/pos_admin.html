@@ -84,13 +84,13 @@
    
         {% if user.role == "admin"%} 
         <label for="">Total Amount:</label>
-        <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
          
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control" id="cash">
          <br>
          <label for="">Change</label>
-         <p id="result"></p>
+         <input type="text" class="form-control">
          <input type="submit" class="btn btn-success " name="compute" id="compute">
 
          {% elif user.role == "staff" %}
@@ -112,6 +112,9 @@
     {% if list_pos %}
 
     {% if user.role == "reseller" %}
+    <label for="">Total Amount:</label>
+    <input type="text" name="amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+    <br>
     <div class="text-end">
     <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>
     </div>

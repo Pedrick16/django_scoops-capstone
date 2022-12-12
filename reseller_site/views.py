@@ -3,11 +3,12 @@ from admin_site.models import *
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+import random
 
 # Create your views here.
 @login_required(login_url='landing_page:login')
-def landing(request):
-    return render(request, 'reseller_site/landing.html')
+def dashboard(request):
+    return render(request, 'reseller_site/dashboard/index.html')
 
 @login_required(login_url='landing_page:login')
 def orders_reseller(request):
@@ -33,22 +34,31 @@ def checkout(request):
         current_user = request.user
         pos = Pos.objects.filter(pos_user = current_user )
 
-        fname = request.POST['fname']
-        lname = request.POST['lname']
-        address = request.POST['address']
-        contact_no = request.POST['contact_no']
-        delivery_option = request.POST['option']
-
-        total_amount = float(request.POST['total_amount'])
-
         status = "Pending"
+        trackno = 'SCOOPS'+str(random.randint(1111111,9999999))
 
-        transaction = Transaction(transaction_user = current_user, transaction_fname = fname,transaction_lname = lname, transaction_address = address, transaction_contactno = contact_no, transaction_doption =delivery_option,  transaction_totalprice = total_amount, transaction_orderstatus = status)
-        transaction.save()
+        NewTransaction = Transaction()
+        NewTransaction.transaction_user = request.user
+        NewTransaction.transaction_fname = request.POST.get('fname')
+        NewTransaction.transaction_lname = request.POST.get('lname')
+        NewTransaction.transaction_address = request.POST.get('address')
+        NewTransaction.transaction_contactno= request.POST.get('contact_no')
+        NewTransaction.transaction_doption = request.POST.get('option')
+        NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
+        NewTransaction.transaction_orderstatus = status
+
+        while Transaction.objects.filter(transaction_no = trackno) is None:
+            trackno = 'SCOOPS'+str(random.randint(1111111,9999999))
+
+        NewTransaction.transaction_no = trackno   
+        NewTransaction.save()
+
+       
         
         NewOrderItems = Pos.objects.filter(pos_user = request.user)
         for item in NewOrderItems:
             OrderItem.objects.create(
+                OrderItem_transactionNo = trackno,
                 OrderItem_user = item.pos_user,
                 OrderItem_category = item.pos_category,
                 OrderItem_name = item.pos_name,
@@ -59,6 +69,11 @@ def checkout(request):
             pos.delete()
     messages.success(request, ("Please wait for your order"))
     return redirect('admin_site:pos')
+
+@login_required(login_url='landing_page:login')
+def profile_reseller(request):
+    return render(request, 'reseller_site/profile/index.html')
+
   
 
       

@@ -35,11 +35,11 @@ def loginView(request):
             activity_log.save()
 
             if user.role == "admin": 
-                return redirect('landing_page:dashboard_admin') 
+                return redirect('admin_site:dashboard') 
             elif user.role == "reseller":
-                return redirect('landing_page:dashboard_reseller')
+                return redirect('reseller_site:dashboard')
             elif user.role == "rider":    
-                return redirect('landing_page:dashboard_rider')
+                return redirect('rider_site:dashboard')
             elif user.role == "staff": 
                 return redirect('landing_page:dashboard_staff')
             else: 
@@ -107,24 +107,20 @@ def logoutView(request):
     return render(request, 'landing_page/login-folder/login.html')
 
 # for inquiry here.
-@login_required(login_url='landing_page:login')
+
 def inquiry_reseller(request):
     return render(request, 'landing_page/inquiry_reseller.html')    
 
+
 # dashboard for admin_site.
-@login_required(login_url='landing_page:login')
-def dashboard_admin(request):
-    return render(request, 'admin_site/dashboard/index.html')
+
+
 
 # dashboard for staff_site.
 @login_required(login_url='landing_page:login')
 def dashboard_staff(request):
     return render(request, 'staff_site/dashboard/index.html')
 
-@login_required(login_url='landing_page:login')
-def dashboard_reseller(request):
-    return render(request, 'reseller_site/dashboard/index.html')    
+ 
 
-@login_required(login_url='landing_page:login')
-def dashboard_rider(request):
-    return render(request, 'rider_site/dashboard/index.html')       
+    

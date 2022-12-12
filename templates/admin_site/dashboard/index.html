@@ -2,11 +2,13 @@
 
 
 {% block content %}
-   <!-- {{ user }}  -->
-   {% if user.is_authenticated %}
      <p>welcome {{ user }}</p> 
-   {% else %} 
-     <label>Wecome Guest</label> 
-   {% endif %}
+     <br>
+     <div class="fw-bolder">
+      <label for="">Total Sales</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_sales.data }}"  class="form-control" disabled>
+     </div>
+
+   
 {% endblock content %}
     

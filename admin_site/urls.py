@@ -45,6 +45,12 @@ urlpatterns = [
     path('pos/cancel/<int:productid>/', views.pos_cancel,name='pos_cancel'),
 
     path('pos/all-products/', views.all_products ,name='all_products'),
-    path('cart/all-products/<int:productid>', views.cart_products ,name='cart_products'),
+    path('cart/all-products/<int:productid>/', views.cart_products ,name='cart_products'),
+
+    path('transaction-orders/', views.Transaction_orders ,name='transaction_orders'),
+
+    path('reports/', views.reports ,name='reports'),
+
+
 
 ]

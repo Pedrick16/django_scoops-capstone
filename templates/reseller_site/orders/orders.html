@@ -5,7 +5,7 @@
     <table class="table table-hover text-center" >
         <thead>
             <tr>
-               <th>Order ID</th>
+               <th>Tansaction ID</th>
                <th>First Name</th>
                <th>Last Name</th>
                <th>Address</th>
@@ -23,7 +23,7 @@
         <tbody>
             {% for list in list_transaction %}
             <tr>
-                <td>{{ list.id }}</td>
+                <td>{{ list.transaction_no }}</td>
                 <td>{{ list.transaction_fname }}</td>
                 <td>{{ list.transaction_lname }}</td>
                 <td>{{ list.transaction_address }}</td>
