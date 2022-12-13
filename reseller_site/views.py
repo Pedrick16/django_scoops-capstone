@@ -20,11 +20,13 @@ def orders_reseller(request):
 
 @login_required(login_url='landing_page:login')
 def cart_reseller(request):
+    total_item = Pos.objects.filter(pos_user = request.user).count()
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(data =Sum('pos_amount'))
     context = {
         'list_cart':list_cart,
-        'sum_amount':sum_amount
+        'sum_amount':sum_amount,
+        'total_item':total_item
     }
     return render(request, 'reseller_site/cart/checkout.html', context)
 
@@ -52,6 +54,15 @@ def checkout(request):
 
         NewTransaction.transaction_no = trackno   
         NewTransaction.save()
+
+        #activity log for Checkout
+        activity = "Check-out"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+    
 
        
         

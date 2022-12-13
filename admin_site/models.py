@@ -6,6 +6,7 @@ import os , random
 
 
 
+
 now = timezone.now()
 # Create your models here.
 
@@ -32,7 +33,7 @@ class Reseller(models.Model):
     reseller_lname =models.CharField(max_length=200, verbose_name='Last Name')
     reseller_gender = models.CharField(max_length = 50,choices=BOOLCHOICE, verbose_name='Gender')
     reseller_contact =models.CharField(max_length = 12, verbose_name='Contact Number')
-    reseller_address =models.CharField(max_length=200, verbose_name='Address')
+    reseller_address =models.TextField(null=False, verbose_name='Address')
     reseller_email =models.EmailField(unique=True, max_length=200, verbose_name='Email')
     reseller_id =models.ImageField( upload_to=image_path, verbose_name='valid id')
     reseller_businessp =models.ImageField( upload_to=image_path,verbose_name='business id')
@@ -112,15 +113,26 @@ class OrderItem(models.Model):
     def __str__(self):
         return self.OrderItem_user
 
+class Profile(models.Model):
+    list_user = models.CharField(max_length=100, null=False, verbose_name="List User")
+    profile_fname = models.CharField(max_length=250, null=False, verbose_name="First Name")
+    profile_mname = models.CharField(max_length=250,  null=False, verbose_name="Middle Name")
+    profile_lname = models.CharField(max_length=250, null=False, verbose_name="Last Name")
+    profile_cnumber = models.CharField(max_length=100, null=False, verbose_name="Contact Number")
+    profile_address = models.TextField(null=False, verbose_name="Address")
+    profile_email = models.CharField(unique=True, max_length=100, null=False, verbose_name="Email Address")
 
+    def __str__(self):
+        return self.profile_email
 
 class Activity_log(models.Model):
     user_name = models.CharField(max_length=250, verbose_name=' Username')
     activity = models.CharField(max_length=250, verbose_name='Activity')
     date_time =  models.DateTimeField(default=timezone.now, verbose_name='Date and Time')
+    role = models.CharField(max_length=100, null=True,verbose_name='Role')
 
     def __str__(self):
-        return self.user_name
+        return self.activity
 
 
     

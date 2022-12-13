@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.db.models import Sum, F, Q
 from django.core.mail import send_mail
 from django.conf import settings
+from datetime import datetime
 
 
 from django.contrib.auth.decorators import login_required, permission_required
@@ -14,8 +15,10 @@ from django.contrib.auth.decorators import login_required, permission_required
 @login_required(login_url='landing_page:login')
 def dashboard_admin(request):
     transaction_sales = Transaction.objects.all().aggregate(data=Sum('transaction_totalprice'))
+    transaction_count = Transaction.objects.count()
     context = {
-        'transaction_sales':transaction_sales  
+        'transaction_sales': transaction_sales ,
+        'transaction_count': transaction_count
     }
     return render(request, 'admin_site/dashboard/index.html', context)
 
@@ -67,8 +70,16 @@ def add_reseller(request):
             reseller.save()
 
             #saving to activity log
-            activity_log = Activity_log(user_name = current_user, activity = activity)
-            activity_log.save()
+            #activity log for adding stock
+            activity = "Adding Reseller"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+    
+  
+            
 
             #showing message
             messages.info(request,"Successfully")
@@ -82,15 +93,31 @@ def add_reseller(request):
 #archiving reseller
 @login_required(login_url='landing_page:login')
 def archive_reseller(request,resellerid):
-    # changing status to inactice
-    reseller = Reseller.objects.get(id = resellerid)
-    # reseller.delete()
+    if request.method =="POST":
+        # changing status to inactice
+        reseller = Reseller.objects.get(id = resellerid)
+        # reseller.delete()
+        status = "inactive"
+        reseller.reseller_status = status
+        reseller.save()
+        #activity log for archiving reseller
+        activity = "archiving reseller"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+    
+  
 
-    status = "inactive"
-    reseller.reseller_status = status
-    reseller.save()
-    messages.success(request,("Successfully Archiving Reseller info"))
-    return redirect('admin_site:list_reseller')
+
+        messages.success(request,("Successfully Archiving Reseller info"))
+        return redirect('admin_site:list_reseller')
+
+
+   
+
+   
 
 @login_required(login_url='landing_page:login')
 def list_archive(request):
@@ -188,10 +215,27 @@ def add_product(request):
         #inserting to database 
         product = Product(product_code = pcode, product_category = pcategory, product_name = pname, product_size =psize, product_price = pprice, product_stock = pstock, product_status = pstatus,product_expiry = pexpiry)
         product.save()
+        
+        #activity log
+        activity = "Adding Product"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+
+
+
+
         messages.success(request,("Successfully Product added"))
         return redirect('admin_site:add_product')
         
     return render(request, 'admin_site/products/add_product.html')    
+
+
+
+def profile(request):
+    return render(request, 'admin_site/profile/index.html')
 
 
 
@@ -224,9 +268,7 @@ def update_inventory(request, productid):
         #to get the latest id
         product = Product.objects.get(id = productid)
 
-        #activity log for adding stock
-        current_user = request.user
-        activity = "Adding Stock"
+      
 
         #the  stock and quantity from input
         product_stock = int(request.POST['stock'])
@@ -238,8 +280,17 @@ def update_inventory(request, productid):
         #update product stock
         product.product_stock = sum 
         product.save()
-        activity_log = Activity_log(user_name = current_user, activity = activity)
-        activity_log.save()
+        
+
+        #activity log for adding stock
+        activity = "Adding stock"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+    
+  
         messages.info(request,("Successfully Updated"))
     return redirect('admin_site:inventory')  
 
@@ -322,8 +373,18 @@ def pos_cancel(request,productid):
 
         product.product_stock = return_stock
         product.save()
-
         cancel.delete()
+
+        #activity log for cancelling the product
+        activity = "Cancelled Cart"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+    
+
+        
         messages.success(request,("Successfully cancelled"))
         return redirect('admin_site:pos')
 
@@ -429,12 +490,20 @@ def Transaction_orders(request):
 
 #reports VIEW
 @login_required(login_url='landing_page:login') 
-def reports(request):
+def report_actlog(request):
     list_reports = Activity_log.objects.all().order_by('-id')
     context = {
         'list_reports':list_reports
     }
-    return render(request, 'admin_site/reports/reports.html', context)
+    return render(request, 'admin_site/reports/act_log.html', context)
+
+# @login_required(login_url='landing_page:login') 
+# def report_sales(request):
+#     list_reports = .objects.all().order_by('-id')
+#     context = {
+#         'list_reports':list_reports
+#     }
+#     return render(request, 'admin_site/reports/act_log.html', context)    
 
 
 
@@ -500,5 +569,19 @@ def search_transaction(request):
         else:
            messages.success(request,("No records found!"))   
            return render(request,'admin_site/transaction/orders.html')
+
+@login_required(login_url='landing_page:login')
+def search_actlog(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_reports = Activity_log.objects.filter(Q(user_name__icontains = search) |    Q(activity__icontains = search) | Q(role__icontains = search)) 
+            return render(request,'admin_site/reports/act_log.html', {'list_reports':list_reports})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/reports/act_log.html')
+
+
+
 
 

@@ -11,6 +11,7 @@ urlpatterns = [
     path('list-inquiry/', views.list_inquiry, name='list_inquiry'),
     path('list-reseller/', views.list_reseller, name='list_reseller'),
     path('archive-reseller/<int:resellerid>/', views.archive_reseller, name='archive_reseller'),
+    path('profile/', views.profile, name='profile'),
 
     path('list-archive-reseller/', views.list_archive, name='list_archive'),
     path('retrieve-reseller/<int:resellerid>/', views.retrieve_reseller, name='retrieve_reseller'),
@@ -42,18 +43,17 @@ urlpatterns = [
 
     path('pos/cancel/<int:productid>/', views.pos_cancel,name='pos_cancel'),
 
+
     path('pos/all-products/', views.all_products ,name='all_products'),
     path('cart/all-products/<int:productid>/', views.cart_products ,name='cart_products'),
-
-    path('transaction-orders/', views.Transaction_orders ,name='transaction_orders'),
-
-    path('reports/', views.reports ,name='reports'),
-
+    path('transaction-orders/', views.Transaction_orders, name='transaction_orders'),
+ 
     path('search-reseller/', views.search_reseller, name='search_reseller'),
     path('search-product/', views.search_product, name='search_product'),
     path('search-inventory/', views.search_inventory, name='search_inventory'),
     path('search-transaction/', views.search_transaction, name='search_transaction'),
+    path('search/activity-log/', views.search_actlog, name='search_act-log'),
 
-
-
+    path('reports/activity-log/', views.report_actlog, name='report_actlog'),
+    # path('reports-sales/', views.report_sales, name='report_sales'),
 ]

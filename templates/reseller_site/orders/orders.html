@@ -1,7 +1,7 @@
 {% extends 'admin_site/base.html' %}
 
 
-{% block content %}
+{% block template %}
 {% if list_transaction %} 
     <table class="table table-hover text-center" >
         <thead>
@@ -15,7 +15,7 @@
                <th>Total Amount</th>
                <th>Date</th>
                <th>Status</th>
-               <th>Delivered date/time</th>
+               <th>Delivered Date-Time</th>
         
             </tr>
         </thead>
@@ -41,4 +41,4 @@
        
     </table>
     {% endif %}
-{% endblock content %}
+{% endblock template %}

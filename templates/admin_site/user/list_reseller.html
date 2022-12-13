@@ -1,11 +1,16 @@
 {% extends 'admin_site/base.html' %}
 
-{% block content %}
+
+
+{% block template %}
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+
+
 
 {% for messsage in messages  %}
 <p class='alert alert-success mt-3'>{{messsage}}</p>
 {% endfor %}
-
+<a href="{% url 'admin_site:add_reseller' %}" class="btn btn-dark ">Add Reseller</a>
 <form action="{% url 'admin_site:search_reseller' %}" method="get" class="my-2">
     {% csrf_token %}
     <div class="input-group">
@@ -20,7 +25,7 @@
 
     
 
-    <a href="{% url 'admin_site:add_reseller' %}" class="btn btn-dark">Add Reseller</a>
+
     {% if list_reseller %}
     <table class="table table-hover text-center">
         <thead>
@@ -54,13 +59,33 @@
                     <td><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
                     <td><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
                     <td>{{ list.reseller_status }}</td>
-                    <td><a href="{% url 'admin_site:archive_reseller'  list.id %}" class="btn btn-danger">Archive</a></td>
+                    <form method="POST" action="{% url 'admin_site:archive_reseller'  list.id %}" onsubmit="return submitForm(this);">
+                        {% csrf_token %}
+                    <td> <input type="submit" class="btn btn-dark"  value="Archive"></td>
+                    </form>
+                    <script>
+                        function submitForm(form) {
+                            swal({
+                                title: "Are you sure?",
+                                text: "This form will be submitted",
+                                icon: "warning",
+                                buttons: true,
+                                dangerMode: true,
+                            })
+                            .then(function (isOkay) {
+                                if (isOkay) {
+                                    form.submit();
+                                }
+                            });
+                            return false;
+                        }
+                    </script>
                 </tr>
                 {% endfor %}
             </tbody>
         </thead>
     </table>
     {% endif %}
-{% endblock content %}
+{% endblock template %}
 
     

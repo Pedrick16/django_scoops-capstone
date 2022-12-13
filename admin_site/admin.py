@@ -25,14 +25,17 @@ class TransactionView(admin.ModelAdmin):
 class OrderItemView(admin.ModelAdmin):
     list_display = ['OrderItem_transactionNo','OrderItem_user', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
     search_fields =  ['OrderItem_transactionNo','OrderItem_user', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
-    
+
+class ProfileView(admin.ModelAdmin):
+    list_display = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email']
+    search_fields = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email']
 
 
 
 
 class Activity_logView(admin.ModelAdmin):
-    list_display = ['user_name','activity','date_time']
-    search_fields = ['user_name','activity','date_time']
+    list_display = ['user_name','activity','role','date_time']
+    search_fields = ['user_name','activity','role','date_time']
 
 
 
@@ -45,3 +48,4 @@ admin.site.register(Pos, PosView),
 admin.site.register(Transaction, TransactionView),
 admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
+admin.site.register(Profile, ProfileView),

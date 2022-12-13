@@ -1,5 +1,5 @@
 from django.shortcuts import render,redirect
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 
 
@@ -31,8 +31,15 @@ def loginView(request):
         if user is not None:
             # current_user =  User.objects.get(pk=user.pk)
             login(request, user)  
-            activity_log = Activity_log(user_name = username, activity = activity)
-            activity_log.save()
+
+            #activity log for login
+            activity = "Signed-in"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+    
 
             if user.role == "admin": 
                 return redirect('admin_site:dashboard') 
@@ -62,7 +69,22 @@ def registerUser(request):
         if form.is_valid():
             form.save()
             return redirect('admin_site:list_reseller')
-    return render(request, 'admin_site/user/register_user.html',{'form':form})     
+    return render(request, 'admin_site/user/register_user.html',{'form':form})    
+
+@login_required(login_url='landing_page:login')
+def logoutView(request):
+    
+    #activity log for login
+    activity = "Signed-out"
+    NewActLog = Activity_log()
+    NewActLog.user_name = request.user
+    NewActLog.role = request.user.role
+    NewActLog.activity = activity 
+    NewActLog.save()
+
+    logout(request)
+    return render(request, 'landing_page/login-folder/login.html')
+
 
 
        
@@ -97,17 +119,8 @@ def registerUser(request):
 #         return render(request, 'landing_page/login-folder/login.html')    
 
 # logout session here.
-@login_required(login_url='landing_page:login')
-def logoutView(request):
-    current_user = request.user
-    activity = "signed-out"
-    logout(request)
-    activity_log = Activity_log(user_name =current_user, activity = activity)
-    activity_log.save()
-    return render(request, 'landing_page/login-folder/login.html')
 
 # for inquiry here.
-
 def inquiry_reseller(request):
     return render(request, 'landing_page/inquiry_reseller.html')    
 

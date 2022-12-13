@@ -2,11 +2,14 @@
 
 
 {% block content %}
-     <p>welcome {{ user }}</p> 
+     <p>welcome {{ user.role }}</p> 
      <br>
      <div class="fw-bolder">
       <label for="">Total Sales</label>
       <input type="text" style="font-weight: bolder;" value="{{ transaction_sales.data }}"  class="form-control" disabled>
+       <br>
+      <label for="">Total Transaction</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_count }}"  class="form-control" disabled>
      </div>
 
    
