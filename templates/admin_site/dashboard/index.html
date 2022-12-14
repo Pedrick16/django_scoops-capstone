@@ -2,14 +2,28 @@
 
 
 {% block content %}
-     <p>welcome {{ user.role }}</p> 
+      <br>
      <br>
      <div class="fw-bolder">
-      <label for="">Total Sales</label>
+      <label for="">Online Sales</label>
       <input type="text" style="font-weight: bolder;" value="{{ transaction_sales.data }}"  class="form-control" disabled>
        <br>
-      <label for="">Total Transaction</label>
+       <label for="">Walk-in Sales</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_sales.data }}"  class="form-control" disabled>
+      <br>
+      <label for="">Overall Transaction</label>
       <input type="text" style="font-weight: bolder;" value="{{ transaction_count }}"  class="form-control" disabled>
+      <br>
+      <label for="">Pending Order</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_pending }}"  class="form-control" disabled>
+      <br>
+      <label for="">Completed</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_completed }}"  class="form-control" disabled>
+      <br>
+      <label for="">Shipping for Out</label>
+      <input type="text" style="font-weight: bolder;" value="{{ transaction_shipped }}"  class="form-control" disabled>
+
+ 
      </div>
 
    

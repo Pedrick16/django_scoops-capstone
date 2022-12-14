@@ -48,15 +48,20 @@ class Reseller(models.Model):
 
 
 class Product(models.Model):
-    STATUS = (("available","available"),("n/a","n/a"))
+    STATUS = (("available","available"),("low stock","low stock"),("n/a","n/a"))
     product_code =  models.CharField(unique=True, max_length=200, verbose_name='Product Code')
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    product_size =  models.CharField(max_length=200, verbose_name='Size')
-    product_price =  models.FloatField( null=True, verbose_name='Price')
-    product_stock =  models.CharField(max_length=200, verbose_name='Available Stock')
+    product_size =  models.CharField(max_length=200, verbose_name='Unit')
+    product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
+    product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
     product_expiry =  models.DateField( null=True, default=None, verbose_name='Expiry Date')
+
+    # def update_status(self):
+    #     if self.product_stock <= 100:
+    #         self.product_status = "low stock"
+    #         self.update()
 
     def __str__(self):
         return self.product_code
@@ -66,10 +71,10 @@ class Pos(models.Model):
     pos_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
     pos_category =  models.CharField(max_length=200, verbose_name='Category')
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    pos_size =  models.CharField(max_length=200, verbose_name='Size')
-    pos_price =  models.FloatField( null=True, verbose_name='Price')
-    pos_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
-    pos_amount =  models.FloatField( null=True,verbose_name='Amount')
+    pos_size =  models.CharField(max_length=200, verbose_name='Unit')
+    pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
+    pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
+    pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
 
     def __str__(self):
         return self.pos_user
@@ -88,7 +93,7 @@ class Transaction(models.Model):
     transaction_address = models.TextField(null=False, verbose_name='Address') 
     transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
-    transaction_totalprice = models.FloatField( null=True, verbose_name='Total Price')
+    transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Price')
     created_at =models.DateTimeField(default=timezone.now)
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
@@ -100,15 +105,13 @@ class Transaction(models.Model):
   
 
 
-
 class OrderItem(models.Model):
     OrderItem_transactionNo =  models.CharField(max_length=200, null=True,  verbose_name='Transaction Number')
-    OrderItem_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List Username')
     OrderItem_category =  models.CharField(max_length=200, verbose_name='Category')
     OrderItem_name=  models.CharField(max_length=200, verbose_name='Product Name')
     OrderItem_size =  models.CharField(max_length=200, verbose_name='Size')
     OrderItem_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
-    OrderItem_amount =  models.FloatField( null=True,verbose_name='Amount')
+    OrderItem_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
 
     def __str__(self):
         return self.OrderItem_user
@@ -118,9 +121,10 @@ class Profile(models.Model):
     profile_fname = models.CharField(max_length=250, null=False, verbose_name="First Name")
     profile_mname = models.CharField(max_length=250,  null=False, verbose_name="Middle Name")
     profile_lname = models.CharField(max_length=250, null=False, verbose_name="Last Name")
-    profile_cnumber = models.CharField(max_length=100, null=False, verbose_name="Contact Number")
+    profile_cnumber = models.BigIntegerField( null=False, verbose_name="Contact Number")
     profile_address = models.TextField(null=False, verbose_name="Address")
     profile_email = models.CharField(unique=True, max_length=100, null=False, verbose_name="Email Address")
+    profile_pic =models.ImageField( upload_to=image_path,null=True, verbose_name='Profile Pic')
 
     def __str__(self):
         return self.profile_email

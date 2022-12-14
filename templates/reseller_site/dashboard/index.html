@@ -2,7 +2,17 @@
 
 
 {% block content %}
-    <h1>Hi {{ user }}</h1>
+<label for="">Overall Transaction</label>
+<input type="text" style="font-weight: bolder;" value="{{ list_numberorder }}"  class="form-control" disabled>
+<br>
+<label for="">Pending Order</label>
+<input type="text" style="font-weight: bolder;" value="{{ transaction_pending }}"  class="form-control" disabled>
+<br>
+<label for="">Out for Shipping</label>
+<input type="text" style="font-weight: bolder;" value="{{ transaction_shipped }}"  class="form-control" disabled>
+<br>
+
+
     
 
 {% endblock content %}

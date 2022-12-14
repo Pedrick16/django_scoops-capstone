@@ -8,15 +8,23 @@ import random
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard(request):
-    return render(request, 'reseller_site/dashboard/index.html')
-
-@login_required(login_url='landing_page:login')
-def orders_reseller(request):
-    list_transaction = Transaction.objects.filter(transaction_user = request.user).order_by('-id')
-    context = {
-        'list_transaction':list_transaction
+    list_numberorder = Transaction.objects.filter(transaction_user = request.user).count()
+    transaction_pending = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Pending").count()
+    transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Shipping").count()
+    context={
+        'list_numberorder':list_numberorder,
+        'transaction_pending':transaction_pending,
+        'transaction_shipped':transaction_shipped
     }
-    return render(request, 'reseller_site/orders/orders.html',context)
+    return render(request, 'reseller_site/dashboard/index.html',context)
+
+# @login_required(login_url='landing_page:login')
+# def orders_reseller(request):
+#     list_transaction = Transaction.objects.filter(transaction_user = request.user).order_by('-id')
+#     context = {
+#         'list_transaction':list_transaction
+#     }
+#     return render(request, 'reseller_site/orders/orders.html',context)
 
 @login_required(login_url='landing_page:login')
 def cart_reseller(request):
@@ -70,7 +78,6 @@ def checkout(request):
         for item in NewOrderItems:
             OrderItem.objects.create(
                 OrderItem_transactionNo = trackno,
-                OrderItem_user = item.pos_user,
                 OrderItem_category = item.pos_category,
                 OrderItem_name = item.pos_name,
                 OrderItem_size = item.pos_size,
@@ -81,6 +88,27 @@ def checkout(request):
     messages.success(request, ("Please wait for your order"))
     return redirect('admin_site:pos')
 
+@login_required(login_url='landing_page:login') 
+def transaction_orders(request):
+    list_transaction = Transaction.objects.filter(transaction_user= request.user).order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'reseller_site/orders/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def transaction_view(request):
+    if request.method == "GET":
+        transaction_no = request.GET.get('trans_no')
+        list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
+        list_transaction = Transaction.objects.filter(transaction_no = transaction_no)
+        list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
+        context = {
+            'list_orderitem':list_orderitem,
+            'list_total':list_total,
+            'list_transaction':list_transaction
+        }
+    return render(request, 'reseller_site/orders/view_orders.html', context)
 
 
 

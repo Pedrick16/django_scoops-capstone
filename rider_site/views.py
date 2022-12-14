@@ -4,9 +4,16 @@ from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 
+
 # Create your views here.
 def dashboard(request):
-    return render(request, 'rider_site/dashboard/index.html')
+    list_pending = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
+    list_complete = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
+    context ={
+        'list_pending':list_pending,
+        'list_complete':list_complete
+    }
+    return render(request, 'rider_site/dashboard/index.html', context)
 
 @login_required(login_url='landing_page:login')
 def deliver_orders(request):
@@ -31,6 +38,7 @@ def orders_completed(request, orderid):
         NewActLog = Activity_log()
         NewActLog.user_name = request.user
         NewActLog.activity = activity 
+        NewActLog.role = request.user.role
         NewActLog.date_time = now
         NewActLog.save()
 

@@ -2,7 +2,15 @@
 
 
 {% block content %}
-    <h1>Hello: {{ user }}</h1>
+ 
+    <div style="font-weight: bolder;" >
+    <label for="">Pending</label>
+    <input type="text" style="font-weight: bolder;" value="{{ list_pending }}"  class="form-control" disabled>
+    <br>
+    <label for="">Completed</label>
+    <input type="text" style="font-weight: bolder;" value="{{ list_complete}}"  class="form-control" disabled>
+    <br>
+    </div>
 
 {% endblock content %}
     

@@ -1,6 +1,5 @@
 from django.urls import path
 from admin_site import views
-from django.conf import settings
 from django.conf.urls.static import static
 
 
@@ -47,6 +46,7 @@ urlpatterns = [
     path('pos/all-products/', views.all_products ,name='all_products'),
     path('cart/all-products/<int:productid>/', views.cart_products ,name='cart_products'),
     path('transaction-orders/', views.Transaction_orders, name='transaction_orders'),
+    path('transaction-view/', views.transaction_view, name='transaction_view'),
  
     path('search-reseller/', views.search_reseller, name='search_reseller'),
     path('search-product/', views.search_product, name='search_product'),

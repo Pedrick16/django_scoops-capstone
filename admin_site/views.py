@@ -1,11 +1,12 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, F, Q
+from django.db.models import Sum, F, Q,Min
 from django.core.mail import send_mail
 from django.conf import settings
 from datetime import datetime
 
+from django.http import HttpResponse
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -14,11 +15,19 @@ from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard_admin(request):
-    transaction_sales = Transaction.objects.all().aggregate(data=Sum('transaction_totalprice'))
+    transaction_sales = Transaction.objects.all().aggregate(data =Sum('transaction_totalprice'))
     transaction_count = Transaction.objects.count()
+    transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
+    transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
+    transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
     context = {
         'transaction_sales': transaction_sales ,
-        'transaction_count': transaction_count
+        'transaction_count': transaction_count,
+        'transaction_pending':transaction_pending,
+        'transaction_completed':transaction_completed,
+        'transaction_shipped':transaction_shipped
+
+
     }
     return render(request, 'admin_site/dashboard/index.html', context)
 
@@ -157,7 +166,7 @@ def send_email(request, inquiryid):
     return render(request, 'admin_site/user/send_email.html')        
 
 #process inquiry for reseller
-@login_required(login_url='landing_page:login')
+
 def process_inquiry(request):
     if request.method =="POST":
         status= "pending"
@@ -171,14 +180,15 @@ def process_inquiry(request):
         valid_id = request.POST['valid-ID']
         business_permit = request.POST['business_permit']
         #inserting to database
-        reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
-        reseller.save()
-        messages.info(request,"Successfully")
-    else:
-        pass    
+        if Reseller.objects.filter(reseller_email = email):
+            messages.success(request,("Email already Exist"))
+            return redirect('landing_page:inquiry_reseller')
+        else:
+            reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
+            reseller.save()
+            messages.success(request,("Successfully Submitted"))
+
     return render(request, 'landing_page/inquiry_reseller.html')
-
-
 
 
 
@@ -313,11 +323,11 @@ def update_inventory(request, productid):
 
 # FOR POS FEATURES
 
-#list Products
+#list pos cart
 @login_required(login_url='landing_page:login')
 def pos(request):
     current_user = request.user
-    list_pos = Pos.objects.order_by('-id').filter(pos_user = current_user)
+    list_pos = Pos.objects.filter(pos_user = current_user)
     sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))
     
   
@@ -393,7 +403,7 @@ def pos_cancel(request,productid):
 #all products for pos
 @login_required(login_url='landing_page:login')
 def all_products(request):
-    list_products = Product.objects.order_by('-id')
+    list_products = Product.objects.all()
     context = {'list_products':list_products}
     return render(request, 'admin_site/pos/all-products.html', context)
 
@@ -426,6 +436,10 @@ def cart_products(request, productid):
         avail_stock = int(product.product_stock)
 
         #checking if have already product in the cart
+
+        status = "low stock"
+
+        
         
 
         # error trapping for 0 stock    
@@ -442,7 +456,7 @@ def cart_products(request, productid):
             return redirect('admin_site:all_products')
         elif product.product_status =="n/a":
             messages.success(request,("Sorry, this Product is not Available"))
-            return redirect('admin_site:all_products')
+            return redirect('admin_site:all_products')       
         else:
 
             #updating product stock
@@ -451,9 +465,19 @@ def cart_products(request, productid):
 
              #inserting product in pos table
             pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_size= p_size, pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart)
-            pos.save()
+            pos.save()   
             messages.info(request,("Successfully carting Products"))
-            return redirect('admin_site:all_products')
+            return redirect('admin_site:all_products')      
+    
+
+
+             
+           
+
+      
+         
+
+        
 
 
 
@@ -474,6 +498,20 @@ def Transaction_orders(request):
         'list_transaction':list_transaction
     }
     return render(request, 'admin_site/transaction/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def transaction_view(request):
+    if request.method == "GET":
+        transaction_no = request.GET.get('trans_no')
+        list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
+        list_transaction = Transaction.objects.filter(transaction_no = transaction_no)
+        list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
+        context = {
+            'list_orderitem':list_orderitem,
+            'list_total':list_total,
+            'list_transaction':list_transaction
+        }
+    return render(request, 'admin_site/transaction/view_orders.html', context)
 
 
 
@@ -575,7 +613,7 @@ def search_actlog(request):
     if request.method == "GET":
         search = request.GET.get('search')
         if search:
-            list_reports = Activity_log.objects.filter(Q(user_name__icontains = search) |    Q(activity__icontains = search) | Q(role__icontains = search)) 
+            list_reports = Activity_log.objects.filter(Q(user_name__icontains = search) |    Q(activity__icontains = search) | Q(role__icontains = search)).order_by('-id')
             return render(request,'admin_site/reports/act_log.html', {'list_reports':list_reports})
         else:
            messages.success(request,("No records found!"))   

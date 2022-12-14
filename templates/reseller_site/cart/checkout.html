@@ -31,13 +31,9 @@
 </table>
     <div class="text-end px-5">
         <label style="font-weight: bolder;" > Grand Total:    {{ sum_amount.data }} </label>
-      
-
     </div>
     <br>
     <br>
-
-
     <form action="{% url 'reseller_site:checkout' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="total_amount"value="{{ sum_amount.data }}">
@@ -59,12 +55,15 @@
         <label for="">Delivery option</label>
         <select name="option"  class="form-control" required>
             <option></option>
-            <option value="pickup">Pickup</option>
+            <option value="pickup" name="pickup">Pickup</option>
             <option value="delivery">Delivery</option>
         </select>
         <br>
+        <input type="datetime-local">
+        <br>
+        <br>
         <input type="submit" class="btn btn-success" value=" Place Order">
-      
+        <br>
         <br>
     </form>
 {% endif %}    
