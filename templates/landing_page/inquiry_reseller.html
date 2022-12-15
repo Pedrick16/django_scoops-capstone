@@ -1,14 +1,14 @@
 {%  extends 'landing_page/base.html' %} 
 
         {% block content%}
-        <form action="{% url 'admin_site:process_inquiry' %}" method="POST"  class="text-center">
+        <form action="{% url 'admin_site:process_inquiry' %}" method="POST" enctype="multipart/form-data" class="text-center">
             {% csrf_token %}
 
             <h1 >Inquiry form</h1>
                 
-                {% for messsage in messages  %}
-                <p class='alert alert-success mt-3'>{{messsage}}</p>
-                {% endfor %}
+            {% for messsage in messages  %}
+             <p class='alert alert-success mt-3'>{{messsage}}</p>
+            {% endfor %}
                 
         
         

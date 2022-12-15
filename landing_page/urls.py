@@ -7,7 +7,6 @@ urlpatterns = [
     # login process
     path('', views.landing_page, name='landing_site'),
     path('login/', views.loginView, name='login'),
-    path('register/', views.registerUser, name='register_user'),
     path('logout/', views.logoutView, name='logout'),
 
     #landing features

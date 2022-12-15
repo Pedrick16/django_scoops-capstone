@@ -1,0 +1,28 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+
+{% for message in messages %}
+<p class="alert alert-success">{{ message }}</p>
+    
+{% endfor %}
+    
+<form  method="post">
+    {% csrf_token %}
+    <label for="username">Username</label>
+      {{ form.username }}
+    <label for="email">Email</label>
+      {{ form.email}}
+    <label for="password">Password</label>
+      {{ form.password1 }}
+    <label for="password">confirm Password</label>
+      {{ form.password2 }}
+    <label >Role</span>
+        {{ form.role }}
+        <br>
+    
+  <input type="submit"  value="Register" class="btn btn-pill text-white btn-block btn-primary">
+</form>
+{% endblock content %}
+    

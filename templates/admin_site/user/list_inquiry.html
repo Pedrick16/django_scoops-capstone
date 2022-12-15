@@ -30,10 +30,10 @@
                     <td>{{ list.reseller_contact }}</td>
                     <td>{{ list.reseller_address }}</td>
                     <td>{{ list.reseller_email }}</td>
-                    <td><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
-                    <td><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                    <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
+                    <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
                     <td>{{ list.reseller_status }}</td>
-                    <td><a href="{% url 'admin_site:send_email' list.id %}" class="btn btn-dark">Approved</a></td>
+                    <td><a href="{% url 'admin_site:register' list.id %}" class="btn btn-dark">Approved</a></td>
                     
                 </tr>
                 {% endfor %}

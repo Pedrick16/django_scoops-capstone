@@ -43,7 +43,6 @@
                 <th>action</th>
             </tr>
             <tbody>
-                
                 {% for list in list_reseller %}
                 <tr>
                     <td>{{ list.reseller_fname }}</td>
@@ -53,11 +52,8 @@
                     <td>{{ list.reseller_contact }}</td>
                     <td>{{ list.reseller_address }}</td>
                     <td>{{ list.reseller_email }}</td>
-                   
-                   
-                 
-                    <td><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
-                    <td><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></td>
+                    <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
+                    <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
                     <td>{{ list.reseller_status }}</td>
                     <form method="POST" action="{% url 'admin_site:archive_reseller'  list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}

@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from .models import *
 from admin_site.models import *
-from .forms import RegisterForm
+
 
 
 
@@ -61,16 +61,11 @@ def loginView(request):
     return render(request, 'landing_page/login-folder/login.html')
 
 
-@login_required(login_url='landing_page:login')
-def registerUser(request):
-    form = RegisterForm()
-    if request.method == "POST":
-        form = RegisterForm(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect('admin_site:list_reseller')
-    return render(request, 'admin_site/user/register_user.html',{'form':form})    
 
+         
+
+   
+    
 @login_required(login_url='landing_page:login')
 def logoutView(request):
     

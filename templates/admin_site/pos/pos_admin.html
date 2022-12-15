@@ -93,7 +93,7 @@
    
         {% if user.role == "admin"%} 
         <label style="font-weight: bolder;">Total Amount:</label>
-        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
          
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control" id="cash">
@@ -122,7 +122,7 @@
 
     {% if user.role == "reseller" %}
     <label style="font-weight: bolder;">Total Amount:</label>
-    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount">
+    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
     <br>
     <div class="text-end">
     <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>

@@ -1,12 +1,13 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, F, Q,Min
+from django.db.models import Sum, Q
 from django.core.mail import send_mail
-from django.conf import settings
-from datetime import datetime
 
-from django.http import HttpResponse
+from datetime import datetime
+from landing_page.forms import SignUpForm
+
+
 
 from django.contrib.auth.decorators import login_required, permission_required
 
@@ -27,10 +28,26 @@ def dashboard_admin(request):
         'transaction_completed':transaction_completed,
         'transaction_shipped':transaction_shipped
 
-
     }
     return render(request, 'admin_site/dashboard/index.html', context)
 
+def register(request, inquiryid):
+    if request.method =="POST":
+        reseller = Reseller.objects.get(id = inquiryid)
+        status = "active"
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+
+            #changing status for reseller
+            reseller.reseller_status = status  
+            reseller.save()
+            return redirect('admin_site:send_email')
+        else:
+            messages.success(request,("sorry have an error"))
+    else:
+        form = SignUpForm()
+    return render(request, 'admin_site/user/register.html',{'form':form})      
 
 
 #list reseller
@@ -98,6 +115,13 @@ def add_reseller(request):
 
     return render(request, 'admin_site/user/add_reseller.html')
 
+def view_pic(request,id):
+    reseller = Reseller.objects.get(id =id)
+    context={
+        'reseller':reseller
+    }
+    return render(request,'admin_site/user/view_pic.html',context)    
+
 
 #archiving reseller
 @login_required(login_url='landing_page:login')
@@ -145,10 +169,9 @@ def retrieve_reseller(request,resellerid):
     return redirect('admin_site:list_archive')
 
 @login_required(login_url='landing_page:login')
-def send_email(request, inquiryid):
+def send_email(request):
     if request.method == "POST":
-        reseller = Reseller.objects.get(id = inquiryid)
-        status = "active"
+     
         tile_email = "your inquiry successfully approved"
         # tile_email = request.POST['name']
         email = request.POST['email']
@@ -159,8 +182,6 @@ def send_email(request, inquiryid):
             'settings.EMAIL_HOST_USER',
             [email],
             fail_silently=False)
-        reseller.reseller_status = status  
-        reseller.save()
         return redirect('admin_site:list_reseller')
 
     return render(request, 'admin_site/user/send_email.html')        
@@ -177,8 +198,8 @@ def process_inquiry(request):
         contact_num= request.POST['cnum']
         address = request.POST['address']
         email = request.POST['email']
-        valid_id = request.POST['valid-ID']
-        business_permit = request.POST['business_permit']
+        valid_id = request.FILES.get('valid-ID')
+        business_permit = request.FILES.get('business_permit')
         #inserting to database
         if Reseller.objects.filter(reseller_email = email):
             messages.success(request,("Email already Exist"))
@@ -350,6 +371,13 @@ def minus_qty(request, productid):
     result = current_amount - current_price
     pos.pos_amount = result
     pos.save()
+    
+    current_pcode = pos.pos_pcode
+    product = Product.objects.get(product_code = current_pcode)
+    current_stock = int(product.product_stock)
+    retrieve_stock = current_stock + 1
+    product.product_stock = retrieve_stock
+    product.save()
     return redirect('admin_site:pos')
 
      
@@ -366,6 +394,13 @@ def add_qty(request,productid):
     result = current_amount + current_price
     pos.pos_amount = result
     pos.save()
+    
+    current_pcode = pos.pos_pcode
+    product = Product.objects.get(product_code = current_pcode)
+    current_stock = int(product.product_stock)
+    minus_stock = current_stock - 1
+    product.product_stock = minus_stock
+    product.save()
     return redirect('admin_site:pos')
 
 
@@ -380,7 +415,6 @@ def pos_cancel(request,productid):
         current_stock = int(product.product_stock)
 
         return_stock = current_stock + current_qty
-
         product.product_stock = return_stock
         product.save()
         cancel.delete()

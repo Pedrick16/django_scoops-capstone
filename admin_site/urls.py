@@ -13,11 +13,11 @@ urlpatterns = [
     path('profile/', views.profile, name='profile'),
 
     path('list-archive-reseller/', views.list_archive, name='list_archive'),
-    path('retrieve-reseller/<int:resellerid>/', views.retrieve_reseller, name='retrieve_reseller'),
+    path('retrieve-reseller/<int:id>/', views.retrieve_reseller, name='retrieve_reseller'),
 
 
 
-    path('send-email/<int:inquiryid>', views.send_email, name='send_email'),
+    path('send-email/', views.send_email, name='send_email'),
 
 
   
@@ -56,4 +56,7 @@ urlpatterns = [
 
     path('reports/activity-log/', views.report_actlog, name='report_actlog'),
     # path('reports-sales/', views.report_sales, name='report_sales'),
+
+    path('register/<int:inquiryid>/', views.register, name='register'),
+    path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
 ]
