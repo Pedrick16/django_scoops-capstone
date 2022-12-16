@@ -52,11 +52,12 @@ class Product(models.Model):
     product_code =  models.CharField(unique=True, max_length=200, verbose_name='Product Code')
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    product_size =  models.CharField(max_length=200, verbose_name='Unit')
+    product_unit =  models.CharField(max_length=200, verbose_name='Unit')
     product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
     product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
-    product_expiry =  models.DateField( null=True, default=None, verbose_name='Expiry Date')
+ 
+   
 
     # def update_status(self):
     #     if self.product_stock <= 100:
@@ -66,12 +67,22 @@ class Product(models.Model):
     def __str__(self):
         return self.product_code
 
+class By_Batch(models.Model):
+    product_code = models.CharField( max_length=200, null=True,verbose_name='Product Code')
+    product_batch =  models.CharField(max_length=200, null=True, verbose_name='Batch Number')
+    product_quantity =  models.BigIntegerField(null=True,  verbose_name='Quantity')
+    product_expired =  models.DateField( null=True, verbose_name='Expiration Date')
+
+
+    def __str__(self):
+        return self.product_code
+
 class Pos(models.Model):
     pos_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
     pos_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
     pos_category =  models.CharField(max_length=200, verbose_name='Category')
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    pos_size =  models.CharField(max_length=200, verbose_name='Unit')
+    pos_unit =  models.CharField(max_length=200, verbose_name='Unit')
     pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
     pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
     pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
@@ -83,7 +94,7 @@ class Pos(models.Model):
 
 
 class Transaction(models.Model):
-    ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
+    ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Decline","Decline"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
 
     transaction_no =  models.CharField(unique=True, max_length=200, null=False,verbose_name='Transaction Number')
@@ -114,7 +125,7 @@ class OrderItem(models.Model):
     OrderItem_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
 
     def __str__(self):
-        return self.OrderItem_user
+        return self.OrderItem_transactionNo
 
 class Profile(models.Model):
     list_user = models.CharField(max_length=100, null=False, verbose_name="List User")
@@ -123,7 +134,7 @@ class Profile(models.Model):
     profile_lname = models.CharField(max_length=250, null=False, verbose_name="Last Name")
     profile_cnumber = models.BigIntegerField( null=False, verbose_name="Contact Number")
     profile_address = models.TextField(null=False, verbose_name="Address")
-    profile_email = models.CharField(unique=True, max_length=100, null=False, verbose_name="Email Address")
+    profile_email = models.CharField( max_length=100, null=False, verbose_name="Email Address")
     profile_pic =models.ImageField( upload_to=image_path,null=True, verbose_name='Profile Pic')
 
     def __str__(self):

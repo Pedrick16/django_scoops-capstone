@@ -2,6 +2,10 @@
 
 
 {% block content %}
-    <h1>Hi {{ user }} </h1>
+<div class="fw-bolder">
+    <label for="">Walk-in Sales</label>
+    <input type="text" style="font-weight: bolder;"   class="form-control" disabled>
+    <br>
+    <label for="">Pending Order</label>
+    <input type="text" style="font-weight: bolder;" value="{{ transaction_pending }}"  class="form-control" disabled>
 {% endblock content %}
-    

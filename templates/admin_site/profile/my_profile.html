@@ -1,0 +1,33 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+    
+    
+
+{% if current_profile %}
+    
+
+    
+    {% for list  in  current_profile %}
+         
+    <div class="container">
+        <div class="text-center fw-bolder">
+        <img src="/media/{{ list.profile_pic}}" alt="Profile-pic" width="250" class="rounded-circle">
+        <br>
+        <label> {{ list.profile_fname }}   {{list.profile_mname}} {{list.profile_lname}}  </label>
+        <br>
+        <label for="">{{list.profile_cnumber}}</label>
+        <br>
+        <label for="">{{list.profile_address}}</label>
+        <br>
+        <label for="">{{list.profile_email}}</label>
+   
+
+        </div>
+    </div>
+    {% endfor %}
+{% endif %}
+  
+
+{% endblock content %}
+    

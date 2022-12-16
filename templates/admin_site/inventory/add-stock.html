@@ -24,39 +24,34 @@
     
     <thead>
     <tr>
-        <th>Product code </th>
-        <th>Category</th>
-        <th>Product Name</th>
-        <th>Unit</th>
-        <th>Price</th>
-        <th>Available Stock</th>
-        <th>Status</th>
+        <th>Product Name </th>
+        <th>Product Code</th>
+        <th>Quantity</th>
+   
         <th>Expiry Date</th>
-        <th>quantity</th>
         <th>Action</th>
+      
     </tr>
     </thead>
-    <tbody>
-        
+    <tbody>  
         {% for list in list_products %}   
     <tr>
-        <td>{{ list.product_code }}</td>
-        <td>{{ list.product_category }}</td>
         <td>{{ list.product_name }}</td>
-        <td>{{ list.product_size }}</td>
-        <td>{{ list.product_price }}</td>
-        <td>{{ list.product_stock }}</td>
-        <td>{{ list.product_status }}</td>
-        <td>{{ list.product_expiry }}</td>
+        <td>{{ list.product_code }}</td>
 
-        <form action="{% url 'admin_site:update_inventory' list.id %}" method="POST">
+    <form action="{% url 'admin_site:update_inventory'  list.id %}" method="POST">
         {% csrf_token %}
-        <td><input type="number" name="quantity" style="text-align:right;" placeholder="0" required></td>
-        <td><input type="submit" name="submit" class="btn btn-dark" value="Add Stock"></td>
-        <input type="hidden" name="stock" value="{{ list.product_stock }}">
-        </form>
+        <td><input type="text" name="quantity" style="text-align:right;" placeholder="0"></td>
+     
+        <td><input type="date" name="expdate"></td>
+        <td><input type="submit" value="add" class="btn btn-dark"></td>
+        <input type="hidden" value="{{ list.product_stock }}" name="stock" >
+    </form>
+
     </tr>
-        {% endfor %}
+    {% endfor %}
+            
+      
     </tbody>
 </table>
 {% endif %}

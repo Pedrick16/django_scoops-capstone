@@ -25,13 +25,13 @@
     <thead>
     <tr>
         <th>Product code </th>
-        <th>Category</th>
         <th>Product Name</th>
+        <th>Category</th>
         <th>Unit</th>
         <th>Price</th>
         <th>Available Stock</th>
         <th>Status</th>
-        <th>Expiry Date</th>
+      
         
   
     </tr>
@@ -41,15 +41,13 @@
         
         {% for list in list_products %}   
     <tr>
-        <td>{{ list.product_code }}</td>
-        <td>{{ list.product_category }}</td>
+        <td><a href="{% url 'admin_site:view_product' list.id %}" class="text-decoration-none">{{ list.product_code }}</a></td>
         <td>{{ list.product_name }}</td>
-        <td>{{ list.product_size }}</td>
+        <td>{{ list.product_category }}</td>
+        <td>{{ list.product_unit }}</td>
         <td>{{ list.product_price }}</td>
         <td>{{ list.product_stock }}</td>
         <td>{{ list.product_status }}</td>
-        <td>{{ list.product_expiry }}</td>
-    
     </tr>
         {% endfor %}
     </tbody>

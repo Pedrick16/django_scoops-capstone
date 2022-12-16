@@ -1,0 +1,43 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+    <label for="">Product Code: {{ list_product.product_code }}  </label>
+    <br>
+    <label for="">Product Name: {{ list_product.product_name }}  </label>
+    <br>
+    <label for="">Category: {{ list_product.product_category }}  </label>
+    <br>
+    <label for="">Unit:  {{ list_product.product_unit }} </label>
+    <br>
+    <label for="">Price:  {{ list_product.product_price }} </label>
+    <br>
+    <label for="">Available Stock: {{ list_product.product_stock }}  </label>
+    <br>
+    <label for="">Status: {{ list_product.product_status }} </label>
+    <br>
+    <br>
+
+    
+    {% if list_batch %}
+    <table class="text-center table">
+        <thead>
+            <tr>
+                <th>Batch Number</th>
+                <th>Expiration Date</th>
+                <th>Quantity</th>
+            </tr>
+            <tbody>
+                
+                {% for list in list_batch %}
+                <tr>
+                    <td>{{ list.product_batch }}</td>
+                    <td>{{ list.product_expired }}</td>
+                    <td>{{ list.product_quantity }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+    {% endif %}
+{% endblock content %}
+    

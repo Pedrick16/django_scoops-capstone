@@ -13,13 +13,12 @@
         {% csrf_token %}
         <h1>Add Product</h1>    
 
-    <input type="text" placeholder="Enter Product Code" name="product_code" class="form-control">
-    <br>
+  
     <input type="text" placeholder="Enter Product Category" name="category" class="form-control">
     <br>
     <input type="text" placeholder="Enter Product Name" name="product_name" class="form-control">
     <br>
-    <input type="text" placeholder="Enter Product Unit" name="size" class="form-control">
+    <input type="text" placeholder="Enter Product Unit" name="unit" class="form-control">
     <br>
     <input type="text" placeholder="Enter Product Price" name="price" class="form-control">
     <br>
@@ -30,9 +29,6 @@
         <option value="available">available</option>
         <option value="n/a">n/a</option>
     </select>
-    <br>
-    
-    <input type="date" placeholder="Enter the Product Expiry date" name="expiry_date" class="form-control">
     <br>
 
     <input type="submit" class="btn btn-dark" value="Submit">

@@ -23,6 +23,8 @@
                <th>Status</th>
                <th></th>
                <th></th>
+           
+        
         
             </tr>
         </thead>
@@ -39,6 +41,7 @@
                 <td>{{ list.transaction_totalprice }}</td>
                 <td>{{ list.created_at}}</td>
                 <td>{{ list.transaction_orderstatus }}</td>
+                <td><a href="" class="btn btn-dark">View</a></td>
 
                 <form action="{% url 'rider_site:orders_completed' list.id %}" method="POST">
                     {% csrf_token %}

@@ -38,9 +38,9 @@
         <thead>
             <tr>
                 <th>Product ID</th>
-                <th>Category</th>
                 <th>Product Name</th>
-                <th>Size</th>
+                <th>Category</th>
+                <th>Unit</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>Amount</th>
@@ -54,9 +54,9 @@
                 {% for list in  list_pos %}       
                 <tr>
                     <td>{{ list.pos_pcode }}</td>
-                    <td>{{ list.pos_category }}</td>
                     <td>{{ list.pos_name }}</td>
-                    <td>{{ list.pos_size }}</td>
+                    <td>{{ list.pos_category }}</td>
+                    <td>{{ list.pos_unit }}</td>
                     <td>{{ list.pos_price }}</td>
                     <td>
                         <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button class="btn btn-success" >{{ list.pos_quantity }}</button>  <a href="{% url 'admin_site:add_qty' list.id  %}" class="btn btn-dark">+</a></td>

@@ -10,7 +10,13 @@ urlpatterns = [
     path('list-inquiry/', views.list_inquiry, name='list_inquiry'),
     path('list-reseller/', views.list_reseller, name='list_reseller'),
     path('archive-reseller/<int:resellerid>/', views.archive_reseller, name='archive_reseller'),
-    path('profile/', views.profile, name='profile'),
+
+    path('settings_profile/', views.settings_profile, name='settings_profile'),
+    path('add_profile/', views.add_profile, name='add_profile'),
+    path('update_profile/<int:profileid>', views.update_profile, name='update_profile'),
+    path('My-profile/', views.my_profile, name='my_profile'),
+
+
 
     path('list-archive-reseller/', views.list_archive, name='list_archive'),
     path('retrieve-reseller/<int:id>/', views.retrieve_reseller, name='retrieve_reseller'),
@@ -29,11 +35,13 @@ urlpatterns = [
    
     
     path('product/', views.list_products, name='list_product'),
+    path('view-product/<int:productid>/', views.view_product, name='view_product'),
     path('add-product/', views.add_product, name='add_product'),
 
 
     path('inventory/', views.inventory, name='inventory'),
-    path('process-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
+   
+    path('update-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
 
     path('pos/', views.pos ,name='pos'),
 

@@ -6,6 +6,7 @@ from django.core.mail import send_mail
 
 from datetime import datetime
 from landing_page.forms import SignUpForm
+import random
 
 
 
@@ -21,12 +22,14 @@ def dashboard_admin(request):
     transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
     transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
+    transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
     context = {
         'transaction_sales': transaction_sales ,
         'transaction_count': transaction_count,
         'transaction_pending':transaction_pending,
         'transaction_completed':transaction_completed,
-        'transaction_shipped':transaction_shipped
+        'transaction_shipped':transaction_shipped,
+        'transaction_decline':transaction_decline
 
     }
     return render(request, 'admin_site/dashboard/index.html', context)
@@ -123,6 +126,8 @@ def view_pic(request,id):
     return render(request,'admin_site/user/view_pic.html',context)    
 
 
+
+
 #archiving reseller
 @login_required(login_url='landing_page:login')
 def archive_reseller(request,resellerid):
@@ -133,6 +138,7 @@ def archive_reseller(request,resellerid):
         status = "inactive"
         reseller.reseller_status = status
         reseller.save()
+        
         #activity log for archiving reseller
         activity = "archiving reseller"
         NewActLog = Activity_log()
@@ -151,6 +157,7 @@ def archive_reseller(request,resellerid):
    
 
    
+#SETTINGS FEATURES
 
 @login_required(login_url='landing_page:login')
 def list_archive(request):
@@ -159,14 +166,15 @@ def list_archive(request):
     return render(request, 'admin_site/user/archive.html', context)    
 
 @login_required(login_url='landing_page:login')
-def retrieve_reseller(request,resellerid):
+def retrieve_reseller(request,id):
     # changing status to actice
-    reseller = Reseller.objects.get(id = resellerid)
+    reseller = Reseller.objects.get(id = id)
     status = "active"
     reseller.reseller_status = status
     reseller.save()
     messages.success(request,("Successfully Retrieved"))
     return redirect('admin_site:list_archive')
+
 
 @login_required(login_url='landing_page:login')
 def send_email(request):
@@ -223,28 +231,44 @@ def process_inquiry(request):
 
 #FOR PRODUCT FEATURES
 
-#list inventory 
+#list product
 @login_required(login_url='landing_page:login')
 def list_products(request):
-    list_products = Product.objects.all()
+    list_products = Product.objects.all().order_by('-id')
     context = {'list_products':list_products}
     return render(request, 'admin_site/products/product.html', context)
+
+#viewing product
+@login_required(login_url='landing_page:login')
+def view_product(request, productid):
+    list_product = Product.objects.get(id = productid)
+    current_pcode = list_product.product_code
+    list_batch = By_Batch.objects.filter(product_code = current_pcode)
+    context ={
+        'list_product':list_product,
+        'list_batch':list_batch
+    }
+    return render(request, 'admin_site/products/view_product.html', context)
+    
 
 #adding product for tbl product
 @login_required(login_url='landing_page:login')
 def add_product(request):
     if request.method == "POST":
-        pcode = request.POST['product_code']
+        product_code = 'S4UPR'+str(random.randint(1111111,9999999))
+
         pcategory = request.POST['category']
         pname = request.POST['product_name']
-        psize = request.POST['size']
+        product_unit = request.POST['unit']
         pprice = request.POST['price']
         pstock = request.POST['stock']
         pstatus = request.POST['status']
-        pexpiry = request.POST['expiry_date']
-        
+       
+        while Product.objects.filter(product_code = product_code) is None:
+            product_code = 'S4U'+str(random.randint(1111111,9999999))
+
         #inserting to database 
-        product = Product(product_code = pcode, product_category = pcategory, product_name = pname, product_size =psize, product_price = pprice, product_stock = pstock, product_status = pstatus,product_expiry = pexpiry)
+        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_price = pprice, product_stock = pstock, product_status = pstatus)
         product.save()
         
         #activity log
@@ -263,10 +287,53 @@ def add_product(request):
         
     return render(request, 'admin_site/products/add_product.html')    
 
+def settings_profile(request):
+    list_profile = Profile.objects.filter(list_user = request.user)
+    context={
+        'list_profile':list_profile
+    }
+    return render(request,'admin_site/profile/settings_profile.html', context)
+  
 
 
-def profile(request):
-    return render(request, 'admin_site/profile/index.html')
+def add_profile(request):
+    if request.method == "POST":
+        
+        NewProfile = Profile()
+        NewProfile.list_user= request.user
+        NewProfile.profile_pic = request.FILES.get('profile_pic')
+        NewProfile.profile_fname = request.POST.get('first')
+        NewProfile.profile_mname = request.POST.get('middle')
+        NewProfile.profile_lname = request.POST.get('last')
+        NewProfile.profile_cnumber = request.POST.get('contact_no')
+        NewProfile.profile_address = request.POST.get('address')
+        NewProfile.profile_email = request.POST.get('email')
+        NewProfile.save()
+        return redirect('admin_site:my_profile')
+
+def update_profile(request,profileid):
+    if request.method == "POST":
+        profile = Profile.objects.get(id =profileid)
+
+        profile_picture = request.FILES.get('profile_pic')
+        profile.profile_fname = request.POST.get('first')
+        profile.profile_mname = request.POST.get('middle')
+        profile.profile_lname = request.POST.get('last')
+        profile.profile_cnumber = request.POST.get('contact_no')
+        profile.profile_address = request.POST.get('address')
+        profile.profile_email = request.POST.get('email')
+        if profile_picture:
+            profile.profile_pic = profile_picture
+        profile.save()
+        return redirect('admin_site:settings_profile')
+           
+
+def my_profile(request):
+    current_profile = Profile.objects.filter(list_user = request.user)
+    context ={
+        'current_profile':current_profile
+    }
+    return render(request, 'admin_site/profile/my_profile.html',context)
 
 
 
@@ -288,7 +355,7 @@ def profile(request):
 #list inventory 
 @login_required(login_url='landing_page:login')
 def inventory(request):
-    list_products = Product.objects.all()
+    list_products = Product.objects.all().order_by('-id')
     context = {'list_products':list_products}
     return render(request, 'admin_site/inventory/add-stock.html', context)   
 
@@ -299,18 +366,38 @@ def update_inventory(request, productid):
         #to get the latest id
         product = Product.objects.get(id = productid)
 
-      
-
         #the  stock and quantity from input
         product_stock = int(request.POST['stock'])
         product_qty = int(request.POST['quantity'])
+    
+ 
+        
         
         #the sum of quantity and stock
         sum = product_stock + product_qty
 
         #update product stock
+       
         product.product_stock = sum 
+     
         product.save()
+
+        #adding to by batch (database)
+        batch_no = 'S4UBN'+str(random.randint(1111111,9999999))
+    
+        current_product = product.product_code
+        NewBatch = By_Batch()
+        NewBatch.product_code = current_product 
+        NewBatch.product_quantity = request.POST.get('quantity')
+        NewBatch.product_expired = request.POST.get('expdate')
+        while By_Batch.objects.filter(product_batch = batch_no) is None:
+            batch_no = 'S4UBN'+str(random.randint(1111111,9999999))
+
+        NewBatch.product_batch = batch_no
+        NewBatch.save()
+
+
+    
         
 
         #activity log for adding stock
@@ -348,7 +435,7 @@ def update_inventory(request, productid):
 @login_required(login_url='landing_page:login')
 def pos(request):
     current_user = request.user
-    list_pos = Pos.objects.filter(pos_user = current_user)
+    list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))
     
   
@@ -455,7 +542,7 @@ def cart_products(request, productid):
         p_stock = int(request.POST['stock'])
         pcode = request.POST['product_code']
         p_price = float(request.POST['product_price'])
-        p_size = request.POST['product_size']
+        p_unit = request.POST['product_unit']
         p_category = request.POST['product_category']
         p_name = request.POST['product_name']
          
@@ -498,7 +585,7 @@ def cart_products(request, productid):
             product.save()
 
              #inserting product in pos table
-            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_size= p_size, pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart)
+            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit, pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart)
             pos.save()   
             messages.info(request,("Successfully carting Products"))
             return redirect('admin_site:all_products')      

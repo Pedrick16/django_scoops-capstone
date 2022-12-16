@@ -11,10 +11,12 @@ def dashboard(request):
     list_numberorder = Transaction.objects.filter(transaction_user = request.user).count()
     transaction_pending = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Pending").count()
     transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Shipping").count()
+    transaction_decline = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Decline").count()
     context={
         'list_numberorder':list_numberorder,
         'transaction_pending':transaction_pending,
-        'transaction_shipped':transaction_shipped
+        'transaction_shipped':transaction_shipped,
+        'transaction_decline':transaction_decline
     }
     return render(request, 'reseller_site/dashboard/index.html',context)
 

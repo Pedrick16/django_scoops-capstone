@@ -51,7 +51,6 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'admin_site:report_actlog' %}">Activity Log</a></li>
                   <li><a class="dropdown-item" href="#">Sales</a></li>
-                
                 </ul>
               </li>
 
@@ -62,20 +61,36 @@
                   Settings
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="{% url 'admin_site:profile' %}">Profile</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:list_archive' %}">Archive Account</a></li>
                   <li><a class="dropdown-item" href="#">Change Password</a></li>
                 </ul>
               </li>
-              
               <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  {{ user }}
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+
+                  
+               
+                    
+                  <li><a class="dropdown-item" href="{% url 'admin_site:my_profile' %}">My Profile</a></li>
+                  <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
+                </ul>
+              </li>
+              
+              <!-- <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                    {{ user }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="#">My Profile</a></li>
+                </ul>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
-                  </ul>
-              </li>
+                </ul>
+              </li> -->
             
             </ul>
           </div>
@@ -107,31 +122,30 @@
                   <li class="nav-item">
                     <a class="nav-link" href="{%url 'admin_site:pos' %}">POS</a>
                   </li>
-                 
-                 
-                  
+ 
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                       Settings
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                      <li><a class="dropdown-item" href="#">Theme</a></li>
-                      <li><a class="dropdown-item" href="#">Change Password</a></li>
+                      <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
                     </ul>
                   </li>
+
                   <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                        {{ user }}
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                      <li><a class="dropdown-item" href="{% url 'admin_site:my_profile' %}">My Profile</a></li>
                       <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
                       </ul>
                   </li>
-                
+
                 </ul>
               </div>
             </div>
-          </nav>       
+          </nav>      
 {% endif %}
 
 {% if user.role == "reseller"%}
@@ -160,17 +174,23 @@
               Settings
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
               <li><a class="dropdown-item" href="#">Change Password</a></li>
             </ul>
+
+
           </li>
           
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                {{ user }}
             </a>
+           
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'admin_site:my_profile' %}">My Profile</a></li>
               <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
-              </ul>
+            </ul>
+
           </li>
         
         </ul>
@@ -196,17 +216,30 @@
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'rider_site:deliver_orders'%}">Orders</a>
           </li>
+          
           <li class="nav-item">
             <a class="nav-link active" aria-current="page" href="{% url 'rider_site:report_deliver'%}">Reports</a>
           </li>
           <li class="nav-item dropdown">
             <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+               Settings
+            </a>
+            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
+            </ul>
+          </li>
+          
+          <li class="nav-item dropdown">
+            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                {{ user }}
             </a>
             <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+              <li> <a class="dropdown-item" href="{%  url 'admin_site:my_profile' %}">My Profile</a></li>
               <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
-              </ul>
+            </ul>
           </li>
+            
+              
           
           
         
