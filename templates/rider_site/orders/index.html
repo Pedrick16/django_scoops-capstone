@@ -4,12 +4,8 @@
 {% block content %}
 {% if list_transaction %} 
 
-{% for message in messages %}
-<p class="alert alert-success">{{ message }}</p>
-{% endfor %}
 
-
-<form action="{% url 'admin_site:search_transaction' %}" method="GET" class="my-3 ">
+<form action="" method="GET" class="my-3 ">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>
@@ -22,11 +18,13 @@
 
 
 
+
+
     <table class="table table-hover text-center" >
         <thead>
             <tr>
                <th>Order Date</th>
-               <th>Transaction NUmber</th>
+               <th>Transaction Number</th>
                <th>Total Price</th>
                <th>Status</th>
                <th>Action</th>
@@ -46,6 +44,11 @@
                     {% csrf_token %}
                      <td><input type="submit" class="btn btn-dark" value="View"></td>
                      <input type="hidden"  name="trans_no" value="{{ list.transaction_no }}">
+                </form>
+
+                <form action="{% url 'rider_site:orders_completed' list.id %}" method="POST">
+                    {% csrf_token %}
+                <td><input type="submit" class="btn btn-dark" name="submit" value="Delivered"></td>
                 </form>
 
             </tr>

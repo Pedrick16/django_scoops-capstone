@@ -26,8 +26,8 @@ class TransactionView(admin.ModelAdmin):
     search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
 
 class OrderItemView(admin.ModelAdmin):
-    list_display = ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
-    search_fields =  ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_size','OrderItem_quantity','OrderItem_amount']
+    list_display = ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_unit','OrderItem_quantity','OrderItem_amount']
+    search_fields =  ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_unit','OrderItem_quantity','OrderItem_amount']
 
 class ProfileView(admin.ModelAdmin):
     list_display = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email','profile_pic']

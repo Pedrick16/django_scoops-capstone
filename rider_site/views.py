@@ -3,6 +3,7 @@ from admin_site.models import *
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 
 
 # Create your views here.
@@ -15,14 +16,14 @@ def dashboard(request):
     }
     return render(request, 'rider_site/dashboard/index.html', context)
 
-@login_required(login_url='landing_page:login')
-def deliver_orders(request):
-    status = "Out for Shipping"
-    list_transaction = Transaction.objects.filter(transaction_orderstatus = status)
-    context = {
-        'list_transaction': list_transaction
-    }
-    return render(request, 'rider_site/deliver_orders/deliver_orders.html', context)
+# @login_required(login_url='landing_page:login')
+# def deliver_orders(request):
+#     status = "Out for Shipping"
+#     list_transaction = Transaction.objects.filter(transaction_orderstatus = status)
+#     context = {
+#         'list_transaction': list_transaction
+#     }
+#     return render(request, 'rider_site/deliver_orders/deliver_orders.html', context)
 
 @login_required(login_url='landing_page:login')
 def orders_completed(request, orderid):
@@ -44,7 +45,32 @@ def orders_completed(request, orderid):
 
 
         messages.success(request, ("Successfully Delivered"))
-        return redirect('rider_site:deliver_orders')
+        return redirect('rider_site:transaction_orders')
+
+
+@login_required(login_url='landing_page:login') 
+def transaction_orders(request):
+    status = "Out for Shipping"
+    list_transaction = Transaction.objects.filter(transaction_orderstatus = status).order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'rider_site/orders/index.html', context)
+
+@login_required(login_url='landing_page:login') 
+def transaction_view(request):
+    if request.method == "GET":
+        transaction_no = request.GET.get('trans_no')
+        list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
+        list_transaction = Transaction.objects.filter(transaction_no = transaction_no)
+        list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
+        context = {
+            'list_orderitem':list_orderitem,
+            'list_total':list_total,
+            'list_transaction':list_transaction
+        }
+    return render(request, 'rider_site/orders/view_orders.html', context)
+
 
 
 @login_required(login_url='landing_page:login')

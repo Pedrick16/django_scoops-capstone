@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, Q
+from django.db.models import Sum, Q,F
 from django.core.mail import send_mail
 
 from datetime import datetime
@@ -377,23 +377,17 @@ def update_inventory(request, productid):
         sum = product_stock + product_qty
 
         #update product stock
-       
+
         product.product_stock = sum 
-     
         product.save()
 
         #adding to by batch (database)
-        batch_no = 'S4UBN'+str(random.randint(1111111,9999999))
-    
         current_product = product.product_code
         NewBatch = By_Batch()
         NewBatch.product_code = current_product 
+        NewBatch.product_batch = request.POST.get('batch_no')
         NewBatch.product_quantity = request.POST.get('quantity')
         NewBatch.product_expired = request.POST.get('expdate')
-        while By_Batch.objects.filter(product_batch = batch_no) is None:
-            batch_no = 'S4UBN'+str(random.randint(1111111,9999999))
-
-        NewBatch.product_batch = batch_no
         NewBatch.save()
 
 
@@ -436,7 +430,7 @@ def update_inventory(request, productid):
 def pos(request):
     current_user = request.user
     list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(data =Sum('pos_amount'))
+    sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(total =Sum('pos_amount'))['total']
     
   
     context = {

@@ -82,13 +82,13 @@ def checkout(request):
                 OrderItem_transactionNo = trackno,
                 OrderItem_category = item.pos_category,
                 OrderItem_name = item.pos_name,
-                OrderItem_size = item.pos_size,
+                OrderItem_unit = item.pos_unit,
                 OrderItem_quantity  = item.pos_quantity,
                 OrderItem_amount= item.pos_amount
             )
             pos.delete()
     messages.success(request, ("Please wait for your order"))
-    return redirect('admin_site:pos')
+    return redirect('reseller_site:transaction_orders')
 
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):

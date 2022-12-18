@@ -1,8 +1,21 @@
 {% extends 'admin_site/base.html' %}
 
 
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script>
+    $(document).ready(function(){
+        $("#compute").click(function(){
+            var totalamount = parseInt($("#total_amount")).val();
+            var cash = parseInt($("#cash")).val();
+            $("#result").text(totalamount - cash);
+            
+        });
+    });
+</script>
+
 
 {% block content %}
+
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- <script>
     {% for message in messages %}
@@ -68,7 +81,6 @@
                     <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
                     <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
                     </form>
-                    
                 </tr>
                 {% endfor %}
             </tbody>
@@ -86,21 +98,26 @@
     
     {% if list_pos %}         
 
-        {% csrf_token %}
+
 
     
           
    
         {% if user.role == "admin"%} 
         <label style="font-weight: bolder;">Total Amount:</label>
-        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
+        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
+       
+        <!-- <input type="text" id="total_amount"> -->
          
         <label for="">Cash</label>
         <input type="text" name="cash" class="form-control" id="cash">
          <br>
          <label for="">Change</label>
-         <input type="text" class="form-control">
-         <input type="submit" class="btn btn-success " name="compute" id="compute">
+         <input type="text" name="cash" class="form-control" id="cash">
+        
+         <input type="submit" class="btn btn-success " value="Compute" id="compute">
+
+
 
          {% elif user.role == "staff" %}
          <label style="font-weight: bolder;">Total Amount:</label>
@@ -110,7 +127,7 @@
          <input type="text" name="cash" class="form-control">
          <br>
          <label for="">Change</label>
-         <p id="result"></p>
+  
          <input type="submit" class="btn btn-success " name="submit"> 
         {% endif %}
         <br>
@@ -122,7 +139,7 @@
 
     {% if user.role == "reseller" %}
     <label style="font-weight: bolder;">Total Amount:</label>
-    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
+    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount}}" class="form-control" id="total_amount" disabled>
     <br>
     <div class="text-end">
     <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>
@@ -166,11 +183,9 @@
             return false;
         }
     </script>
-    
+
 
     
-   
-   
 {% endblock content %}
 
     

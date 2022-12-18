@@ -113,14 +113,12 @@ class Transaction(models.Model):
         return self.transaction_no
 
 
-  
-
 
 class OrderItem(models.Model):
     OrderItem_transactionNo =  models.CharField(max_length=200, null=True,  verbose_name='Transaction Number')
     OrderItem_category =  models.CharField(max_length=200, verbose_name='Category')
     OrderItem_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    OrderItem_size =  models.CharField(max_length=200, verbose_name='Size')
+    OrderItem_unit =  models.CharField(max_length=200, null=True, verbose_name='Unit')
     OrderItem_quantity =  models.CharField(max_length=200, null=True, verbose_name='quantity')
     OrderItem_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
 
@@ -148,7 +146,4 @@ class Activity_log(models.Model):
 
     def __str__(self):
         return self.activity
-
-
-    
 
