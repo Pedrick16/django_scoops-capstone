@@ -135,9 +135,10 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 AUTH_USER_MODEL='landing_page.User'
 
-STATICFILES_DIRS = (
-    os.path.join(BASE_DIR, 'static'),
-    )
+STATIC_URL = '/static/'
+STATICFILES_DIRS = (os.path.join(BASE_DIR, "scoops4u_capstone/static"),)
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+
 
 
 

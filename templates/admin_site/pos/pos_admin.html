@@ -1,20 +1,10 @@
+
 {% extends 'admin_site/base.html' %}
-
-
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script>
-    $(document).ready(function(){
-        $("#compute").click(function(){
-            var totalamount = parseInt($("#total_amount")).val();
-            var cash = parseInt($("#cash")).val();
-            $("#result").text(totalamount - cash);
-            
-        });
-    });
-</script>
-
+{% load static %}
 
 {% block content %}
+
+
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <!-- <script>
@@ -105,30 +95,42 @@
    
         {% if user.role == "admin"%} 
         <label style="font-weight: bolder;">Total Amount:</label>
-        <input type="text" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
+        <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
        
         <!-- <input type="text" id="total_amount"> -->
          
         <label for="">Cash</label>
-        <input type="text" name="cash" class="form-control" id="cash">
+        <input type="number" name="cash" class="form-control" id="cash">
          <br>
          <label for="">Change</label>
-         <input type="text" name="cash" class="form-control" id="cash">
+         <input type="number" name="cash" class="form-control" id="change" disabled>
         
-         <input type="submit" class="btn btn-success " value="Compute" id="compute">
+     
+
+         <button  onclick="BtnCompute()" class="btn btn-success" id="compute">compute</button>
+         <button   class="btn btn-success">Print</button>
+
 
 
 
          {% elif user.role == "staff" %}
          <label style="font-weight: bolder;">Total Amount:</label>
-         <input type="text" style="font-weight: bolder;" name="total_amount" value="{{ sum_amount.data }}" class="form-control" id="total_amount" disabled>
- 
+         <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
+        
+         <!-- <input type="text" id="total_amount"> -->
+          
          <label for="">Cash</label>
-         <input type="text" name="cash" class="form-control">
-         <br>
-         <label for="">Change</label>
-  
-         <input type="submit" class="btn btn-success " name="submit"> 
+         <input type="number" name="cash" class="form-control" id="cash">
+          <br>
+          <label for="">Change</label>
+          <input type="number" name="cash" class="form-control"  id="change" disabled>
+         
+      
+ 
+          <button  onclick="BtnCompute()" class="btn btn-success" id="compute">compute</button>
+          <button   class="btn btn-success">Print</button>
+ 
+        
         {% endif %}
         <br>
 
@@ -149,23 +151,7 @@
     {% endif %}
 
     
-     <!-- <script type="text/javascript">
-        $(document).ready(function(){
-            $("#compute").click(function(){
-                var total_amount =parseInt($("#total_amount").val());
-                var cash =parseInt($("#cash").val());
-                var compute = $("#result").text(total_amount - cash);
-                console.log(compute)
-
-            })
-        })
-    </script>  -->
-    <!-- <script>
-        // alert("hello")
-        let name = "pedrick"
-        name = "bebeboy"
-        console.log(name)
-    </script> -->
+   
     <script>
         function submitForm(form) {
             swal({
@@ -185,7 +171,14 @@
     </script>
 
 
-    
+<script src="{% static 'js/main.js' %}"></script> 
 {% endblock content %}
+
+
+
+
+
+    
+
 
     
