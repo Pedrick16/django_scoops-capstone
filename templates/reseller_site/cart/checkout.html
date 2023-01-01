@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+<!-- {% load static %} -->
 {% if list_cart %}
     
 <table class="table table-hover text-center">
@@ -38,7 +38,7 @@
         {% csrf_token %}
         <input type="hidden" name="total_amount"value="{{ sum_amount.data }}">
         <h1 class="text-center">Basic Details</h1>
-        <label for="">First Name</label>
+        <label for="" id="fname">First Name</label>
         <input type="text" placeholder="Enter your First Name" class="form-control" name="fname" required>
         <br> 
         <label for="">Last Name</label>
@@ -53,20 +53,31 @@
 
         <br> 
         <label for="">Delivery option</label>
-        <select name="option"  class="form-control" required>
+        <select name="option"  class="form-control" id="option" onchange="handleChange(this)" required>
             <option></option>
             <option value="pickup" name="pickup">Pickup</option>
             <option value="delivery">Delivery</option>
         </select>
         <br>
+
+        <div id="pdate" style="display:none;">
+        <h3>Preffered Date Deliver</h3>
         <input type="datetime-local">
         <br>
         <br>
+        <h3>No Specific Date</h3>
+        <input type="radio" value="none">
+        </div>
+        <br>
+        <br>
         <input type="submit" class="btn btn-success" value=" Place Order">
+       
         <br>
         <br>
     </form>
 {% endif %}    
 
+
+<script src="{% static 'js/main.js' %}"></script> 
 {% endblock content %}
     
