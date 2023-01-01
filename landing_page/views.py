@@ -15,6 +15,11 @@ from admin_site.models import *
 
 # Create your views here.
 
+
+
+
+
+
 # first landing of page
 def landing_page(request):
     return render(request, 'landing_page/index.html')

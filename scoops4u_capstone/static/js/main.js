@@ -2,12 +2,14 @@
 function BtnCompute(){
     const TotalAmount = document.querySelector('#total_amount').value
     const cash = document.querySelector('#cash').value
-   
+    const msg = document.querySelector('#msg')
 
 
     const change =  parseInt(cash) - parseInt(TotalAmount)
-    if( TotalAmount > cash ) {
-        alert('invalid payment')
+    if( TotalAmount.value > cash.value ) {
+       msg.style.color = "red"
+       msg.innerHTML = "<p class='error'>invalid payment</p>"
+       setTimeout(() => document.querySelector('.error').remove(),3000)
     }else{
         document.querySelector('#change').value = change
     }

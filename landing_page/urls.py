@@ -9,6 +9,7 @@ urlpatterns = [
     path('login/', views.loginView, name='login'),
     path('logout/', views.logoutView, name='logout'),
 
+    
     #landing features
     path('inquiry/', views.inquiry_reseller, name='inquiry_reseller'),
 ]
