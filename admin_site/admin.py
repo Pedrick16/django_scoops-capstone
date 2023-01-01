@@ -21,6 +21,10 @@ class BatchView(admin.ModelAdmin):
 class PosView(admin.ModelAdmin):
     list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_price','pos_quantity','pos_amount']
     search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_amount']
+
+class Pos_SalesView(admin.ModelAdmin):
+    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change']
+    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change']
 class TransactionView(admin.ModelAdmin):
     list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
     search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
@@ -50,3 +54,4 @@ admin.site.register(Transaction, TransactionView),
 admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
 admin.site.register(Profile, ProfileView),
+admin.site.register(Pos_Sales, Pos_SalesView),

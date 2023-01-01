@@ -90,6 +90,15 @@ class Pos(models.Model):
     def __str__(self):
         return self.pos_user
 
+class Pos_Sales(models.Model):
+    pos_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
+    pos_TotalAmount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Amount')
+    pos_cash = models.BigIntegerField( null=True, verbose_name='Cash')
+    pos_change =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Change')
+
+    def __str__(self):
+        return self.pos_user
+
    
 
 
