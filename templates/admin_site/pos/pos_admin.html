@@ -1,6 +1,7 @@
 
 {% extends 'admin_site/base.html' %}
-{% load static %}
+
+
 
 {% block content %}
 
@@ -37,7 +38,7 @@
   
 
 
-    <table class="table table-hover text-center">
+    <table class="table table-hover text-center" >
         <thead>
             <tr>
                 <th>Product ID</th>
@@ -100,7 +101,7 @@
         <!-- <input type="text" id="total_amount"> -->
          
         <label for="">Cash</label>
-        <p id="msg"></p>
+        <p id="msg" style=" display:none;"></p>
         <input type="number" name="cash" class="form-control" id="cash">
          <br>
          <label for="">Change</label>
@@ -108,7 +109,7 @@
         
      
 
-         <button  onclick="BtnCompute()" class="btn btn-success" id="compute">compute</button>
+         <button id="btn_compute" class="btn btn-success" hidden>compute</button>
          <button   class="btn btn-success">Print</button>
 
 
@@ -119,16 +120,16 @@
          <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
         
          <!-- <input type="text" id="total_amount"> -->
-          
+         <p id="msg"></p>
          <label for="">Cash</label>
          <input type="number" name="cash" class="form-control" id="cash">
           <br>
           <label for="">Change</label>
-          <input type="number" name="cash" class="form-control"  id="change" disabled>
+          <input type="number"  class="form-control"  id="change" disabled>
          
       
  
-          <button  onclick="BtnCompute()" class="btn btn-success" id="compute">compute</button>
+          <button   class="btn btn-success" id="btn_compute">compute</button>
           <button   class="btn btn-success">Print</button>
  
         
@@ -154,6 +155,7 @@
     
    
     <script>
+      
         function submitForm(form) {
             swal({
                 title: "Are you sure?",
@@ -172,7 +174,44 @@
     </script>
 
 
-<script src="{% static 'js/main.js' %}"></script> 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    
+
+    $(document).ready(function () {
+        $(btn_compute).on('click', function () {
+            var total_amount = parseInt($('#total_amount').val())
+            var cash = parseInt($('#cash').val())
+            var result =  cash - total_amount
+            var msg = $('#msg')
+          
+            if(cash > total_amount){
+                $('#change').val(result)
+             
+
+            }else{
+                $('#msg').css("color", "red")
+                // $('#msg').css("fontSize", "20px")
+                $('#msg').css("display", "block")
+                msg.html('<i class="msg">Invalid Payment<i/>')
+                setTimeout(function (){
+                    $('.msg').remove()
+                },3000)
+            }
+          
+            
+        })
+        
+        $('#btn_compute').removeAttr('hidden')
+
+
+
+    })
+
+
+</script>
+
+
 {% endblock content %}
 
 

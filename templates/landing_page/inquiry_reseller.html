@@ -1,11 +1,10 @@
 {%  extends 'landing_page/base.html' %} 
-
+    {% load static %}
         {% block content%}
         <form action="{% url 'admin_site:process_inquiry' %}" method="POST" enctype="multipart/form-data" class="text-center">
             {% csrf_token %}
 
             <h1 >Inquiry form</h1>
-                
             {% for messsage in messages  %}
              <p class='alert alert-success mt-3'>{{messsage}}</p>
             {% endfor %}
@@ -44,13 +43,14 @@
             <br>
             
             <label for="">Business Permit</label>
-            <input type="File" class="form-control" name="business_permit" accept=".jpg, .jpeg, .png" required>
+
+            <input type="File" class="form-control" id="file" name="business_permit" accept=".jpg, .jpeg, .png" required>
             <br>
             <button class="btn btn-primary"  type="submit" name="submit" >Submit</button>
             </form>
             <br>
             
-
+<script src=" {% static 'js/main.js' %} "></script>
 {% endblock %}
      
          

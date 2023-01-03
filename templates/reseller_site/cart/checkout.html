@@ -2,7 +2,7 @@
 
 
 {% block content %}
-<!-- {% load static %} -->
+
 {% if list_cart %}
     
 <table class="table table-hover text-center">
@@ -37,7 +37,7 @@
     <form action="{% url 'reseller_site:checkout' %}" method="POST">
         {% csrf_token %}
         <input type="hidden" name="total_amount"value="{{ sum_amount.data }}">
-        <h1 class="text-center">Basic Details</h1>
+        <h1 class="text-center" id="bdetails">Basic Details</h1>
         <label for="" id="fname">First Name</label>
         <input type="text" placeholder="Enter your First Name" class="form-control" name="fname" required>
         <br> 
@@ -52,33 +52,99 @@
         <input type="text" placeholder="Enter your contact number" class="form-control" name="contact_no" required>
 
         <br> 
-        <label for="">Delivery option</label>
-        <select name="option"  class="form-control" id="option" onchange="handleChange(this)" required>
+        <label for="" id="doption">Delivery option</label>
+        <select  class="form-control" id="option"   required>
             <option></option>
-            <option value="pickup" name="pickup">Pickup</option>
+            <option value="pickup">Pickup</option>
             <option value="delivery">Delivery</option>
         </select>
         <br>
 
         <!-- wag tatangglim yung div! nakakamamatay -->
-        <div id="pdate" style="display:none;">
-        <h3>Preffered Date Deliver</h3>
-        <input type="datetime-local">
-        <br>
-        <br>
-        <h3>No Specific Date</h3>
-        <input type="radio" value="none">
+        <div id="pdate" style="display: none;">
+            <div id="date_deliver">
+                <h3 id="h3_date">Preffered Date Deliver</h3>
+                <input type="date" id="btn_prefer">
+            </div>
+            <br>
+            <br>
+            <div id="no_specific">
+                <h3>No Specific Date</h3>
+                <input type="radio" id="btn_no_date">
+            </div>
         </div>
         <br>
         <br>
         <input type="submit" class="btn btn-success" value=" Place Order">
+
        
         <br>
         <br>
     </form>
+ 
 {% endif %}    
 
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
-<script src="{% static 'js/main.js' %}"></script> 
+
+<script>
+
+
+   $(document).ready(function () {
+
+        $('#option').on('change', function(){
+            var select_value = this.value
+            if (select_value == "delivery") {
+                // $('#pdate').css("display", "block")
+                $('#bdetails').css('color','blue').animate({
+                    fontSize:'20px'
+                })
+                $('#h3_date').text('Preffered Date Deliver')
+                $('#pdate').fadeIn(1000)
+                $('#no_specific').fadeIn(1000)
+            } else if (select_value == "pickup") {
+                $('#bdetails').css('color','green')
+                $('#h3_date').text('Pickup Date')
+                $('#pdate').fadeIn(1000)
+                $('#no_specific').fadeOut()
+                // $('#pdate').css("display", "none")
+            } else if (select_value == "") {
+                $('#bdetails').css('color','darkViolet')
+                $('#pdate').fadeOut(1000)
+                // $('#pdate').css("display", "none")
+            }
+
+        })
+        
+        $('#btn_prefer').on('click', function(){
+            $('#no_specific').fadeToggle(1000)
+           
+        })
+    
+        $('#btn_no_date').on('click', function(){
+            $('#date_deliver').fadeToggle(1000)
+        })
+
+        
+     
+     
+        
+    //    $('#option').on('change', function(){
+    //             var select_value = this.value
+    //             if(select_value === "delivery"){
+    //                 $('#p_date').css("display","block")
+    //             }else if(select_value === "pickup"){
+    //                 $('#p_date').css("display","none")
+    //             }else if(select_value === ""){
+    //                 $('#p_date').css("display","none")
+    //         }
+    //     }) 
+
+   })
+
+
+ 
+</script>
+
 {% endblock content %}
     
