@@ -1,0 +1,43 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+    <div class="text-end" id="btn_cancel">
+        <button class="btn btn-danger">Cancel</button>
+    </div>
+    <div class="hedear">
+        <h1 class="text-center">Scoops4u Dulumbayan</h1>
+        <p class="pos_number">POS: {{ user }}</p>
+    </div>
+     <hr>
+    <div>
+        <p class="product" ></p>
+        <p class="price"></p>
+        <p> X </p>
+    </div>
+    <hr>
+    <div class="total">
+        <p class="total_price"></p>
+        <br>
+        <p class="cash"></p>
+        <br>
+        <p class="Change"></p>
+    </div>
+    <hr>
+    
+    <button onclick="window.print()" class="btn btn-success">Print</button>
+    <button class="btn btn-success">Done</button>
+
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+    
+
+  
+
+
+</script>
+
+
+{% endblock content %}
+    

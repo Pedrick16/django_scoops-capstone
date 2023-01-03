@@ -5,10 +5,12 @@ from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import random
 
+
+
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard(request):
-    list_numberorder = Transaction.objects.filter(transaction_user = request.user).count()
+    list_numberorder =    Transaction.objects.filter(transaction_user = request.user).count()
     transaction_pending = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Pending").count()
     transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Shipping").count()
     transaction_decline = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Decline").count()
@@ -45,50 +47,93 @@ def checkout(request):
     if request.method == "POST":
         current_user = request.user
         pos = Pos.objects.filter(pos_user = current_user )
-
+        preferred_date = request.POST['prefer_date']
+        no_specific = "None"
         status = "Pending"
-        trackno = 'S4U'+str(random.randint(1111111,9999999))
+        trackno = 'S4U'+str(random.randint(1111111, 9999999))
+        if preferred_date:
+            NewTransaction = Transaction()
+            NewTransaction.transaction_user = request.user
+            NewTransaction.transaction_fname = request.POST.get('fname')
+            NewTransaction.transaction_lname = request.POST.get('lname')
+            NewTransaction.transaction_address = request.POST.get('address')
+            NewTransaction.transaction_contactno= request.POST.get('contact_no')
+            NewTransaction.transaction_doption = request.POST.get('option')
+            NewTransaction.transaction_preferred_date = preferred_date 
+            NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
+            NewTransaction.transaction_orderstatus = status
 
-        NewTransaction = Transaction()
-        NewTransaction.transaction_user = request.user
-        NewTransaction.transaction_fname = request.POST.get('fname')
-        NewTransaction.transaction_lname = request.POST.get('lname')
-        NewTransaction.transaction_address = request.POST.get('address')
-        NewTransaction.transaction_contactno= request.POST.get('contact_no')
-        NewTransaction.transaction_doption = request.POST.get('option')
-        NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
-        NewTransaction.transaction_orderstatus = status
-
-        while Transaction.objects.filter(transaction_no = trackno) is None:
-            trackno = 'S4U'+str(random.randint(1111111,9999999))
-
-        NewTransaction.transaction_no = trackno   
-        NewTransaction.save()
-
-        #activity log for Checkout
-        activity = "Check-out"
-        NewActLog = Activity_log()
-        NewActLog.user_name = request.user
-        NewActLog.role = request.user.role
-        NewActLog.activity = activity 
-        NewActLog.save()
-    
-
-       
         
-        NewOrderItems = Pos.objects.filter(pos_user = request.user)
-        for item in NewOrderItems:
-            OrderItem.objects.create(
-                OrderItem_transactionNo = trackno,
-                OrderItem_category = item.pos_category,
-                OrderItem_name = item.pos_name,
-                OrderItem_unit = item.pos_unit,
-                OrderItem_quantity  = item.pos_quantity,
-                OrderItem_amount= item.pos_amount
-            )
-            pos.delete()
-    messages.success(request, ("Please wait for your order"))
-    return redirect('reseller_site:transaction_orders')
+            while Transaction.objects.filter(transaction_no = trackno) is None:
+                trackno = 'S4U'+str(random.randint(1111111,9999999))
+
+            NewTransaction.transaction_no = trackno   
+            NewTransaction.save()
+
+            #activity log for Checkout
+            activity = "Check-out"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+        
+
+        
+            NewOrderItems = Pos.objects.filter(pos_user = request.user)
+            for item in NewOrderItems:
+                OrderItem.objects.create(
+                    OrderItem_transactionNo = trackno,
+                    OrderItem_category = item.pos_category,
+                    OrderItem_name = item.pos_name,
+                    OrderItem_unit = item.pos_unit,
+                    OrderItem_quantity  = item.pos_quantity,
+                    OrderItem_amount= item.pos_amount
+                )
+                pos.delete()
+            messages.success(request, ("Please wait for your order"))
+            return redirect('reseller_site:transaction_orders')
+        else:
+            NewTransaction = Transaction()
+            NewTransaction.transaction_user = request.user
+            NewTransaction.transaction_fname = request.POST.get('fname')
+            NewTransaction.transaction_lname = request.POST.get('lname')
+            NewTransaction.transaction_address = request.POST.get('address')
+            NewTransaction.transaction_contactno= request.POST.get('contact_no')
+            NewTransaction.transaction_doption = request.POST.get('option')
+            NewTransaction.transaction_preferred_date = no_specific
+            NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
+            NewTransaction.transaction_orderstatus = status
+
+        
+            while Transaction.objects.filter(transaction_no = trackno) is None:
+                trackno = 'S4U'+str(random.randint(1111111,9999999))
+
+            NewTransaction.transaction_no = trackno   
+            NewTransaction.save()
+
+            #activity log for Checkout
+            activity = "Check-out"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+        
+
+            NewOrderItems = Pos.objects.filter(pos_user = request.user)
+            for item in NewOrderItems:
+                OrderItem.objects.create(
+                    OrderItem_transactionNo = trackno,
+                    OrderItem_category = item.pos_category,
+                    OrderItem_name = item.pos_name,
+                    OrderItem_unit = item.pos_unit,
+                    OrderItem_quantity  = item.pos_quantity,
+                    OrderItem_amount= item.pos_amount
+                )
+                pos.delete()
+            messages.success(request, ("Please wait for your order"))
+            return redirect('reseller_site:transaction_orders')
 
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):

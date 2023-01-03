@@ -44,6 +44,7 @@ urlpatterns = [
     path('update-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
 
     path('pos/', views.pos ,name='pos'),
+    path('pos-receipt/', views.receipt ,name='receipt'),
 
     path('minus-qty/<int:productid>/', views.minus_qty, name='minus_qty'),
     path('add-qty/<int:productid>/', views.add_qty ,name='add_qty'),

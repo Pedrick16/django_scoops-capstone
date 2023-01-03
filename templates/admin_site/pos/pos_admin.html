@@ -3,6 +3,7 @@
 
 
 
+
 {% block content %}
 
 
@@ -95,6 +96,7 @@
           
    
         {% if user.role == "admin"%} 
+      
         <label style="font-weight: bolder;">Total Amount:</label>
         <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
        
@@ -102,15 +104,20 @@
          
         <label for="">Cash</label>
         <p id="msg" style=" display:none;"></p>
-        <input type="number" name="cash" class="form-control" id="cash">
+        <input type="number" name="cash"  class="form-control"  id="cash">
          <br>
          <label for="">Change</label>
          <input type="number" name="cash" class="form-control" id="change" disabled>
+
+         <button id="btn_compute" class="btn btn-success" >compute</button>
+         
+         <a href="{% url 'admin_site:receipt' %}" class="btn btn-success">Receipt</a>
+
         
      
 
-         <button id="btn_compute" class="btn btn-success" hidden>compute</button>
-         <button   class="btn btn-success">Print</button>
+       
+        
 
 
 
@@ -130,7 +137,7 @@
       
  
           <button   class="btn btn-success" id="btn_compute">compute</button>
-          <button   class="btn btn-success">Print</button>
+          <a href="{% url 'admin_site:receipt' %}" class="btn btn-success" >receipt</a>
  
         
         {% endif %}
@@ -180,12 +187,13 @@
 
     $(document).ready(function () {
         $(btn_compute).on('click', function () {
+         
             var total_amount = parseInt($('#total_amount').val())
             var cash = parseInt($('#cash').val())
             var result =  cash - total_amount
             var msg = $('#msg')
           
-            if(cash > total_amount){
+            if(cash >= total_amount){
                 $('#change').val(result)
              
 
@@ -202,7 +210,7 @@
             
         })
         
-        $('#btn_compute').removeAttr('hidden')
+     
 
 
 

@@ -26,8 +26,8 @@ class Pos_SalesView(admin.ModelAdmin):
     list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change']
     search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change']
 class TransactionView(admin.ModelAdmin):
-    list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
-    search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
+    list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
+    search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
 
 class OrderItemView(admin.ModelAdmin):
     list_display = ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_unit','OrderItem_quantity','OrderItem_amount']
@@ -37,11 +37,13 @@ class ProfileView(admin.ModelAdmin):
     list_display = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email','profile_pic']
     search_fields = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email']
 
-
-
 class Activity_logView(admin.ModelAdmin):
     list_display = ['user_name','activity','role','date_time']
     search_fields = ['user_name','activity','role','date_time']
+
+
+
+
 
 
 

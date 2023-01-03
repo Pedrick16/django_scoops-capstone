@@ -5,7 +5,7 @@
 <!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 <script>
     {% for message in messages %}
-         swal('{{ message }}');
+        swal('{{ message }}');
     {% endfor %}
 </script> -->
 <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
@@ -25,33 +25,30 @@
 
 {% if list_products %}     
 <table class="table table-hover text-center">
-    
     <thead>
-    <tr>
-        <th>Product code </th>
-        <th>Product Name</th>
-        <th>Category</th>
-        <th>Unit</th>
-        <th>Price</th>
-        <th>Available Stock</th>
-        <th>Status</th>
-        <th>quantity</th>
-        <th>action</th>
-     
-    </tr>
+        <tr>
+            <th>Product code </th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Unit</th>
+            <th>Price</th>
+            <th>Available Stock</th>
+            <th>Status</th>
+            <th>quantity</th>
+            <th>action</th>
+        </tr>
     </thead>
     <tbody>
         
-        {% for list in list_products %}   
-    <tr>
-        <td>{{ list.product_code }}</td>
-        <td>{{ list.product_name }}</td>
-        <td>{{ list.product_category }}</td>
-        <td>{{ list.product_unit }}</td>
-        <td>{{ list.product_price }}</td>
-        <td>{{ list.product_stock }}</td>
-        <td>{{ list.product_status }}</td>
-       
+        {% for list in list_products %}
+        <tr>
+            <td>{{ list.product_code }}</td>
+            <td>{{ list.product_name }}</td>
+            <td>{{ list.product_category }}</td>
+            <td>{{ list.product_unit }}</td>
+            <td>{{ list.product_price }}</td>
+            <td>{{ list.product_stock }}</td>
+            <td>{{ list.product_status }}</td>
 
         <form action="{% url 'admin_site:cart_products' list.id %}" method="POST">
             {% csrf_token %}
@@ -64,7 +61,7 @@
         <input type="hidden" name="product_unit" value="{{ list.product_unit }}">
         <input type="hidden" name="product_price" value="{{ list.product_price }}">
         </form>
-    </tr>
+        </tr>
         {% endfor %}
     </tbody>
 </table>

@@ -48,7 +48,7 @@ class Reseller(models.Model):
 
 
 class Product(models.Model):
-    STATUS = (("available","available"),("low stock","low stock"),("n/a","n/a"))
+    STATUS = (("available","available"),("not available","not available"))
     product_code =  models.CharField(unique=True, max_length=200, verbose_name='Product Code')
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
@@ -56,8 +56,6 @@ class Product(models.Model):
     product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
     product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
- 
-   
 
     # def update_status(self):
     #     if self.product_stock <= 100:
@@ -113,6 +111,7 @@ class Transaction(models.Model):
     transaction_address = models.TextField(null=False, verbose_name='Address') 
     transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
+    transaction_preferred_date = models.CharField(max_length=250,  null=True,   verbose_name='Preferred Date') 
     transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Price')
     created_at =models.DateTimeField(default=timezone.now)
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')

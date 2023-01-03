@@ -261,9 +261,8 @@ def add_product(request):
         pname = request.POST['product_name']
         product_unit = request.POST['unit']
         pprice = request.POST['price']
-        pstock = request.POST['stock']
-        pstatus = request.POST['status']
-       
+        pstock = 0
+        pstatus = "not available"
         while Product.objects.filter(product_code = product_code) is None:
             product_code = 'S4U'+str(random.randint(1111111,9999999))
 
@@ -325,8 +324,7 @@ def update_profile(request,profileid):
         if profile_picture:
             profile.profile_pic = profile_picture
         profile.save()
-        return redirect('admin_site:settings_profile')
-           
+        return redirect('admin_site:settings_profile') 
 
 def my_profile(request):
     current_profile = Profile.objects.filter(list_user = request.user)
@@ -438,6 +436,10 @@ def pos(request):
         'sum_amount':sum_amount
         }
     return render(request, 'admin_site/pos/pos_admin.html', context)
+
+def receipt(request):
+    
+    return render(request, 'admin_site/pos/receipt.html')
 
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
@@ -693,23 +695,26 @@ def search_inventory(request):
     if request.method == "GET":
         search = request.GET.get('search')
         if search:
-            list_products = Product.objects.filter(Q(product_code__icontains = search) | Q(product_category__icontains = search) | Q(product_name__icontains = search)| Q(product_size__icontains = search) | Q(product_stock__icontains = search)| Q(product_status = search)) 
+            list_products = Product.objects.filter(Q(product_code__icontains = search) | Q(product_name__icontains = search)) 
             return render(request,'admin_site/inventory/add-stock.html', {'list_products':list_products})
         else:
            messages.success(request,("No records found!"))   
            return render(request,'admin_site/inventory/add-stock.html')
 
 #search bar for Products             
+
+
 @login_required(login_url='landing_page:login')
 def search_product(request):
     if request.method == "GET":
         search = request.GET.get('search')
         if search:
-            list_products = Product.objects.filter(Q(product_code__icontains = search) | Q(product_category__icontains = search) | Q(product_name__icontains = search)| Q(product_size__icontains = search)| Q(product_stock__icontains = search)| Q(product_status__icontains = search) ) 
-            return render(request,'admin_site/products/product.html', {'list_products':list_products})
+            list_products = Product.objects.filter(Q(product_code__icontains=search) | Q(product_category__icontains=search) | Q(
+                product_name__icontains=search) | Q(product_unit__icontains=search) | Q(product_stock__icontains=search) | Q(product_status__icontains=search))
+            return render(request, 'admin_site/products/product.html', {'list_products': list_products})
         else:
-           messages.success(request,("No records found!"))   
-           return render(request,'admin_site/products/product.html')
+           messages.success(request, ("No records found!"))
+           return render(request, 'admin_site/products/product.html')
 
 #search bar for Products             
 @login_required(login_url='landing_page:login')
