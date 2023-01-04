@@ -37,6 +37,8 @@
 </table>
     <div class="text-end px-5">
         <label style="font-weight: bolder;" > Grand Total:    {{ list_total.data }} </label>
+        <br>
+        <label style="font-weight: bolder;" > Transaction No:  {{ list_transaction.transaction_no}}   </label>
  
         
        
@@ -45,31 +47,35 @@
     <br>
    
 
-    {% for list in list_transaction %}
+
         
         <div class="container-fluid">
         <h1 class="text-center">Shipping Details</h1>
 
         <label for="">First Name</label>
-        <input type="text"class="form-control" value="{{ list.transaction_fname }}" disabled>
+        <input type="text"class="form-control" value="{{ list_transaction.transaction_fname }}" disabled>
         <br> 
 
         <label for="">Last Name</label>
-        <input type="text"  value="{{ list.transaction_lname }}" class="form-control" disabled>
+        <input type="text"  value="{{ list_transaction.transaction_lname }}" class="form-control" disabled>
         <br> 
         <label for="">Address</label>
-        <input type="text"  value="{{ list.transaction_address }}" class="form-control" disabled>
+        <input type="text"  value="{{ list_transaction.transaction_address }}" class="form-control" disabled>
    
         <br>
         <label for="">contact No</label>
-        <input type="text"   value="{{ list.transaction_contactno }}"class="form-control" disabled>
+        <input type="text"   value="{{ list_transaction.transaction_contactno }}"class="form-control" disabled>
 
         <br> 
         <label for="">Delivery option</label>
-        <input type="text" value="{{ list.transaction_doption }}" class="form-control" disabled>
+        <input type="text" value="{{ list_transaction.transaction_doption }}" class="form-control" disabled>
+        <br> 
+        <label for="">Preferred Date</label>
+        <input type="text" value="{{ list_transaction.transaction_preferred_date }}" class="form-control" disabled>
+
         <br>
         <br>
-    {% endfor %}
+   
   
       
    

@@ -26,8 +26,8 @@ class Pos_SalesView(admin.ModelAdmin):
     list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change']
     search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change']
 class TransactionView(admin.ModelAdmin):
-    list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
-    search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_orderstatus','transaction_delivered']
+    list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_totalprice','transaction_doption','created_at','transaction_preferred_date','transaction_delivered','transaction_orderstatus']
+    search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_delivered','transaction_orderstatus']
 
 class OrderItemView(admin.ModelAdmin):
     list_display = ['OrderItem_transactionNo', 'OrderItem_category', 'OrderItem_name', 'OrderItem_unit','OrderItem_quantity','OrderItem_amount']

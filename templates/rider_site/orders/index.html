@@ -40,10 +40,10 @@
                 <td>{{ list.transaction_totalprice }}</td>
                 <td>{{ list.transaction_orderstatus }}</td>
 
-                <form action="{% url 'rider_site:transaction_view' %} " method="GET">
+                <form action="{% url 'rider_site:transaction_view' list.id %} " method="GET">
                     {% csrf_token %}
                      <td><input type="submit" class="btn btn-dark" value="View"></td>
-                     <input type="hidden"  name="trans_no" value="{{ list.transaction_no }}">
+              
                 </form>
 
                 <form action="{% url 'rider_site:orders_completed' list.id %}" method="POST">

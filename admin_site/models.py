@@ -113,7 +113,7 @@ class Transaction(models.Model):
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
     transaction_preferred_date = models.CharField(max_length=250,  null=True,   verbose_name='Preferred Date') 
     transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Price')
-    created_at =models.DateTimeField(default=timezone.now)
+    created_at =models.DateTimeField(default=timezone.now, verbose_name=' Date Ordered ')
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
 

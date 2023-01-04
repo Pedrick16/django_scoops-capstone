@@ -9,6 +9,6 @@ urlpatterns = [
     path('report-deliver/', views.report_deliver, name='report_deliver'),
 
     path('orders/', views.transaction_orders, name='transaction_orders'),
-    path('transaction-view/', views.transaction_view, name='transaction_view'),
+    path('transaction-view/<int:id>/', views.transaction_view, name='transaction_view'),
    
 ]

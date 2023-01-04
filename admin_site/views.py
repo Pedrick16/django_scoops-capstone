@@ -438,7 +438,7 @@ def pos(request):
     return render(request, 'admin_site/pos/pos_admin.html', context)
 
 def receipt(request):
-    
+
     return render(request, 'admin_site/pos/receipt.html')
 
 @login_required(login_url='landing_page:login')
@@ -617,16 +617,19 @@ def Transaction_orders(request):
     return render(request, 'admin_site/transaction/orders.html', context)
 
 @login_required(login_url='landing_page:login') 
-def transaction_view(request):
+def transaction_view(request, id):
     if request.method == "GET":
-        transaction_no = request.GET.get('trans_no')
+        transaction = Transaction.objects.get(id = id)
+       
+        transaction_no = transaction.transaction_no
         list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
-        list_transaction = Transaction.objects.filter(transaction_no = transaction_no)
+       
         list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
+       
         context = {
             'list_orderitem':list_orderitem,
             'list_total':list_total,
-            'list_transaction':list_transaction
+            'list_transaction':transaction
         }
     return render(request, 'admin_site/transaction/view_orders.html', context)
 

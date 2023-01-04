@@ -3,6 +3,8 @@
 
 {% block content %}
 
+{% load static %}
+
 {% if list_cart %}
     
 <table class="table table-hover text-center">
@@ -63,13 +65,13 @@
         <div id="pdate" style="display: none;">
             <div id="date_deliver">
                 <h3 id="h3_date">Preferred Delivery date</h3>
-                <input type="date" id="btn_prefer" name="prefer_date">
+                <input type="date" id="input_date" name="prefer_date">
             </div>
             <br>
             <br>
             <div id="no_specific">
                 <h3>No Specific Date</h3>
-                <input type="checkbox" id="btn_no_date"  name="specific_date" >
+                <input type="checkbox" id="checkbox_no_date"  name="specific_date" >
             </div>
         </div>
         <br>
@@ -82,66 +84,9 @@
 {% endif %}    
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="{% static 'js/checkout.js' %}"></script>
 
 
-<script>
-
-
-    $(document).ready(function () {
-
-        $('#option').on('change', function () {
-            var select_value = this.value
-            if (select_value == "delivery") {
-                // $('#pdate').css("display", "block")
-                $('#bdetails').css('color', 'blue').animate({
-                    fontSize: '20px'
-                })
-                $('#h3_date').text('Preferred Delivery date')
-                $('#pdate').fadeIn(1000)
-                $('#no_specific').fadeIn(1000)
-            } else if (select_value == "pickup") {
-                $('#bdetails').css('color', 'green')
-                $('#h3_date').text('Pickup Date')
-                $('#pdate').fadeIn(1000)
-                $('#no_specific').fadeOut()
-                // $('#pdate').css("display", "none")
-            } else if (select_value == "") {
-                $('#bdetails').css('color', 'darkViolet')
-                $('#pdate').fadeOut(1000)
-                // $('#pdate').css("display", "none")
-            }
-
-        })
-
-        $('#btn_prefer').on('click', function () {
-            $('#no_specific').fadeToggle(1000)
-        })
-
-        $('#btn_no_date').on('click', function () {
-            $('#date_deliver').fadeToggle(1000)
-            $('#btn_prefer').val('')
-        })
-
-
-
-
-
-        //    $('#option').on('change', function(){
-        //             var select_value = this.value
-        //             if(select_value === "delivery"){
-        //                 $('#p_date').css("display","block")
-        //             }else if(select_value === "pickup"){
-        //                 $('#p_date').css("display","none")
-        //             }else if(select_value === ""){
-        //                 $('#p_date').css("display","none")
-        //         }
-        //     }) 
-
-    })
-
-
-
-</script>
 
 {% endblock content %}
     
