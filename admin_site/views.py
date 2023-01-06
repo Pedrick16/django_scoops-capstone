@@ -379,6 +379,7 @@ def update_inventory(request, productid):
         #update product stock
 
         product.product_stock = sum 
+        product.product_status = "available"
         product.save()
 
         #adding to by batch (database)

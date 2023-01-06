@@ -1,68 +1,93 @@
-{% extends 'admin_site/base.html' %}
 
 {% load static %}
-{% block content %}
-<div class="text-start">
-    <button onclick="window.print()" class="btn btn-success">Print</button>
-</div>
-    
-   <form action="{% url 'admin_site:receipt_process' %}" method="POST" class="text-end">
-    {% csrf_token %}
-    <input type="hidden" id="get_id"  name="get_id">
-    <button class="btn btn-success" id="btn-receipt">Done</button>
-    </form>
-  
-   
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Document</title>
+</head>
+
+<body>
+
+    <div class="container">
+        <div class="row mt-2">
+            <div class="col-lg-12">
+                {% block content %}
+                <div class="text-start">
+                    <button onclick="window.print()" class="btn btn-success">Print</button>
+                </div>
+
+                <form action="{% url 'admin_site:receipt_process' %}" method="POST" class="text-end">
+                    {% csrf_token %}
+                    <input type="hidden" id="get_id" name="get_id">
+                    <button class="btn btn-success" id="btn-receipt">Done</button>
+                </form>
 
 
 
-<div class="hedear pt-5">
-    <h1 class="text-center">Scoops4u Dulumbayan</h1>
-    <p class="pos_number">POS: {{ user }}</p>
-</div>
-<hr>
 
 
-{% for list in list_pos %}
-
-<div>
-    <p class="product" style="font-weight: bolder;">{{ list.pos_name }}</p>
-    <p class="price">{{ list.pos_amount }}</p>
-    <p>{{ list.pos_quantity }} X {{ list.pos_price }}</p>
-</div>
-{% endfor %}
-
-<hr>
+                <div class="hedear pt-5">
+                    <h1 class="text-center">Scoops4u Dulumbayan</h1>
+                    <p class="pos_number">POS: {{ user }}</p>
+                </div>
+                <hr>
 
 
+                {% for list in list_pos %}
 
-<div class="total">
-    <h3 class="text-center">Total Amount</h3>
+                <div>
+                    <p class="product" style="font-weight: bolder;">{{ list.pos_name }}</p>
+                    <p class="price">{{ list.pos_amount }}</p>
+                    <p>{{ list.pos_quantity }} X {{ list.pos_price }}</p>
+                </div>
+                {% endfor %}
 
-    <label for="" style="font-weight: bolder;"> total amount</label>
-    <p class="total_price">{{ sum_amount }} </p>
+                <hr>
+
+
+
+                <div class="total">
+                    <h3 class="text-center">Total Amount</h3>
+
+                    <label for="" style="font-weight: bolder;"> total amount</label>
+                    <p class="total_price">{{ sum_amount }} </p>
+                    <br>
+                    <label for="" style="font-weight: bolder;"> cash</label>
+                    <p class="cash">{{ pos_payment.pos_cash }}</p>
+                    <br>
+                    <label for="" style="font-weight: bolder;">Change</label>
+                    <p class="Change">{{ pos_payment.pos_change }}</p>
+                    <input type="hidden" name="payment_id" id="payment_id" value="{{ pos_payment.id }}">
+                </div>
+
+
+                {% endblock content %}
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+
+
     <br>
-    <label for="" style="font-weight: bolder;"> cash</label>
-    <p class="cash">{{ pos_payment.pos_cash }}</p>
     <br>
-    <label for="" style="font-weight: bolder;">Change</label>
-    <p class="Change">{{ pos_payment.pos_change }}</p>
-    <input type="hidden"  name="payment_id" id="payment_id" value="{{ pos_payment.id }}">
-</div>
-
-<hr>
 
 
-<br>
-<br>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
+        integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script src="{% static 'js/receipt.js' %}"></script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js"
-    integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    
-<script src="{% static 'js/receipt.js' %}"></script>
+</body>
 
-
-{% endblock content %}
-    
+</html>

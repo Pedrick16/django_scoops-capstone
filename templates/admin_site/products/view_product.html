@@ -23,16 +23,17 @@
         <thead>
             <tr>
                 <th>Batch Number</th>
-                <th>Expiration Date</th>
                 <th>Quantity</th>
+                <th>Expiration Date</th>
             </tr>
             <tbody>
                 
                 {% for list in list_batch %}
                 <tr>
                     <td>{{ list.product_batch }}</td>
-                    <td>{{ list.product_expired }}</td>
                     <td>{{ list.product_quantity }}</td>
+                    <td>{{ list.product_expired }}</td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>
