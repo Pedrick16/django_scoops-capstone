@@ -15,6 +15,7 @@
     {% endfor %}
 </script> -->
 {% for message in messages %}
+
 <p class="alert alert-success mt-3">{{ message }}</p>
 {% endfor %}
 <a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
@@ -72,6 +73,8 @@
                     <td><button type="submit" class="btn btn-dark">Cancel</button></td>
                     <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
                     <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
+                    <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
+                
                     </form>
                 </tr>
                 {% endfor %}
@@ -96,50 +99,57 @@
           
    
         {% if user.role == "admin"%} 
-      
+        
+        <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
+        {% csrf_token %}
         <label style="font-weight: bolder;">Total Amount:</label>
-        <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
+        <input type="number" name="total_amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount"   readonly="readonly"> 
        
         <!-- <input type="text" id="total_amount"> -->
          
         <label for="">Cash</label>
         <p id="msg" style=" display:none;"></p>
-        <input type="number" name="cash"  class="form-control"  id="cash">
-         <br>
-         <label for="">Change</label>
-         <input type="number" name="cash" class="form-control" id="change" disabled>
+        <input type="number" name="cash"  class="form-control"  id="cash" required>
+    
+        <label for="">Change</label>
+        <input type="number" name="change" class="form-control" id="change"  readonly="readonly">
+        <input type="hidden" name="get_id" id="get_id">
 
-         <button id="btn_compute" class="btn btn-success" >compute</button>
-         
-         <a href="{% url 'admin_site:receipt' %}" class="btn btn-success">Receipt</a>
+        <div class="text-center pt-2" >
+        <button id="btn_compute" class="btn btn-success" >compute</button>
+        <button  class="btn btn-success"id="btn-receipt" hidden>Receipt</button>
+        </div>
 
+        </form>
         
-     
-
-       
         
-
-
 
 
          {% elif user.role == "staff" %}
-         <label style="font-weight: bolder;">Total Amount:</label>
-         <input type="number" name="amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount" disabled> 
+         <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
+            {% csrf_token %}
+            <label style="font-weight: bolder;">Total Amount:</label>
+            <input type="number" name="total_amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount"   readonly="readonly"> 
+
+            <!-- <input type="text" id="total_amount"> -->
+
+            <label for="">Cash</label>
+            <p id="msg" style=" display:none;"></p>
+            <input type="number" name="cash"  class="form-control"  id="cash" required>
         
-         <!-- <input type="text" id="total_amount"> -->
-         <p id="msg"></p>
-         <label for="">Cash</label>
-         <input type="number" name="cash" class="form-control" id="cash">
-          <br>
-          <label for="">Change</label>
-          <input type="number"  class="form-control"  id="change" disabled>
-         
-      
- 
-          <button   class="btn btn-success" id="btn_compute">compute</button>
-          <a href="{% url 'admin_site:receipt' %}" class="btn btn-success" >receipt</a>
- 
-        
+            <label for="">Change</label>
+            <input type="number" name="change" class="form-control" id="change"  readonly="readonly">
+            <input type="hidden" name="get_id" id="get_id">
+    
+            <div class="text-center pt-2" >
+            <button id="btn_compute" class="btn btn-success" >compute</button>
+            <button  class="btn btn-success"id="btn-receipt" hidden>Receipt</button>
+            </div>
+    
+            </form>
+            
+            
+
         {% endif %}
         <br>
 
@@ -181,7 +191,7 @@
     </script>
 
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
 
 <script src="{% static 'js/pos.js' %}"></script>
 

@@ -20,11 +20,11 @@ class BatchView(admin.ModelAdmin):
     search_fields = ['product_code',  'product_batch','product_quantity','product_expired']
 class PosView(admin.ModelAdmin):
     list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_price','pos_quantity','pos_amount']
-    search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_size','pos_price','pos_amount']
+    search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_price','pos_quantity''pos_amount']
 
-class Pos_SalesView(admin.ModelAdmin):
-    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change']
-    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change']
+class Pos_PaymentView(admin.ModelAdmin):
+    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status']
+    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status']
 class TransactionView(admin.ModelAdmin):
     list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_totalprice','transaction_doption','created_at','transaction_preferred_date','transaction_delivered','transaction_orderstatus']
     search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_delivered','transaction_orderstatus']
@@ -56,4 +56,4 @@ admin.site.register(Transaction, TransactionView),
 admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
 admin.site.register(Profile, ProfileView),
-admin.site.register(Pos_Sales, Pos_SalesView),
+admin.site.register(Pos_Payment, Pos_PaymentView),

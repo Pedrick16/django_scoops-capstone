@@ -84,15 +84,20 @@ class Pos(models.Model):
     pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
     pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
     pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
+   
+
 
     def __str__(self):
         return self.pos_user
 
-class Pos_Sales(models.Model):
+class Pos_Payment(models.Model):
+    STATUS = (("Printed","Printed"),("not Print","not Print"))
     pos_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
-    pos_TotalAmount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Amount')
+    pos_no = models.CharField(max_length=200, null=True,  verbose_name='Pos No')
+    pos_TotalAmount =  models.DecimalField( max_digits=12, decimal_places=2,null=True, verbose_name='Total Amount')
     pos_cash = models.BigIntegerField( null=True, verbose_name='Cash')
-    pos_change =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Change')
+    pos_change =  models.DecimalField(  max_digits=12, decimal_places=2,null=True, verbose_name='Change')
+    pos_status = models.CharField(max_length=250, null=True, choices=STATUS, verbose_name='Status')
 
     def __str__(self):
         return self.pos_user

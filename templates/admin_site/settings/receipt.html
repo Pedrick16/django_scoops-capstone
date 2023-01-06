@@ -2,16 +2,11 @@
 
 {% load static %}
 {% block content %}
-<div class="text-start">
-    <button onclick="window.print()" class="btn btn-success">Print</button>
-</div>
-    
+
    <form action="{% url 'admin_site:receipt_process' %}" method="POST" class="text-end">
-    {% csrf_token %}
-    <input type="hidden" id="get_id"  name="get_id">
-    <button class="btn btn-success" id="btn-receipt">Done</button>
+      
+        <button class="btn btn-success" id="btn-receipt">Cancel</button>
     </form>
-  
    
 
 
@@ -35,7 +30,7 @@
 <hr>
 
 
-
+{% for list in pos_payment %}
 <div class="total">
     <h3 class="text-center">Total Amount</h3>
 
@@ -43,13 +38,13 @@
     <p class="total_price">{{ sum_amount }} </p>
     <br>
     <label for="" style="font-weight: bolder;"> cash</label>
-    <p class="cash">{{ pos_payment.pos_cash }}</p>
+    <p class="cash">{{ list.pos_cash }}</p>
     <br>
     <label for="" style="font-weight: bolder;">Change</label>
-    <p class="Change">{{ pos_payment.pos_change }}</p>
-    <input type="hidden"  name="payment_id" id="payment_id" value="{{ pos_payment.id }}">
+    <p class="Change">{{ list.pos_change }}</p>
+    <input type="hidden"  name="payment_id" id="payment_id" value="{{ list.id }}">
 </div>
-
+{% endfor %}
 <hr>
 
 

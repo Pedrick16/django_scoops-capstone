@@ -4,7 +4,7 @@
 {% block content %}
 <div class="fw-bolder">
     <label for="">Walk-in Sales</label>
-    <input type="text" style="font-weight: bolder;"   class="form-control" disabled>
+    <input type="text" style="font-weight: bolder;"  value="{{ transaction_pos_payment }}" class="form-control" readonly>
     <br>
     <label for="">Pending Order</label>
     <input type="text" style="font-weight: bolder;" value="{{ transaction_pending }}"  class="form-control" disabled>

@@ -44,7 +44,11 @@ urlpatterns = [
     path('update-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
 
     path('pos/', views.pos ,name='pos'),
-    path('pos-receipt/', views.receipt ,name='receipt'),
+    path('pos-receipt/', views.pos_receipt ,name='pos_receipt'),
+    path('settings-receipt/', views.Click_receipt ,name='click_receipt'),
+    
+    path('pos/add-receipt/', views.pos_addreceipt ,name='add_receipt'),
+    path('pos/receipt-process/', views.pos_receipt_process ,name='receipt_process'),
 
     path('minus-qty/<int:productid>/', views.minus_qty, name='minus_qty'),
     path('add-qty/<int:productid>/', views.add_qty ,name='add_qty'),

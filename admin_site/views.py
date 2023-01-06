@@ -17,14 +17,16 @@ from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard_admin(request):
-    transaction_sales = Transaction.objects.all().aggregate(data =Sum('transaction_totalprice'))
+    transaction_OnlineSales = Transaction.objects.all().aggregate(data =Sum('transaction_totalprice'))['data']
+    transaction_pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed').aggregate(data =Sum('pos_TotalAmount'))['data']
     transaction_count = Transaction.objects.count()
     transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
     transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
     transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
     context = {
-        'transaction_sales': transaction_sales ,
+        'transaction_OnlineSales': transaction_OnlineSales ,
+        'transaction_pos_payment':transaction_pos_payment,
         'transaction_count': transaction_count,
         'transaction_pending':transaction_pending,
         'transaction_completed':transaction_completed,
@@ -437,9 +439,61 @@ def pos(request):
         }
     return render(request, 'admin_site/pos/pos_admin.html', context)
 
-def receipt(request):
+def pos_receipt(request):
 
-    return render(request, 'admin_site/pos/receipt.html')
+    pos = Pos.objects.filter(pos_user = request.user )
+    pos_payment = Pos_Payment.objects.get(pos_user = request.user.role, pos_status = "not Print")
+    sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(total =Sum('pos_amount'))['total']
+   
+    context = {
+        'list_pos':pos,
+        'sum_amount':sum_amount,
+        'pos_payment':pos_payment
+     
+    }
+    return render(request, 'admin_site/pos/receipt.html', context)    
+
+def pos_receipt_process(request):
+    if request.method == "POST":
+        get_paymentID = request.POST['get_id']
+        pos_payment = Pos_Payment.objects.get(id = get_paymentID)
+        pos_payment.pos_status = "Printed"
+        pos_payment.save()
+
+        pos = Pos.objects.filter(pos_user = request.user)
+        pos.delete()
+        return redirect('admin_site:pos')
+        
+        
+
+def pos_addreceipt(request):
+    if request.method == "POST":
+       
+
+        #saving to pos payment in databse
+        pos_id = request.POST['get_id']
+        if Pos_Payment.objects.filter(pos_user =request.user.role, pos_status="not Print"):
+            messages.error(request,('receipt still not done'))
+            return redirect('admin_site:pos')
+        else:
+            new_Pos_Payment = Pos_Payment()
+            new_Pos_Payment.pos_user = request.user.role
+            new_Pos_Payment.pos_no = pos_id
+            new_Pos_Payment.pos_TotalAmount = request.POST.get('total_amount')
+            new_Pos_Payment.pos_cash = request.POST.get('cash')
+            
+            new_Pos_Payment.pos_change = request.POST.get('change')
+            new_Pos_Payment.pos_status = "not Print"
+            new_Pos_Payment.save()
+            return redirect('admin_site:pos_receipt')
+
+
+def Click_receipt(request):
+    if Pos_Payment.objects.filter(pos_user = request.user.role, pos_status = "not Print"):
+        return redirect('admin_site:pos_receipt')
+    else:
+        return redirect('admin_site:pos')
+
 
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
@@ -509,6 +563,11 @@ def pos_cancel(request,productid):
         NewActLog.role = request.user.role
         NewActLog.activity = activity 
         NewActLog.save()
+
+        #removing in pos payment
+        # pos_id = request.POST['pos_id']
+        pos_payment = Pos_Payment.objects.filter(pos_user =request.user.role, pos_status="not Print")
+        pos_payment.delete()
     
 
         
