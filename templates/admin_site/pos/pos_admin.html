@@ -20,7 +20,7 @@
 {% endfor %}
 <a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
 {% if list_pos %}
-   
+
     <br>
     <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
         {% csrf_token %}

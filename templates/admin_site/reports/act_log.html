@@ -1,7 +1,19 @@
 {% extends 'admin_site/base.html' %}
 
-
+{% load static %}
 {% block content %}
+<div class="text-start">
+<button class="btn btn-success" id="btn-show">**</button>
+</div>
+
+<div id="form-date" style="display: none;" class="text-end">
+<form>
+   From : <input type="date" >To : <input type="date" > <input type="submit" class="btn btn-dark text-center" value="Search" >
+</form>
+</div>
+
+
+<div  id="form_textsearch">
 <form action="{% url 'admin_site:search_act-log' %}" method="GET" class="my-3 ">
     {% csrf_token %}
     <div class="input-group">
@@ -11,7 +23,7 @@
         </div>
     </div>
 </form>
-
+</div>
 
     <table class="table table-hover text-center" >
         <thead>
@@ -37,6 +49,7 @@
         </tbody>
         {% endif %}
     </table>
+    <script src="{% static 'js/act_log.js' %}"></script>
     
 {% endblock content %}
     

@@ -370,14 +370,10 @@ def update_inventory(request, productid):
         product_stock = int(request.POST['stock'])
         product_qty = int(request.POST['quantity'])
     
- 
-        
-        
         #the sum of quantity and stock
         sum = product_stock + product_qty
 
         #update product stock
-
         product.product_stock = sum 
         product.product_status = "available"
         product.save()
@@ -392,8 +388,6 @@ def update_inventory(request, productid):
         NewBatch.save()
 
 
-    
-        
 
         #activity log for adding stock
         activity = "Adding stock"
@@ -403,7 +397,7 @@ def update_inventory(request, productid):
         NewActLog.activity = activity 
         NewActLog.save()
     
-  
+
         messages.info(request,("Successfully Updated"))
     return redirect('admin_site:inventory')  
 
@@ -433,7 +427,7 @@ def pos(request):
     list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(total =Sum('pos_amount'))['total']
     
-  
+
     context = {
         'list_pos':list_pos,
         'sum_amount':sum_amount

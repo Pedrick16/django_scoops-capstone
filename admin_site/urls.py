@@ -26,14 +26,12 @@ urlpatterns = [
     path('send-email/', views.send_email, name='send_email'),
 
 
-  
+
     path('process/inquiry', views.process_inquiry, name='process_inquiry'),
 
     #adding reseller 
     path('adding-reseller/', views.add_reseller, name='add_reseller'),
 
-   
-    
     path('product/', views.list_products, name='list_product'),
     path('view-product/<int:productid>/', views.view_product, name='view_product'),
     path('add-product/', views.add_product, name='add_product'),
