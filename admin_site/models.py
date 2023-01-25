@@ -53,7 +53,8 @@ class Product(models.Model):
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
     product_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
+    product_ResellerPrice =  models.DecimalField( max_digits=10,  decimal_places=2,null=True, verbose_name='Reseller Price')
+    product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Price')
     product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
 
@@ -81,9 +82,11 @@ class Pos(models.Model):
     pos_category =  models.CharField(max_length=200, verbose_name='Category')
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
     pos_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Price')
+    pos_reseller_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Reseller Price')
+    pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Price')
     pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
-    pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
+    pos_ResellerAmount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Reseller Amount')
+    pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Amount')
    
 
 

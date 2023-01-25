@@ -262,6 +262,7 @@ def add_product(request):
         pcategory = request.POST['category']
         pname = request.POST['product_name']
         product_unit = request.POST['unit']
+        reseller_price = request.POST['reseller_price']
         pprice = request.POST['price']
         pstock = 0
         pstatus = "not available"
@@ -269,7 +270,7 @@ def add_product(request):
             product_code = 'S4U'+str(random.randint(1111111,9999999))
 
         #inserting to database 
-        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_price = pprice, product_stock = pstock, product_status = pstatus)
+        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_ResellerPrice =reseller_price, product_price = pprice, product_stock = pstock, product_status = pstatus)
         product.save()
         
         #activity log
@@ -369,37 +370,47 @@ def update_inventory(request, productid):
         #the  stock and quantity from input
         product_stock = int(request.POST['stock'])
         product_qty = int(request.POST['quantity'])
+        p_code = request.POST['product_code']
+        p_batch = request.POST['batch_no']
+
     
         #the sum of quantity and stock
         sum = product_stock + product_qty
 
-        #update product stock
-        product.product_stock = sum 
-        product.product_status = "available"
-        product.save()
+        if By_Batch.objects.filter(product_code = p_code, product_batch =p_batch):
+            messages.info(request,("already have a batch number"))
+            return redirect('admin_site:inventory') 
+        else:
+            #update product stock
+            product.product_stock = sum 
+            product.product_status = "available"
+            product.save()
 
-        #adding to by batch (database)
-        current_product = product.product_code
-        NewBatch = By_Batch()
-        NewBatch.product_code = current_product 
-        NewBatch.product_batch = request.POST.get('batch_no')
-        NewBatch.product_quantity = request.POST.get('quantity')
-        NewBatch.product_expired = request.POST.get('expdate')
-        NewBatch.save()
+            #adding to by batch (database)
+            current_product = product.product_code
+            NewBatch = By_Batch()
+            NewBatch.product_code = current_product 
+            NewBatch.product_batch = request.POST.get('batch_no')
+            NewBatch.product_quantity = request.POST.get('quantity')
+            NewBatch.product_expired = request.POST.get('expdate')
+            NewBatch.save()
 
 
 
-        #activity log for adding stock
-        activity = "Adding stock"
-        NewActLog = Activity_log()
-        NewActLog.user_name = request.user
-        NewActLog.role = request.user.role
-        NewActLog.activity = activity 
-        NewActLog.save()
-    
 
-        messages.info(request,("Successfully Updated"))
-    return redirect('admin_site:inventory')  
+        
+
+
+
+            #activity log for adding stock
+            activity = "Adding stock"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+            messages.info(request,("Successfully Updated"))
+            return redirect('admin_site:inventory')  
 
 
 
@@ -585,12 +596,14 @@ def cart_products(request, productid):
     if request.method =="POST":
         # getting id 
         product = Product.objects.get(id = productid)
+        
        
 
         # coming from  input type
         qty = int(request.POST['quantity'])
         p_stock = int(request.POST['stock'])
         pcode = request.POST['product_code']
+        p_reseller_price = float(request.POST['product_reseller_price'])
         p_price = float(request.POST['product_price'])
         p_unit = request.POST['product_unit']
         p_category = request.POST['product_category']
@@ -602,6 +615,7 @@ def cart_products(request, productid):
         # minus or adding to the stock
         diff = p_stock -  qty 
         amount_cart = p_price * qty
+        reseller_cart = p_reseller_price * qty
         
         #converting the data of product stock to integer
         avail_stock = int(product.product_stock)
@@ -634,21 +648,15 @@ def cart_products(request, productid):
             product.product_stock = diff
             product.save()
 
-             #inserting product in pos table
-            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit, pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart)
+            #inserting product in pos table
+            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit,pos_reseller_price =p_reseller_price , pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart,  pos_ResellerAmount =reseller_cart )
             pos.save()   
             messages.info(request,("Successfully carting Products"))
             return redirect('admin_site:all_products')      
     
 
 
-             
-           
 
-      
-         
-
-        
 
 
 

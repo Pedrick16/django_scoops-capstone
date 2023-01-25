@@ -34,7 +34,7 @@ def dashboard(request):
 def cart_reseller(request):
     total_item = Pos.objects.filter(pos_user = request.user).count()
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(data =Sum('pos_amount'))
+    sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(data =Sum('pos_ResellerAmount'))
     context = {
         'list_cart':list_cart,
         'sum_amount':sum_amount,
@@ -143,6 +143,20 @@ def transaction_orders(request):
     }
     return render(request, 'reseller_site/orders/orders.html', context)
 
+#list reseller cart
+@login_required(login_url='landing_page:login')
+def add_cart(request):
+    current_user = request.user
+    list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
+    sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(total =Sum('pos_ResellerAmount'))['total']
+    
+
+    context = {
+        'list_pos':list_pos,
+        'sum_amount':sum_amount
+        }
+    return render(request, 'reseller_site/cart/cart.html', context)
+
 @login_required(login_url='landing_page:login') 
 def transaction_view(request,id):
 
@@ -161,5 +175,85 @@ def transaction_view(request,id):
         }
     
     return render(request, 'reseller_site/orders/view_orders.html', context)
+
+@login_required(login_url='landing_page:login')
+def minus_qty(request, productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty - 1
+    pos.pos_quantity = result
+    pos.save()
+
+    current_amount = int(pos.pos_ResellerAmount)
+    current_price = int(pos.pos_reseller_price)
+    result = current_amount - current_price
+    pos.pos_ResellerAmount = result
+    pos.save()
+    
+    current_pcode = pos.pos_pcode
+    product = Product.objects.get(product_code = current_pcode)
+    current_stock = int(product.product_stock)
+    retrieve_stock = current_stock + 1
+    product.product_stock = retrieve_stock
+    product.save()
+    return redirect('reseller_site:add_cart')
+
+     
+@login_required(login_url='landing_page:login')
+def add_qty(request,productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty + 1
+    pos.pos_quantity = result
+    pos.save()
+
+    current_amount = int(pos.pos_ResellerAmount)
+    current_price = int(pos.pos_reseller_price)
+    result = current_amount + current_price
+    pos.pos_ResellerAmount = result
+    pos.save()
+    
+    current_pcode = pos.pos_pcode
+    product = Product.objects.get(product_code = current_pcode)
+    current_stock = int(product.product_stock)
+    minus_stock = current_stock - 1
+    product.product_stock = minus_stock
+    product.save()
+    return redirect('reseller_site:add_cart')
+
+
+@login_required(login_url='landing_page:login')
+def cart_cancel(request,productid):
+    if request.method == "POST":
+        cancel = Pos.objects.get(id =productid)
+        current_pcode = request.POST['current_pcode']
+        product = Product.objects.get(product_code = current_pcode)
+
+        current_qty = int(request.POST['current_qty'])
+        current_stock = int(product.product_stock)
+
+        return_stock = current_stock + current_qty
+        product.product_stock = return_stock
+        product.save()
+        cancel.delete()
+
+        #activity log for cancelling the product
+        activity = "Cancelled Cart"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.role = request.user.role
+        NewActLog.activity = activity 
+        NewActLog.save()
+
+        #removing in pos payment
+        # pos_id = request.POST['pos_id']
+        pos_payment = Pos_Payment.objects.filter(pos_user =request.user.role, pos_status="not Print")
+        pos_payment.delete()
+    
+
+        
+        messages.success(request,("Successfully cancelled"))
+        return redirect('admin_site:pos')
+
 
 

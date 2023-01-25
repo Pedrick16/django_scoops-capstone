@@ -31,8 +31,23 @@
             <th>Product Name</th>
             <th>Category</th>
             <th>Unit</th>
+            <th>Reseller Price</th>
+
+            {% if user.role == "admin" %}
             <th>Price</th>
+            {% elif user.role == "staff" %}
+            <th>Price</th>
+            {% endif %}
+
+
+           
+            
+      
+                
+        
             <th>Available Stock</th>
+      
+       
             <th>Status</th>
             <th>quantity</th>
             <th>action</th>
@@ -46,8 +61,19 @@
             <td>{{ list.product_name }}</td>
             <td>{{ list.product_category }}</td>
             <td>{{ list.product_unit }}</td>
+            <td>{{ list.product_ResellerPrice }}</td>
+            
+            {% if user.role == "admin" %}
             <td>{{ list.product_price }}</td>
+            {% elif user.role == "staff" %}
+            <td>{{ list.product_price }}</td>
+                
+            {% endif %}
+                
+          
+
             <td>{{ list.product_stock }}</td>
+            
             <td>{{ list.product_status }}</td>
 
         <form action="{% url 'admin_site:cart_products' list.id %}" method="POST">
@@ -59,6 +85,7 @@
         <input type="hidden" name="product_category" value="{{ list.product_category }}">
         <input type="hidden" name="product_name" value="{{ list.product_name}}">
         <input type="hidden" name="product_unit" value="{{ list.product_unit }}">
+        <input type="hidden" name="product_reseller_price" value="{{ list.product_ResellerPrice }}">
         <input type="hidden" name="product_price" value="{{ list.product_price }}">
         </form>
         </tr>

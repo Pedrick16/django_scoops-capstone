@@ -53,7 +53,21 @@
                 <th>Product Name</th>
                 <th>Category</th>
                 <th>Unit</th>
+
+                
+                {% if user.role == "reseller" %}
+                <th>Reseller Price</th>
+                {% endif %}
+
+                
+                {% if user.role == "admin" %}
                 <th>Price</th>
+                {% elif user.role == "staff"  %}
+                <th>Price</th>
+                {% endif %}
+                    
+                <th>Price</th>
+
                 <th>Quantity</th>
                 <th>Amount</th>
                 <th></th>
@@ -69,17 +83,41 @@
                     <td>{{ list.pos_name }}</td>
                     <td>{{ list.pos_category }}</td>
                     <td>{{ list.pos_unit }}</td>
-                    <td>{{ list.pos_price }}</td>
-                    <td>
-                        <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button class="btn btn-success" >{{ list.pos_quantity }}</button>  <a href="{% url 'admin_site:add_qty' list.id  %}" class="btn btn-dark">+</a></td>
-                    <td>{{ list.pos_amount }} </td>
 
-                    <form  method="POST"  action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
+                    {% if user.role == "reseller" %}
+                    <td>{{ list.pos_reseller_price }}</td>
+                        
+                    {% endif %}
+                 
+
+                    {% if user.role == "admin" %}
+                    <td>{{ list.pos_price}}</td>
+                    {% elif user.role == "staff" %}
+                    <td>{{ list.pos_price}}</td>
+                    {% endif %}
+
+                    
+                
+                
+               
+
+           
+                    <td>
+                        <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button
+                            class="btn btn-success">{{ list.pos_quantity }}</button> <a href="{% url 'admin_site:add_qty' list.id  %}"
+                            class="btn btn-dark">+</a>
+                    </td>
+
+                   
+                        
+                    <td>{{ list.pos_amount }} </td>
+                
+                    <form method="POST" action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
-                    <td><button type="submit" class="btn btn-dark">Cancel</button></td>
-                    <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
-                    <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
-                    <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
+                        <td><button type="submit" class="btn btn-dark">Cancel</button></td>
+                        <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
+                        <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
+                        <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
                 
                     </form>
                 </tr>
@@ -162,18 +200,7 @@
     {% endif %}
     
     
-    {% if list_pos %}
-
-    {% if user.role == "reseller" %}
-    <label style="font-weight: bolder;">Total Amount:</label>
-    <input type="text" name="amount"  style="font-weight: bolder;" value="{{ sum_amount}}" class="form-control" id="total_amount" disabled>
-    <br>
-    <div class="text-end">
-    <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>
-    </div>
-    {% endif %}
-
-    {% endif %}
+    
 
     
    
