@@ -1,7 +1,7 @@
 from django.shortcuts import render,redirect
 from .models import *
 from django.contrib import messages
-from django.db.models import Sum, Q,F
+from django.db.models import Sum, Q,F, Max
 from django.core.mail import send_mail
 
 from datetime import datetime
@@ -246,9 +246,11 @@ def view_product(request, productid):
     list_product = Product.objects.get(id = productid)
     current_pcode = list_product.product_code
     list_batch = By_Batch.objects.filter(product_code = current_pcode)
+    latest_bnumber = By_Batch.objects.aggregate(max = Max('product_batch'))['max']
     context ={
         'list_product':list_product,
-        'list_batch':list_batch
+        'list_batch':list_batch,
+        'latest_bnumber': latest_bnumber
     }
     return render(request, 'admin_site/products/view_product.html', context)
     
@@ -398,7 +400,7 @@ def update_inventory(request, productid):
 
 
 
-        
+
 
 
 
@@ -595,6 +597,7 @@ def all_products(request):
 def cart_products(request, productid):
     if request.method =="POST":
         # getting id 
+       
         product = Product.objects.get(id = productid)
         
        
@@ -608,6 +611,8 @@ def cart_products(request, productid):
         p_unit = request.POST['product_unit']
         p_category = request.POST['product_category']
         p_name = request.POST['product_name']
+
+       
          
         # session,  getting  user name
         current_user = request.user
@@ -651,6 +656,10 @@ def cart_products(request, productid):
             #inserting product in pos table
             pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit,pos_reseller_price =p_reseller_price , pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart,  pos_ResellerAmount =reseller_cart )
             pos.save()   
+
+            
+
+
             messages.info(request,("Successfully carting Products"))
             return redirect('admin_site:all_products')      
     

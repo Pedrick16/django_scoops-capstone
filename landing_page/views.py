@@ -58,7 +58,6 @@ def loginView(request):
                 messages.success(request, ("There was an error logging in, Try Again ..."))
                 return redirect('landing_page:login') 
 
-           
         else:
             messages.success(request, ("There was an error logging in, Try Again ..."))
             return redirect('landing_page:login') 
