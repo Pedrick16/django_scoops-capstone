@@ -3,3 +3,4 @@ $('#btn-show').on('click', function(){
     $('#form_textsearch').fadeToggle(1000)
 
 })
+

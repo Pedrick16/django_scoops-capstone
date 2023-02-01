@@ -246,7 +246,7 @@ def view_product(request, productid):
     list_product = Product.objects.get(id = productid)
     current_pcode = list_product.product_code
     list_batch = By_Batch.objects.filter(product_code = current_pcode)
-    latest_bnumber = By_Batch.objects.aggregate(max = Max('product_batch'))['max']
+    latest_bnumber = By_Batch.objects.filter(product_code = current_pcode).aggregate(max = Max('product_batch'))['max']
     context ={
         'list_product':list_product,
         'list_batch':list_batch,
@@ -531,22 +531,31 @@ def add_qty(request,productid):
     pos = Pos.objects.get(id =productid)
     current_qty = int(pos.pos_quantity)
     result = current_qty + 1
-    pos.pos_quantity = result
-    pos.save()
 
-    current_amount = int(pos.pos_amount)
-    current_price = int(pos.pos_price)
-    result = current_amount + current_price
-    pos.pos_amount = result
-    pos.save()
-    
+    #for checking product code
     current_pcode = pos.pos_pcode
+
     product = Product.objects.get(product_code = current_pcode)
-    current_stock = int(product.product_stock)
-    minus_stock = current_stock - 1
-    product.product_stock = minus_stock
-    product.save()
-    return redirect('admin_site:pos')
+    if product.product_stock == 0:
+        messages.success(request,("No available Stock"))
+        return redirect('admin_site:pos')
+    else:
+        pos.pos_quantity = result
+        pos.save()
+
+        current_amount = int(pos.pos_amount)
+        current_price = int(pos.pos_price)
+        result = current_amount + current_price
+        pos.pos_amount = result
+        pos.save()
+    
+
+        product = Product.objects.get(product_code = current_pcode)
+        current_stock = int(product.product_stock)
+        minus_stock = current_stock - 1
+        product.product_stock = minus_stock
+        product.save()
+        return redirect('admin_site:pos')
 
 
 @login_required(login_url='landing_page:login')
@@ -636,7 +645,7 @@ def cart_products(request, productid):
         if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
             messages.success(request,("you already have on the cart"))
             return redirect('admin_site:all_products')
-        elif  product.product_stock == "0":
+        elif  product.product_stock == 0:
             messages.success(request,("Sorry, No Available Stock"))
             return redirect('admin_site:all_products')
 
@@ -661,7 +670,7 @@ def cart_products(request, productid):
 
 
             messages.info(request,("Successfully carting Products"))
-            return redirect('admin_site:all_products')      
+            return redirect('admin_site:pos')      
     
 
 
@@ -682,6 +691,30 @@ def cart_products(request, productid):
 @login_required(login_url='landing_page:login') 
 def Transaction_orders(request):
     list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Pending")).order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'admin_site/transaction/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def Transaction_outshipping(request):
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Shipping")).order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'admin_site/transaction/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def Transaction_completed(request):
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Completed")).order_by('-id')
+    context = {
+        'list_transaction':list_transaction
+    }
+    return render(request, 'admin_site/transaction/orders.html', context)
+
+@login_required(login_url='landing_page:login') 
+def Transaction_decline(request):
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Decline")).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }

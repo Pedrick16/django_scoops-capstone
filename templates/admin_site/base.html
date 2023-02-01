@@ -13,8 +13,17 @@
       </title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.3/jquery.min.js" integrity="sha512-STof4xm1wgkfm7heWqFJVn58Hm3EtS31XFaagaa8VMReCXAkQnJZ+jEy8PCC/iT18dFy95WcExNHFTqLyp72eQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
- 
+      <link rel="stylesheet" href="{% static 'css/sample.css' %}">
   </head>
+  <style>
+    /* .navbar .nav-link .active{
+        color: red;
+    } */
+    #sample{
+      color: red;
+    }
+    
+  </style>
 <body>
 
 
@@ -51,8 +60,18 @@
               <li class="nav-item">
                 <a class="nav-link" href="{%url 'admin_site:pos' %}">POS</a>
               </li>
-              <li class="nav-item">
-                <a class="nav-link" href="{% url 'admin_site:transaction_orders' %}">Order</a>
+             
+              <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                  Order
+                </a>
+                <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_orders' %}">Pending</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_outshipping' %}">For Delivery</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_completed' %}">Completed</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_decline' %}">Decline Order</a></li>
+         
+                </ul>
               </li>
 
               <li class="nav-item dropdown">
@@ -82,9 +101,7 @@
                   {{ user }}
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-
                   
-               
                     
                   <li><a class="dropdown-item" href="{% url 'admin_site:my_profile' %}">My Profile</a></li>
                   <li> <a class="dropdown-item" href="{%  url 'landing_page:logout' %}">Logout</a></li>
@@ -121,11 +138,12 @@
               <div class="collapse navbar-collapse" id="navbarNavDropdown">
                 <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'staff_site:dashboard'%}">Dashboard</a>
+                    <a class="nav-link active" aria-current="page" href="{% url 'staff_site:dashboard'%}" id="dashboard">Dashboard</a>
                   </li>
+                 
   
                   <li class="nav-item">
-                    <a class="nav-link" href="{%url 'admin_site:list_product' %}">Product</a>
+                    <a class="nav-link active  " href="{%url 'admin_site:list_product' %}" id="product"> Product</a>
                   </li>
                   <li class="nav-item">
                     <a class="nav-link" href="{%url 'admin_site:inventory' %}">Inventory</a>
@@ -140,7 +158,7 @@
                     </a>
                     <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                       <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
-                     
+
                     </ul>
                   </li>
 
@@ -286,11 +304,10 @@
         
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js" integrity="sha384-IQsoLXl5PILFhosVNubq5LC7Qb9DXgDA9i+tQ8Zj3iwWAwPtgFTxbJ8NT4GN1R8p" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js" integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF" crossorigin="anonymous"></script>
-    
-   
-    
-    
  
-      
+    <script src="{% static 'js/base.js' %}"></script>
+
+
+
 </body>
 </html>

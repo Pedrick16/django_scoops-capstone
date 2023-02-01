@@ -56,7 +56,10 @@ urlpatterns = [
 
     path('pos/all-products/', views.all_products ,name='all_products'),
     path('cart/all-products/<int:productid>/', views.cart_products ,name='cart_products'),
-    path('transaction-orders/', views.Transaction_orders, name='transaction_orders'),
+    path('transaction-orders/pending', views.Transaction_orders, name='transaction_orders'),
+    path('transaction-orders/out for shipping', views.Transaction_outshipping, name='transaction_outshipping'),
+    path('transaction-orders/completed', views.Transaction_completed, name='transaction_completed'),
+    path('transaction-orders/decline', views.Transaction_decline, name='transaction_decline'),
     path('transaction-view/<int:id>/', views.transaction_view, name='transaction_view'),
  
     path('search-reseller/', views.search_reseller, name='search_reseller'),
