@@ -43,7 +43,7 @@ class Reseller(models.Model):
     def __str__(self):
         return self.reseller_email
 
-   
+
 
 
 
@@ -109,7 +109,7 @@ class Pos_Payment(models.Model):
 
 
 class Transaction(models.Model):
-    ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Decline","Decline"),("Completed","Completed"))
+    ORDERSTATUS = ( ("Pending","Pending"),("Out for Delivery","Out for Delivery"),("Decline","Decline"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
 
     transaction_no =  models.CharField(unique=True, max_length=200, null=False,verbose_name='Transaction Number')

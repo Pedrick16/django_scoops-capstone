@@ -2,6 +2,10 @@
 
 
 {% block content %}
+{% for message in messages %}
+
+<p class="alert alert-success mt-3">{{ message }}</p>
+{% endfor %}
 {% if list_transaction %} 
 <form action="{% url 'admin_site:search_transaction' %}" method="GET" class="my-3 ">
     {% csrf_token %}

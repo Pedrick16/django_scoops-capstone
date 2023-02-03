@@ -4,9 +4,7 @@
 {% block content %}
 
 {% if list_orderitem %}
-<div class="text-end">
-    <a href="{% url 'admin_site:transaction_orders' %}" class="btn btn-dark">Back</a>
-</div>
+
        
     
 <table class="table table-hover text-center">
@@ -35,7 +33,7 @@
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Grand Total:    {{ list_total.data }} </label>
+        <label style="font-weight: bolder;" > Grand Total:    {{ list_total.data }} </label><br>
         <label style="font-weight: bolder;" > Transaction No:    {{  list_transaction.transaction_no}} </label>
  
         
@@ -68,7 +66,17 @@
         <label for="">Delivery option</label>
         <input type="text" value="{{ list_transaction.transaction_doption }}" class="form-control" disabled>
         <br>
+      
+        <form action="{% url 'rider_site:completed_process' %}" method="POST" class="text-end">
+            {% csrf_token %}
+            <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">
+            <button class="btn btn-dark">Delivered</button>
+        </form>
         <br>
+        <br>
+        <br>
+
+
 
   
       

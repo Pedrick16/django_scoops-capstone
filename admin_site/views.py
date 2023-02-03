@@ -22,7 +22,7 @@ def dashboard_admin(request):
     transaction_count = Transaction.objects.count()
     transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
-    transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
+    transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Delivery").count()
     transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
     context = {
         'transaction_OnlineSales': transaction_OnlineSales ,
@@ -698,7 +698,7 @@ def Transaction_orders(request):
 
 @login_required(login_url='landing_page:login') 
 def Transaction_outshipping(request):
-    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Shipping")).order_by('-id')
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Delivery")).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }
@@ -720,20 +720,47 @@ def Transaction_decline(request):
     }
     return render(request, 'admin_site/transaction/orders.html', context)
 
+@login_required(login_url='landing_page:login')
+def delivery_process(request):
+    if request.method == "POST":
+        transaction_no = request.POST['transaction_no']
+        transaction = Transaction.objects.get(transaction_no = transaction_no)
+        transaction.transaction_orderstatus = "Out for Delivery"
+        transaction.save()
+        messages.success(request,("Out for Delivery"))
+        return redirect('admin_site:transaction_outshipping')
+
+
+
+@login_required(login_url='landing_page:login')
+def completed_process(request):
+    if request.method == "POST":
+        transaction_no = request.POST['transaction_no']
+        transaction = Transaction.objects.get(transaction_no = transaction_no)
+        transaction.transaction_orderstatus = "Completed"
+        transaction.save()
+        messages.success(request,("Successfully Delivered"))
+        return redirect('admin_site:transaction_completed')
+
+
 @login_required(login_url='landing_page:login') 
 def transaction_view(request, id):
     if request.method == "GET":
         transaction = Transaction.objects.get(id = id)
+
+        
        
         transaction_no = transaction.transaction_no
         list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
+
        
         list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
        
         context = {
             'list_orderitem':list_orderitem,
             'list_total':list_total,
-            'list_transaction':transaction
+            'list_transaction':transaction,
+     
         }
     return render(request, 'admin_site/transaction/view_orders.html', context)
 

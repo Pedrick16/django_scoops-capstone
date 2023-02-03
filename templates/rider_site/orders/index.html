@@ -3,6 +3,11 @@
 
 {% block content %}
 {% if list_transaction %} 
+{% for message in messages %}
+
+<p class="alert alert-success mt-3">{{ message }}</p>
+{% endfor %}
+
 
 
 <form action="" method="GET" class="my-3 ">
@@ -46,10 +51,7 @@
               
                 </form>
 
-                <form action="{% url 'rider_site:orders_completed' list.id %}" method="POST">
-                    {% csrf_token %}
-                <td><input type="submit" class="btn btn-dark" name="submit" value="Delivered"></td>
-                </form>
+              
 
             </tr>
             {% endfor %}

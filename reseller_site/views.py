@@ -12,7 +12,7 @@ import random
 def dashboard(request):
     list_numberorder =    Transaction.objects.filter(transaction_user = request.user).count()
     transaction_pending = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Pending").count()
-    transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Shipping").count()
+    transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Delivery").count()
     transaction_decline = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Decline").count()
     context={
         'list_numberorder':list_numberorder,
@@ -41,6 +41,60 @@ def cart_reseller(request):
         'total_item':total_item
     }
     return render(request, 'reseller_site/cart/checkout.html', context)
+
+@login_required(login_url='landing_page:login')
+def minus_qty(request, productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty - 1
+    pos.pos_quantity = result
+    pos.save()
+
+    current_amount = int(pos.pos_amount)
+    current_price = int(pos.pos_price)
+    result = current_amount - current_price
+    pos.pos_amount = result
+    pos.save()
+    
+    current_pcode = pos.pos_pcode
+    product = Product.objects.get(product_code = current_pcode)
+    current_stock = int(product.product_stock)
+    retrieve_stock = current_stock + 1
+    product.product_stock = retrieve_stock
+    product.save()
+    return redirect('admin_site:pos')
+
+
+@login_required(login_url='landing_page:login')
+def add_qty(request,productid):
+    pos = Pos.objects.get(id =productid)
+    current_qty = int(pos.pos_quantity)
+    result = current_qty + 1
+
+    #for checking product code
+    current_pcode = pos.pos_pcode
+
+    product = Product.objects.get(product_code = current_pcode)
+    if product.product_stock == 0:
+        messages.success(request,("No available Stock"))
+        return redirect('admin_site:pos')
+    else:
+        pos.pos_quantity = result
+        pos.save()
+
+        current_amount = int(pos.pos_amount)
+        current_price = int(pos.pos_price)
+        result = current_amount + current_price
+        pos.pos_amount = result
+        pos.save()
+    
+
+        product = Product.objects.get(product_code = current_pcode)
+        current_stock = int(product.product_stock)
+        minus_stock = current_stock - 1
+        product.product_stock = minus_stock
+        product.save()
+        return redirect('admin_site:pos')
 
 @login_required(login_url='landing_page:login')
 def checkout(request):
@@ -176,50 +230,7 @@ def transaction_view(request,id):
     
     return render(request, 'reseller_site/orders/view_orders.html', context)
 
-@login_required(login_url='landing_page:login')
-def minus_qty(request, productid):
-    pos = Pos.objects.get(id =productid)
-    current_qty = int(pos.pos_quantity)
-    result = current_qty - 1
-    pos.pos_quantity = result
-    pos.save()
 
-    current_amount = int(pos.pos_ResellerAmount)
-    current_price = int(pos.pos_reseller_price)
-    result = current_amount - current_price
-    pos.pos_ResellerAmount = result
-    pos.save()
-    
-    current_pcode = pos.pos_pcode
-    product = Product.objects.get(product_code = current_pcode)
-    current_stock = int(product.product_stock)
-    retrieve_stock = current_stock + 1
-    product.product_stock = retrieve_stock
-    product.save()
-    return redirect('reseller_site:add_cart')
-
-     
-@login_required(login_url='landing_page:login')
-def add_qty(request,productid):
-    pos = Pos.objects.get(id =productid)
-    current_qty = int(pos.pos_quantity)
-    result = current_qty + 1
-    pos.pos_quantity = result
-    pos.save()
-
-    current_amount = int(pos.pos_ResellerAmount)
-    current_price = int(pos.pos_reseller_price)
-    result = current_amount + current_price
-    pos.pos_ResellerAmount = result
-    pos.save()
-    
-    current_pcode = pos.pos_pcode
-    product = Product.objects.get(product_code = current_pcode)
-    current_stock = int(product.product_stock)
-    minus_stock = current_stock - 1
-    product.product_stock = minus_stock
-    product.save()
-    return redirect('reseller_site:add_cart')
 
 
 @login_required(login_url='landing_page:login')

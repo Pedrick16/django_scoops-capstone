@@ -72,6 +72,24 @@
         <br> 
         <label for="">Preferred Date</label>
         <input type="text" value="{{ list_transaction.transaction_preferred_date }}" class="form-control" disabled>
+        <br>
+        
+        {% if list_transaction.transaction_orderstatus == "Pending" %}
+            
+        <form action="{% url 'admin_site:delivery_process' %}" method="POST" class="text-end">
+            {% csrf_token %}
+            <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">
+            <button class="btn btn-dark">Out for Delivery</button>
+        </form>
+        {% endif %}
+
+        {% if list_transaction.transaction_orderstatus == "Out for Delivery" %}
+        <form action="{% url 'admin_site:completed_process' %}" method="POST" class="text-end">
+            {% csrf_token %}
+            <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">
+            <button class="btn btn-dark">Completed</button>
+        </form>
+        {% endif %}
 
         <br>
         <br>

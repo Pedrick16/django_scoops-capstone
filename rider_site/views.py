@@ -8,7 +8,7 @@ from django.db.models import Sum
 
 # Create your views here.
 def dashboard(request):
-    list_pending = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
+    list_pending = Transaction.objects.filter(transaction_orderstatus = "Out for Delivery").count()
     list_complete = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
     context ={
         'list_pending':list_pending,
@@ -50,7 +50,7 @@ def orders_completed(request, orderid):
 
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):
-    status = "Out for Shipping"
+    status = "Out for Delivery"
     list_transaction = Transaction.objects.filter(transaction_orderstatus = status).order_by('-id')
     context = {
         'list_transaction':list_transaction
@@ -74,6 +74,26 @@ def transaction_view(request,id):
         }
         
     return render(request, 'rider_site/orders/view_orders.html', context)
+
+@login_required(login_url='landing_page:login')
+def completed_process(request):
+    if request.method == "POST":
+        transaction_no = request.POST['transaction_no']
+        now = datetime.now()
+        transaction = Transaction.objects.get(transaction_no = transaction_no)
+        transaction.transaction_orderstatus = "Completed"
+        transaction.transaction_delivered = now
+        transaction.save()
+
+        activity = "Delivered"
+        NewActLog = Activity_log()
+        NewActLog.user_name = request.user
+        NewActLog.activity = activity 
+        NewActLog.role = request.user.role
+        NewActLog.date_time = now
+        NewActLog.save()
+        messages.success(request,("Successfully Delivered"))
+        return redirect('rider_site:dashboard')
 
 
 
