@@ -100,7 +100,7 @@ def add_qty(request,productid):
 def checkout(request):
     if request.method == "POST":
         current_user = request.user
-        pos = Pos.objects.filter(pos_user = current_user )
+        pos = Pos.objects.filter(pos_user = current_user)
         preferred_date = request.POST['prefer_date']
         no_specific = "None"
         status = "Pending"
@@ -116,6 +116,7 @@ def checkout(request):
             NewTransaction.transaction_preferred_date = preferred_date 
             NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
             NewTransaction.transaction_orderstatus = status
+
 
         
             while Transaction.objects.filter(transaction_no = trackno) is None:
@@ -133,7 +134,6 @@ def checkout(request):
             NewActLog.save()
         
 
-        
             NewOrderItems = Pos.objects.filter(pos_user = request.user)
             for item in NewOrderItems:
                 OrderItem.objects.create(
@@ -166,6 +166,7 @@ def checkout(request):
             NewTransaction.transaction_no = trackno   
             NewTransaction.save()
 
+
             #activity log for Checkout
             activity = "Check-out"
             NewActLog = Activity_log()
@@ -189,6 +190,7 @@ def checkout(request):
             messages.success(request, ("Please wait for your order"))
             return redirect('reseller_site:transaction_orders')
 
+
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):
     list_transaction = Transaction.objects.filter(transaction_user= request.user).order_by('-id')
@@ -196,6 +198,7 @@ def transaction_orders(request):
         'list_transaction':list_transaction
     }
     return render(request, 'reseller_site/orders/orders.html', context)
+
 
 #list reseller cart
 @login_required(login_url='landing_page:login')
@@ -210,6 +213,7 @@ def add_cart(request):
         'sum_amount':sum_amount
         }
     return render(request, 'reseller_site/cart/cart.html', context)
+
 
 @login_required(login_url='landing_page:login') 
 def transaction_view(request,id):

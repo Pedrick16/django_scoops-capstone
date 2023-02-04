@@ -4,7 +4,7 @@ from django.contrib import messages
 from django.db.models import Sum, Q,F, Max
 from django.core.mail import send_mail
 
-from datetime import datetime
+from datetime import datetime,date
 from landing_page.forms import SignUpForm
 import random
 
@@ -17,24 +17,28 @@ from django.contrib.auth.decorators import login_required, permission_required
 # Create your views here.
 @login_required(login_url='landing_page:login')
 def dashboard_admin(request):
-    transaction_OnlineSales = Transaction.objects.all().aggregate(data =Sum('transaction_totalprice'))['data']
-    transaction_pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed').aggregate(data =Sum('pos_TotalAmount'))['data']
+    
+
+    now = datetime.now()
+    transaction_OnlineSales = Transaction.objects.filter(created_at = now).aggregate(data =Sum('transaction_totalprice'))['data']
+    transaction_pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed', pos_date=now).aggregate(data =Sum('pos_TotalAmount'))['data']
     transaction_count = Transaction.objects.count()
     transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
     transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Delivery").count()
     transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
     context = {
-        'transaction_OnlineSales': transaction_OnlineSales ,
+        'transaction_OnlineSales': transaction_OnlineSales,
         'transaction_pos_payment':transaction_pos_payment,
         'transaction_count': transaction_count,
         'transaction_pending':transaction_pending,
         'transaction_completed':transaction_completed,
         'transaction_shipped':transaction_shipped,
         'transaction_decline':transaction_decline
-
     }
     return render(request, 'admin_site/dashboard/index.html', context)
+
+
 
 def register(request, inquiryid):
     if request.method =="POST":
@@ -55,6 +59,7 @@ def register(request, inquiryid):
     return render(request, 'admin_site/user/register.html',{'form':form})      
 
 
+
 #list reseller
 @login_required(login_url='landing_page:login')
 def list_reseller(request):
@@ -62,12 +67,15 @@ def list_reseller(request):
     context = {'list_reseller':list_reseller}
     return render(request, 'admin_site/user/list_reseller.html', context)
 
+
+
 #showing to the table data 
 @login_required(login_url='landing_page:login')
 def list_inquiry(request):
     list_inquiry = Reseller.objects.order_by('-id').filter(reseller_status = "pending")
     context = {'list_inquiry':list_inquiry}
     return render(request, 'admin_site/user/list_inquiry.html', context)
+
 
 #adding reseller to table 
 @login_required(login_url='landing_page:login')
@@ -109,9 +117,8 @@ def add_reseller(request):
             NewActLog.activity = activity 
             NewActLog.save()
     
-  
-            
 
+            
             #showing message
             messages.info(request,"Successfully")
             return redirect('admin_site:add_reseller')
@@ -149,18 +156,12 @@ def archive_reseller(request,resellerid):
         NewActLog.activity = activity 
         NewActLog.save()
     
-  
-
 
         messages.success(request,("Successfully Archiving Reseller info"))
         return redirect('admin_site:list_reseller')
 
 
-   
-
-   
 #SETTINGS FEATURES
-
 @login_required(login_url='landing_page:login')
 def list_archive(request):
     list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "inactive") 
@@ -198,6 +199,7 @@ def send_email(request):
 
 #process inquiry for reseller
 
+@login_required(login_url='landing_page:login')
 def process_inquiry(request):
     if request.method =="POST":
         status= "pending"
@@ -227,12 +229,7 @@ def process_inquiry(request):
 
 
 
-
-
-
-
 #FOR PRODUCT FEATURES
-
 #list product
 @login_required(login_url='landing_page:login')
 def list_products(request):
@@ -284,8 +281,6 @@ def add_product(request):
         NewActLog.save()
 
 
-
-
         messages.success(request,("Successfully Product added"))
         return redirect('admin_site:add_product')
         
@@ -297,7 +292,6 @@ def settings_profile(request):
         'list_profile':list_profile
     }
     return render(request,'admin_site/profile/settings_profile.html', context)
-  
 
 
 def add_profile(request):
@@ -362,6 +356,12 @@ def inventory(request):
     context = {'list_products':list_products}
     return render(request, 'admin_site/inventory/add-stock.html', context)   
 
+@login_required(login_url='landing_page:login')
+def view_inventory(request):
+    list_inventory = By_Batch.objects.all().order_by('-id')
+    context = {'list_inventory':list_inventory}
+    return render(request, 'admin_site/inventory/view.html', context)  
+
 #updating inventory
 @login_required(login_url='landing_page:login')
 def update_inventory(request, productid):
@@ -388,10 +388,12 @@ def update_inventory(request, productid):
             product.product_status = "available"
             product.save()
 
+
             #adding to by batch (database)
             current_product = product.product_code
             NewBatch = By_Batch()
-            NewBatch.product_code = current_product 
+            NewBatch.product_code = current_product
+            NewBatch.product_name = request.POST.get('product_name')
             NewBatch.product_batch = request.POST.get('batch_no')
             NewBatch.product_quantity = request.POST.get('quantity')
             NewBatch.product_expired = request.POST.get('expdate')
@@ -729,7 +731,6 @@ def delivery_process(request):
         transaction.save()
         messages.success(request,("Out for Delivery"))
         return redirect('admin_site:transaction_outshipping')
-
 
 
 @login_required(login_url='landing_page:login')

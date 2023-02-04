@@ -6,7 +6,6 @@ import os , random
 
 
 
-
 now = timezone.now()
 # Create your models here.
 
@@ -66,12 +65,15 @@ class Product(models.Model):
     def __str__(self):
         return self.product_code
 
+
 class By_Batch(models.Model):
     product_code = models.CharField( max_length=200, null=True,verbose_name='Product Code')
+    product_name = models.CharField( max_length=200, null=True,verbose_name='Product Name')
     product_batch =  models.CharField(max_length=200, null=True, verbose_name='Batch Number')
     product_quantity =  models.BigIntegerField(null=True,  verbose_name='Quantity')
     product_expired =  models.DateField( null=True, verbose_name='Expiration Date')
-
+    created_at =models.DateTimeField(default=timezone.now,  verbose_name='created')
+    
 
     def __str__(self):
         return self.product_code
@@ -87,7 +89,6 @@ class Pos(models.Model):
     pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
     pos_ResellerAmount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Reseller Amount')
     pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Amount')
-   
 
 
     def __str__(self):
@@ -101,11 +102,11 @@ class Pos_Payment(models.Model):
     pos_cash = models.BigIntegerField( null=True, verbose_name='Cash')
     pos_change =  models.DecimalField(  max_digits=12, decimal_places=2,null=True, verbose_name='Change')
     pos_status = models.CharField(max_length=250, null=True, choices=STATUS, verbose_name='Status')
+    pos_date = models.DateField(default=timezone.now, verbose_name='Date')
 
     def __str__(self):
         return self.pos_user
 
-   
 
 
 class Transaction(models.Model):
@@ -121,7 +122,7 @@ class Transaction(models.Model):
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
     transaction_preferred_date = models.CharField(max_length=250,  null=True,   verbose_name='Preferred Date') 
     transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Price')
-    created_at =models.DateTimeField(default=timezone.now, verbose_name=' Date Ordered ')
+    created_at =models.DateField(default=timezone.now,  verbose_name='Date Ordered')
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
 

@@ -1,0 +1,32 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+
+
+    {% if list_inventory %}
+    <table class="table table-hover">
+        
+        <thead>
+            <tr>
+                <th>Product Code</th>
+                <th>Product Name</th>
+                <th>Quantity</th>
+                <th>Date-Time Added</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for list in  list_inventory %}  
+          
+            <tr>
+                <td>{{ list.product_code }}</td>
+                <td>{{ list.product_name }}</td>
+                <td>{{ list.product_quantity }}</td>
+                <td>{{ list.created_at }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+   
+    {% endif %}
+{% endblock content %}

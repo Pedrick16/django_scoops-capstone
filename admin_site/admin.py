@@ -16,15 +16,15 @@ class ProductView(admin.ModelAdmin):
     search_fields = ['product_code', 'product_category', 'product_name', 'product_unit','product_ResellerPrice','product_price','product_stock','product_status']
 
 class BatchView(admin.ModelAdmin):
-    list_display = ['product_code',  'product_batch','product_quantity','product_expired']
-    search_fields = ['product_code',  'product_batch','product_quantity','product_expired']
+    list_display = ['product_code','product_name','product_batch','product_quantity','product_expired','created_at']
+    search_fields = ['product_code','product_name', 'product_batch','product_quantity','product_expired','created_at']
 class PosView(admin.ModelAdmin):
     list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_reseller_price','pos_price','pos_quantity','pos_amount']
     search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_reseller_price','pos_price','pos_quantity''pos_amount']
 
 class Pos_PaymentView(admin.ModelAdmin):
-    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status']
-    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status']
+    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status','pos_date']
+    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status','pos_date']
 class TransactionView(admin.ModelAdmin):
     list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_totalprice','transaction_doption','created_at','transaction_preferred_date','transaction_delivered','transaction_orderstatus']
     search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_delivered','transaction_orderstatus']

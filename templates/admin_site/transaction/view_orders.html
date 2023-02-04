@@ -87,7 +87,7 @@
         <form action="{% url 'admin_site:completed_process' %}" method="POST" class="text-end">
             {% csrf_token %}
             <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">
-            <button class="btn btn-dark">Completed</button>
+            <button class="btn btn-dark">Delivered</button>
         </form>
         {% endif %}
 
