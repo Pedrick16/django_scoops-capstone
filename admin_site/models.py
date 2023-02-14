@@ -62,6 +62,7 @@ class Product(models.Model):
     #         self.product_status = "low stock"
     #         self.update()
 
+
     def __str__(self):
         return self.product_code
 

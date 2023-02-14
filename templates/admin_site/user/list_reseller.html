@@ -40,7 +40,9 @@
                 <th>Valid ID</th>
                 <th>Business Permit</th>
                 <th>Status</th>
+            
                 <th>action</th>
+                <th></th>
             </tr>
             <tbody>
                 {% for list in list_reseller %}
@@ -55,6 +57,9 @@
                     <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_id}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
                     <td><a href="{% url 'admin_site:viewing_pic' list.id %}"><img src="/media/{{ list.reseller_businessp}}" alt="Valid-ID" width="50" class="rounded-circle"></a></td>
                     <td>{{ list.reseller_status }}</td>
+
+                    <td><a href="{% url 'admin_site:edit_reseller' list.id %}" class="btn btn-dark">Edit</a></td>
+                    
                     <form method="POST" action="{% url 'admin_site:archive_reseller'  list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
                     <td> <input type="submit" class="btn btn-dark"  value="Archive"></td>

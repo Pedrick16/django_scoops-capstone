@@ -1,0 +1,65 @@
+{%  extends 'admin_site/base.html' %} 
+ 
+ 
+    
+        {% block content%}
+        
+        <form action="" method="GET"  class="text-center">
+            {% csrf_token %}
+            
+        
+            <h1 >Edit Reseller</h1>
+                
+        
+            <input type="text"class="form-control" name="fname" placeholder="Edit First Name" value="{{ list_reseller.reseller_fname }}" required>
+            <br>
+        
+            <input type="text" class="form-control" name="mname" placeholder="Edit Middle Name" value="{{ list_reseller.reseller_mname }}" required>
+            <br>
+        
+            <input type="text"class="form-control" name="lname"  placeholder="Edit Last Name" value="{{ list_reseller.reseller_lname }}" required>
+            <br>
+            
+            
+            <select name="gender" class="form-control" id="gender" required >
+                <option ></option>
+                
+                {% if list_reseller.reseller_gender == "Male" %}
+                <option value="Male">Male</option>
+                    
+                {% else %}
+                    
+                {% endif %}
+                    
+                <option value="Male"></option>
+            
+                <option value="Female">Female</option>
+            </select>
+            <br>
+        
+            <input type="text" class="form-control" name="cnum" placeholder="Edit Number" value="{{ list_reseller.reseller_contact}}" required>
+
+            <br>
+            <textarea name="address" class="form-control" placeholder="Edit address" required>
+            {{ list_reseller.reseller_address}}
+            </textarea>
+            <br>
+    
+            <input type="email" class="form-control"name="email" placeholder="Edit Email" value="{{ list_reseller.reseller_email }}" required>
+            <br>
+            <label for="">Valid ID</label>
+    
+            <input type="File" class="form-control" name="valid-ID" accept=".jpg, .jpeg, .png" disabled>
+            <br>
+            <label for="">Business Permit</label>
+            <br>
+
+            <input type="File" class="form-control" name="Business-permit" accept=".jpg, .jpeg, .png" disabled>
+            <br>
+            <button class="btn btn-primary"  type="submit" name="submit" >Submit</button>
+            </form>
+            <br>
+            
+
+{% endblock %}
+            

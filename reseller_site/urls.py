@@ -10,6 +10,8 @@ urlpatterns = [
     path('minus-qty/<int:productid>/', views.minus_qty, name='minus_qty'),
     path('add-qty/<int:productid>/', views.add_qty ,name='add_qty'),
     path('pos/cancel/<int:productid>/', views.cart_cancel,name='cart_cancel'),
+    path('cart/all-products/', views.all_products ,name='all_products'),
+    path('cart/all-products/<int:productid>/', views.cart_products ,name='cart_products'),
 
 
     path('transaction-view/<int:id>/', views.transaction_view, name='transaction_view'),

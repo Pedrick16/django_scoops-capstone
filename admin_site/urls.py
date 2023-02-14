@@ -65,7 +65,6 @@ urlpatterns = [
     path('transaction-orders/completed', views.Transaction_completed, name='transaction_completed'),
     path('transaction-orders/process-completed', views.completed_process, name='completed_process'),
 
-    path('transaction-orders/decline', views.Transaction_decline, name='transaction_decline'),
     path('transaction-view/<int:id>/', views.transaction_view, name='transaction_view'),
  
     path('search-reseller/', views.search_reseller, name='search_reseller'),
@@ -79,4 +78,9 @@ urlpatterns = [
 
     path('register/<int:inquiryid>/', views.register, name='register'),
     path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
+
+    #edit
+    path('edit-reseller/<int:id>/', views.edit_reseller, name='edit_reseller'),
+
+
 ]

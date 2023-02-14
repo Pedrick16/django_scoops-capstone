@@ -214,6 +214,82 @@ def add_cart(request):
         }
     return render(request, 'reseller_site/cart/cart.html', context)
 
+@login_required(login_url='landing_page:login')
+def all_products(request):
+    list_products = Product.objects.all()
+    context = {'list_products':list_products}
+    return render(request, 'reseller_site/cart/all-products.html', context)
+
+@login_required(login_url='landing_page:login')
+def cart_products(request, productid):
+    if request.method =="POST":
+        # getting id 
+       
+        product = Product.objects.get(id = productid)
+        
+       
+
+        # coming from  input type
+        qty = int(request.POST['quantity'])
+        p_stock = int(request.POST['stock'])
+        pcode = request.POST['product_code']
+        p_reseller_price = float(request.POST['product_reseller_price'])
+        p_price = float(request.POST['product_price'])
+        p_unit = request.POST['product_unit']
+        p_category = request.POST['product_category']
+        p_name = request.POST['product_name']
+
+       
+         
+        # session,  getting  user name
+        current_user = request.user
+        
+        # minus or adding to the stock
+        diff = p_stock -  qty 
+        amount_cart = p_price * qty
+        reseller_cart = p_reseller_price * qty
+        
+        #converting the data of product stock to integer
+        avail_stock = int(product.product_stock)
+
+        #checking if have already product in the cart
+
+        status = "low stock"
+
+        
+        
+
+        # error trapping for 0 stock    
+        if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
+            messages.success(request,("you already have on the cart"))
+            return redirect('reseller_site:all_products')
+        elif  product.product_stock == 0:
+            messages.success(request,("Sorry, No Available Stock"))
+            return redirect('reseller_site:all_products')
+
+        # error trapping for low stock
+        elif avail_stock <  qty:
+            messages.success(request,("sorry available stock not enough"))
+            return redirect('reseller_site:all_products')
+        elif product.product_status =="n/a":
+            messages.success(request,("Sorry, this Product is not Available"))
+            return redirect('reseller_site:all_products')       
+        else:
+
+            #updating product stock
+            product.product_stock = diff
+            product.save()
+
+            #inserting product in pos table
+            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit,pos_reseller_price =p_reseller_price , pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart,  pos_ResellerAmount =reseller_cart )
+            pos.save()   
+
+            
+
+
+            messages.info(request,("Successfully carting Products"))
+            return redirect('reseller_site:add_cart')   
+
 
 @login_required(login_url='landing_page:login') 
 def transaction_view(request,id):
@@ -268,7 +344,6 @@ def cart_cancel(request,productid):
 
         
         messages.success(request,("Successfully cancelled"))
-        return redirect('admin_site:pos')
-
+        return redirect('reseller_site:add_cart')
 
 

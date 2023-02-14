@@ -134,6 +134,14 @@ def view_pic(request,id):
     }
     return render(request,'admin_site/user/view_pic.html',context)    
 
+def edit_reseller(request,id):
+    list_reseller = Reseller.objects.get(id = id)
+    context={
+        'list_reseller':list_reseller,
+    }
+
+    return render(request,'admin_site/edit/edit_reseller.html',context)   
+
 
 
 
@@ -198,8 +206,6 @@ def send_email(request):
     return render(request, 'admin_site/user/send_email.html')        
 
 #process inquiry for reseller
-
-@login_required(login_url='landing_page:login')
 def process_inquiry(request):
     if request.method =="POST":
         status= "pending"
@@ -220,7 +226,6 @@ def process_inquiry(request):
             reseller = Reseller(reseller_fname = f_name, reseller_mname = m_name, reseller_lname = l_name, reseller_gender = gender, reseller_contact = contact_num, reseller_address= address, reseller_email = email, reseller_id = valid_id, reseller_businessp =business_permit, reseller_status=status)
             reseller.save()
             messages.success(request,("Successfully Submitted"))
-
     return render(request, 'landing_page/inquiry_reseller.html')
 
 
@@ -368,6 +373,7 @@ def update_inventory(request, productid):
     if request.method == "POST":
         #to get the latest id
         product = Product.objects.get(id = productid)
+
 
         #the  stock and quantity from input
         product_stock = int(request.POST['stock'])
@@ -714,13 +720,7 @@ def Transaction_completed(request):
     }
     return render(request, 'admin_site/transaction/orders.html', context)
 
-@login_required(login_url='landing_page:login') 
-def Transaction_decline(request):
-    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Decline")).order_by('-id')
-    context = {
-        'list_transaction':list_transaction
-    }
-    return render(request, 'admin_site/transaction/orders.html', context)
+
 
 @login_required(login_url='landing_page:login')
 def delivery_process(request):

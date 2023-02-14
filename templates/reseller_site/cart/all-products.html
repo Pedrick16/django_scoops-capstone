@@ -1,0 +1,98 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+    {% for message in messages %}
+        swal('{{ message }}');
+    {% endfor %}
+</script> -->
+<form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="search" required>
+        <div class="input-group-append">
+            <button class="btn btn-success">Search</button>
+        </div>
+    </div>
+</form>
+
+{% for messsage in messages  %}
+<p class='alert alert-success mt-3'>{{messsage}}</p>
+{% endfor %}
+    
+
+{% if list_products %}     
+<table class="table table-hover text-center">
+    <thead>
+        <tr>
+            <th>Product code </th>
+            <th>Product Name</th>
+            <th>Category</th>
+            <th>Unit</th>
+            <th>Reseller Price</th>
+
+            {% if user.role == "admin" %}
+            <th>Price</th>
+            {% elif user.role == "staff" %}
+            <th>Price</th>
+            {% endif %}
+
+
+           
+            
+      
+                
+        
+            <th>Available Stock</th>
+      
+       
+            <th>Status</th>
+            <th>quantity</th>
+            <th>action</th>
+        </tr>
+    </thead>
+    <tbody>
+        
+        {% for list in list_products %}
+        <tr>
+            <td>{{ list.product_code }}</td>
+            <td>{{ list.product_name }}</td>
+            <td>{{ list.product_category }}</td>
+            <td>{{ list.product_unit }}</td>
+            <td>{{ list.product_ResellerPrice }}</td>
+            
+            {% if user.role == "admin" %}
+            <td>{{ list.product_price }}</td>
+            {% elif user.role == "staff" %}
+            <td>{{ list.product_price }}</td>
+                
+            {% endif %}
+                
+          
+
+            <td>{{ list.product_stock }}</td>
+            
+            <td>{{ list.product_status }}</td>
+
+        <form action="{% url 'reseller_site:cart_products' list.id %}" method="POST">
+            {% csrf_token %}
+        <td><input type="number" name="quantity" style="text-align:right;" placeholder="0" required></td>
+        <td><button class="btn btn-dark" type="submit" name="cart">Cart</button></td>
+        <input type="hidden" name="stock" value="{{ list.product_stock }}">
+        <input type="hidden" name="product_code" value="{{ list.product_code }}">
+        <input type="hidden" name="product_category" value="{{ list.product_category }}">
+        <input type="hidden" name="product_name" value="{{ list.product_name}}">
+        <input type="hidden" name="product_unit" value="{{ list.product_unit }}">
+        <input type="hidden" name="product_reseller_price" value="{{ list.product_ResellerPrice }}">
+        <input type="hidden" name="product_price" value="{{ list.product_price }}">
+        </form>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endif %}
+
+{% endblock content %}
+    
