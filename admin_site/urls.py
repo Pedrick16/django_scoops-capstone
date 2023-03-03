@@ -66,15 +66,19 @@ urlpatterns = [
     path('transaction-orders/process-completed', views.completed_process, name='completed_process'),
 
     path('transaction-view/<int:id>/', views.transaction_view, name='transaction_view'),
- 
+    
+    #search 
     path('search-reseller/', views.search_reseller, name='search_reseller'),
     path('search-product/', views.search_product, name='search_product'),
     path('search-inventory/', views.search_inventory, name='search_inventory'),
     path('search-transaction/', views.search_transaction, name='search_transaction'),
     path('search/activity-log/', views.search_actlog, name='search_act-log'),
 
+    #report
     path('reports/activity-log/', views.report_actlog, name='report_actlog'),
-    # path('reports-sales/', views.report_sales, name='report_sales'),
+    path('reports/pos-sales/', views.report_pos_sales, name='report_pos_sales'),
+    path('reports/online-sales/', views.report_online_sales, name='report_online_sales'),
+
 
     path('register/<int:inquiryid>/', views.register, name='register'),
     path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),

@@ -22,18 +22,9 @@
             
             
             <select name="gender" class="form-control" id="gender" required >
-                <option ></option>
-                
-                {% if list_reseller.reseller_gender == "Male" %}
-                <option value="Male">Male</option>
-                    
-                {% else %}
-                    
-                {% endif %}
-                    
-                <option value="Male"></option>
-            
-                <option value="Female">Female</option>
+
+                <option value="Male"{% if list_reseller.reseller_gender == 'Male' %}selected{% endif %}>Male</option>
+                <option value="Female"{% if list_reseller.reseller_gender == 'Female' %}selected{% endif %}>Female</option>
             </select>
             <br>
         

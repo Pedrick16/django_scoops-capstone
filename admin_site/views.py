@@ -787,13 +787,22 @@ def report_actlog(request):
     }
     return render(request, 'admin_site/reports/act_log.html', context)
 
-# @login_required(login_url='landing_page:login') 
-# def report_sales(request):
-#     list_reports = .objects.all().order_by('-id')
-#     context = {
-#         'list_reports':list_reports
-#     }
-#     return render(request, 'admin_site/reports/act_log.html', context)    
+@login_required(login_url='landing_page:login') 
+def report_pos_sales(request):
+    pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed')
+    context = {
+        'pos_payment':pos_payment
+    }
+
+    return render(request, 'admin_site/reports/pos_sales.html',context)
+
+@login_required(login_url='landing_page:login') 
+def report_online_sales(request):
+    transaction = Transaction.objects.filter(transaction_orderstatus = 'Completed')
+    context = {
+        'transaction':transaction
+    }
+    return render(request, 'admin_site/reports/online_sales.html',context) 
 
 
 

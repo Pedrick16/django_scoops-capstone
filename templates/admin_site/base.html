@@ -74,7 +74,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'admin_site:transaction_orders' %}">Pending</a></li>
-                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_outshipping' %}">Out For Delivery</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:transaction_outshipping' %}">Out For Shipping</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:transaction_completed' %}">Delivered</a></li>
                 </ul>
               </li>
@@ -86,8 +86,10 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'admin_site:report_actlog' %}">Activity Log</a></li>
-                  <li><a class="dropdown-item" href="#">Sales</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:report_online_sales' %}">Online Sales</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:report_pos_sales' %}">POS Sales</a></li>
                 </ul>
+                
               </li>
 
               
