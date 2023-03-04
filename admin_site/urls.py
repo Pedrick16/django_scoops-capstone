@@ -73,6 +73,8 @@ urlpatterns = [
     path('search-inventory/', views.search_inventory, name='search_inventory'),
     path('search-transaction/', views.search_transaction, name='search_transaction'),
     path('search/activity-log/', views.search_actlog, name='search_act-log'),
+    path('search/online-sales', views.search_online_sales, name='search_online_sales'),
+    path('search/pos-sales', views.search_pos_sales, name='search_pos_sales'),
 
     #report
     path('reports/activity-log/', views.report_actlog, name='report_actlog'),

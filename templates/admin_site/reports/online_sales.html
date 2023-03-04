@@ -3,8 +3,9 @@
 
 {% block content %}
     <div id="form-date" class="text-end">
-    <form>
-        From : <input type="date" >To : <input type="date" > <input type="submit" class="btn btn-dark text-center" value="Search" >
+    <form action="{% url 'admin_site:search_online_sales' %}" method="post">
+        {% csrf_token %}
+        From : <input type="date" name="start_date" required>To : <input type="date" name="end_date" required> <input type="submit" class="btn btn-dark text-center" value="Search" >
     </form>
     </div>
     
@@ -17,7 +18,6 @@
                 <th>Sales</th>
                 <th>Date</th>
             </tr>
-            
         </thead>
             <tbody>
                 {% for list in transaction %}
@@ -30,7 +30,7 @@
             </tbody>
     </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Total Sales:    </label>
+        <label style="font-weight: bolder;" > Total Sales: {{ list_transaction }}   </label>
     </div>
 
 {% endblock content %}

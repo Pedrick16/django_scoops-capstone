@@ -884,6 +884,42 @@ def search_actlog(request):
            return render(request,'admin_site/reports/act_log.html')
 
 
+@login_required(login_url='landing_page:login')
+def search_online_sales(request):
+    if request.method == "POST":
+        start_date= request.POST['start_date']
+        end_date = request.POST['end_date']
+        transaction = Transaction.objects.filter(created_at__range=[start_date,end_date])
+        list_transaction = Transaction.objects.filter(created_at__range=[start_date,end_date]).aggregate(total=Sum('transaction_totalprice'))['total']
+
+        context = {
+            'transaction':transaction,
+            'list_transaction':list_transaction
+
+        }
+        return render(request, 'admin_site/reports/online_sales.html',context)
+
+@login_required(login_url='landing_page:login')
+def search_pos_sales(request):
+    if request.method == "POST":
+        start_date= request.POST['start_date']
+        end_date = request.POST['end_date']
+        pos_payment = Pos_Payment.objects.filter(pos_date__range=[start_date,end_date])
+        list_pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed', pos_date__range=[start_date,end_date]).aggregate(total=Sum('pos_TotalAmount'))['total']
+
+        context = {
+            'pos_payment':pos_payment,
+            'list_transaction':list_pos_payment
+        }
+        return render(request, 'admin_site/reports/pos_sales.html',context)
+    
+
+
+    
+
+
+
+
 
 
 
