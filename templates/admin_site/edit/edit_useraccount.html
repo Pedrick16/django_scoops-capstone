@@ -1,0 +1,29 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+
+
+<form action="{% url 'admin_site:update_user_account' list_users.id %}" method="POST">
+    {% csrf_token %}
+    <input type="text" value="{{ list_users.username }}" placeholder="Username" name="username" class="form-control">
+    <br>
+    <input type="text" value="{{ list_users.email }}" placeholder="Email" name="email" class="form-control">
+    <br>
+    <select name="role" class="form-control"  required>
+
+        <option value="admin"{% if list_users.role == 'admin' %}selected{% endif %}>admin</option>
+        <option value="staff"{% if list_users.role == 'staff' %}selected{% endif %}>staff</option>
+        <option value="reseller"{% if list_users.role == 'reseller' %}selected{% endif %}>reseller</option>
+        <option value="rider"{% if list_users.role == 'rider' %}selected{% endif %}>rider</option>
+    </select>
+    <br>
+    <select name="status" class="form-control"  required>
+        <option value="active"{% if list_users.role == 'active' %}selected{% endif %}>active</option>
+        <option value="inactive"{% if list_users.role == 'inactive' %}selected{% endif %}>inactive</option>
+    </select>
+  
+    <br>
+    <button class="btn btn-dark">Update</button>
+</form>
+{% endblock content %}
+    

@@ -5,4 +5,6 @@ from django.contrib.auth.models import AbstractUser
 
 class User(AbstractUser):
     ROLE = ((" "," "),("admin","admin"),("staff","staff"),("reseller","reseller"),("rider","rider"))  
-    role = models.CharField(max_length=50, null=True, default=False, choices=ROLE)        
+    STAT = ((" "," "),("active","active"),("inactive","inactive"))
+    role = models.CharField(max_length=50, null=True, default=None, choices=ROLE)
+    status = models.CharField(max_length=50, null=True, default=None , choices=STAT)

@@ -1,0 +1,33 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+{% for message in messages %}
+<p class="alert alert-success mt-3">{{ message }}</p>
+{% endfor %}
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Username</th>
+                <th>Email</th>
+                <th>Role</th>
+                <th>Status</th>
+                <th>Actions</th>
+            </tr>
+            <tbody>
+                
+                {% for list in users %}
+                <tr>
+                    <td>{{ list.username }}</td>
+                    <td>{{ list.email }}</td>
+                    <td>{{ list.role }}</td>
+                    <td>{{ list.status }}</td>
+                    <td><a href="{% url 'admin_site:edit_user_account' list.id %}" class="btn btn-dark" >Edit</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </thead>
+    </table>
+{% endblock content %}
+    

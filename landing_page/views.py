@@ -46,14 +46,17 @@ def loginView(request):
             NewActLog.save()
     
 
-            if user.role == "admin": 
+            if user.role == "admin" and user.status == "active": 
                 return redirect('admin_site:dashboard') 
-            elif user.role == "reseller":
+            elif user.role == "reseller" and user.status == "active":
                 return redirect('reseller_site:dashboard')
-            elif user.role == "rider":    
+            elif user.role == "rider" and user.status == "active":    
                 return redirect('rider_site:dashboard')
-            elif user.role == "staff": 
+            elif user.role == "staff" and user.status == "active": 
                 return redirect('staff_site:dashboard')
+            elif user.status == "inactive": 
+                messages.success(request, ("Your account is no longer active"))
+                return redirect('landing_page:login') 
             else: 
                 messages.success(request, ("There was an error logging in, Try Again ..."))
                 return redirect('landing_page:login') 

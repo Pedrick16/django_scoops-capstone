@@ -6,7 +6,7 @@
 <p class='alert alert-success mt-3'>{{messsage}}</p>
 {% endfor %}
 
-<form action="{% url 'admin_site:search_reseller' %}" method="get" class="my-2">
+<form action="{% url 'admin_site:search_archive_reseller' %}" method="get" class="my-2">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>

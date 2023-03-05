@@ -7,9 +7,12 @@
 </div>
 
 <div id="form-date" style="display: none;" class="text-end">
-<form>
-   From : <input type="date" >To : <input type="date" > <input type="submit" class="btn btn-dark text-center" value="Search" >
-</form>
+    <form action="{% url 'admin_site:search_date_actlog' %}" method="post">
+        {% csrf_token %}
+        From : <input type="date" name="start_date" required>
+        To : <input type="date" name="end_date" required>
+         <input type="submit" class="btn btn-dark text-center" value="Search" >
+    </form>
 </div>
 
 

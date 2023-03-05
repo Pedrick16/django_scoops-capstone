@@ -44,11 +44,12 @@
               </li>
               <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                  List Reseller 
+                  User Accounts
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                  <li><a class="dropdown-item" href="{% url 'admin_site:list_reseller'%}">Reseller</a></li>
-                  <li><a class="dropdown-item" href="{% url 'admin_site:list_inquiry'%}">Inquiry</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:user_list' %}">User List</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:list_reseller'%}">Resellers List</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:list_inquiry'%}">Inquiry List</a></li>
                 </ul>
               </li>
               <li class="nav-item">

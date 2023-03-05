@@ -7,8 +7,13 @@ from django.conf.urls.static import static
 app_name = 'admin_site'
 urlpatterns = [
     path('', views.dashboard_admin, name='dashboard'),
+    path('user-list/', views.user_list , name='user_list'),
+    path('edit-user-list/<int:userid>/', views.edit_user_account , name='edit_user_account'),
+    path('update-user-list/<int:userid>/', views.update_user_account , name='update_user_account'),
+
     path('list-inquiry/', views.list_inquiry, name='list_inquiry'),
     path('list-reseller/', views.list_reseller, name='list_reseller'),
+    path('edit-reseller/<int:id>/', views.edit_reseller, name='edit_reseller'),
     path('archive-reseller/<int:resellerid>/', views.archive_reseller, name='archive_reseller'),
 
     path('settings_profile/', views.settings_profile, name='settings_profile'),
@@ -69,10 +74,12 @@ urlpatterns = [
     
     #search 
     path('search-reseller/', views.search_reseller, name='search_reseller'),
+    path('search-archive-reseller/', views.search_archive, name='search_archive_reseller'),
     path('search-product/', views.search_product, name='search_product'),
     path('search-inventory/', views.search_inventory, name='search_inventory'),
     path('search-transaction/', views.search_transaction, name='search_transaction'),
     path('search/activity-log/', views.search_actlog, name='search_act-log'),
+    path('search/activity-log-date/', views.search_date_actlog, name='search_date_actlog'),
     path('search/online-sales', views.search_online_sales, name='search_online_sales'),
     path('search/pos-sales', views.search_pos_sales, name='search_pos_sales'),
 
@@ -86,7 +93,7 @@ urlpatterns = [
     path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
 
     #edit
-    path('edit-reseller/<int:id>/', views.edit_reseller, name='edit_reseller'),
+
 
 
 ]

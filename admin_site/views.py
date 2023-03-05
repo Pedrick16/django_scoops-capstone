@@ -6,7 +6,9 @@ from django.core.mail import send_mail
 
 from datetime import datetime,date
 from landing_page.forms import SignUpForm
+from landing_page.models import User
 import random
+
 
 
 
@@ -52,8 +54,7 @@ def register(request, inquiryid):
             reseller.reseller_status = status  
             reseller.save()
             return redirect('admin_site:send_email')
-        else:
-            messages.success(request,("sorry have an error"))
+
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/register.html',{'form':form})      
@@ -67,6 +68,41 @@ def list_reseller(request):
     context = {'list_reseller':list_reseller}
     return render(request, 'admin_site/user/list_reseller.html', context)
 
+#list user account
+@login_required(login_url='landing_page:login')
+def user_list(request):
+    users = User.objects.all()
+    context = {'users':users}
+    return render(request, 'admin_site/user/useraccount.html', context)
+
+
+#list user account
+@login_required(login_url='landing_page:login')
+def edit_user_account(request,userid):
+    list_users = User.objects.get(id = userid)
+    context={
+        'list_users':list_users
+    }
+    return render(request, 'admin_site/edit/edit_useraccount.html',context)
+
+@login_required(login_url='landing_page:login')
+def update_user_account(request,userid):
+    if request.method == "POST":
+        user = User.objects.get(id = userid)
+        username =  request.POST['username']
+        email = request.POST['email']
+        role =  request.POST['role']
+        status = request.POST['status']
+        user.username = username
+        user.email=    email
+        user.role =  role
+        user.status = status
+        user.save()
+        messages.success(request,"successfully updated")
+        return redirect('admin_site:user_list')
+
+     
+      
 
 
 #showing to the table data 
@@ -787,6 +823,7 @@ def report_actlog(request):
     }
     return render(request, 'admin_site/reports/act_log.html', context)
 
+
 @login_required(login_url='landing_page:login') 
 def report_pos_sales(request):
     pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed')
@@ -829,6 +866,18 @@ def search_reseller(request):
         if search:
             list_reseller = Reseller.objects.filter(Q(reseller_status = "active"), Q(reseller_fname__contains=search) | Q(reseller_mname__contains=search) |Q(reseller_lname__contains=search) | Q(reseller_gender__contains=search) | Q(reseller_address__contains=search)| Q(reseller_email__contains=search)) 
             return render(request,'admin_site/user/list_reseller.html', {'list_reseller': list_reseller})
+        else:
+           messages.success(request,("No records found!"))   
+           return render(request,'admin_site/user/list_reseller.html')
+
+#search bar for reseller
+@login_required(login_url='landing_page:login')
+def search_archive(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_reseller = Reseller.objects.filter(Q(reseller_status = "inactive"), Q(reseller_fname__contains=search) | Q(reseller_mname__contains=search) |Q(reseller_lname__contains=search) | Q(reseller_gender__contains=search) | Q(reseller_address__contains=search)| Q(reseller_email__contains=search)) 
+            return render(request,'admin_site/user/archive.html', {'list_reseller': list_reseller})
         else:
            messages.success(request,("No records found!"))   
            return render(request,'admin_site/user/list_reseller.html')
@@ -882,6 +931,20 @@ def search_actlog(request):
         else:
            messages.success(request,("No records found!"))   
            return render(request,'admin_site/reports/act_log.html')
+
+@login_required(login_url='landing_page:login')
+def search_date_actlog(request):
+    if request.method == "POST":
+        start_date= request.POST['start_date']
+        end_date = request.POST['end_date']
+
+        list_reports = Activity_log.objects.filter(date_time__date__range=[start_date, end_date])
+     
+        context ={
+            'list_reports':list_reports
+        }
+        return render(request,'admin_site/reports/act_log.html',context)
+
 
 
 @login_required(login_url='landing_page:login')

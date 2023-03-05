@@ -18,19 +18,14 @@
 
 <p class="alert alert-success mt-3">{{ message }}</p>
 {% endfor %}
+<div class="text-end">
 <a href="{% url 'admin_site:all_products' %}" class="btn btn-dark">Select Products</a>
+</div>
+<br>
+
 {% if list_pos %}
 
-    <br>
-    <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" class="form-control" name="search" placeholder="search" required>
-            <div class="input-group-append">
-                <button class="btn btn-success">Search</button>
-            </div>
-        </div>
-    </form>
+
     
     {% if user.role == "admin" %}
     <a href="{% url 'admin_site:click_receipt' %}">Recent Activity</a>
