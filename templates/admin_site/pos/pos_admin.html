@@ -67,9 +67,9 @@
                 <th>Action</th>
                 <th></th>
                 <th></th>
-             
+
             </tr>
-         
+
             <tbody>
                 
                 {% for list in  list_pos %}       
@@ -83,7 +83,7 @@
                     <td>{{ list.pos_reseller_price }}</td>
                         
                     {% endif %}
-                 
+
 
                     {% if user.role == "admin" %}
                     <td>{{ list.pos_price}}</td>
@@ -92,33 +92,29 @@
                     {% endif %}
 
                     
-                
-                
-               
 
-           
                     <td>
-                        <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark">-</a> <button
-                            class="btn btn-success">{{ list.pos_quantity }}</button> <a href="{% url 'admin_site:add_qty' list.id  %}"
+                        <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark" id="d_minus">-</a>
+                        <button
+                            class="btn btn-success" >{{ list.pos_quantity }}
+                        </button>
+                            <a href="{% url 'admin_site:add_qty' list.id  %}"
                             class="btn btn-dark">+</a>
                     </td>
 
-                   
-                        
+
+
                     <td>{{ list.pos_amount }} </td>
-                
                     <form method="POST" action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
                         <td><button type="submit" class="btn btn-dark">Cancel</button></td>
                         <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
                         <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
                         <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
-                
                     </form>
                 </tr>
                 {% endfor %}
             </tbody>
-        
         </thead>
     </table>
     {% endif %}
@@ -127,25 +123,21 @@
 
     
 
-    
-  
+
     
     {% if list_pos %}         
 
 
 
-    
-          
-   
         {% if user.role == "admin"%} 
         
         <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
         {% csrf_token %}
         <label style="font-weight: bolder;">Total Amount:</label>
         <input type="number" name="total_amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount"   readonly="readonly"> 
-       
+
         <!-- <input type="text" id="total_amount"> -->
-         
+
         <label for="">Cash</label>
         <p id="msg" style=" display:none;"></p>
         <input type="number" name="cash"  class="form-control"  id="cash" required>

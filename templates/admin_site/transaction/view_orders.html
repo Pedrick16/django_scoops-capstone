@@ -15,8 +15,8 @@
     <p class="fw-bolder">Order Details</p>
     <thead>
         <tr>
-            <th>Product Category</th>
             <th>Product Name</th>
+            <th>Product Category</th>
             <th>Product Unit</th>
             <th>Quantity</th>
             <th>Amount</th>
@@ -26,8 +26,8 @@
     
         {% for list in list_orderitem %}
         <tr>
-            <td>{{ list.OrderItem_category }}</td>
             <td>{{ list.OrderItem_name }}</td>
+            <td>{{ list.OrderItem_category }}</td>
             <td>{{ list.OrderItem_unit}}</td>
             <td>{{ list.OrderItem_quantity}}</td>
             <td>{{ list.OrderItem_amount }}</td>
@@ -70,9 +70,12 @@
         <label for="">Delivery option</label>
         <input type="text" value="{{ list_transaction.transaction_doption }}" class="form-control" disabled>
         <br> 
-        <label for="">Preferred Date</label>
+        {% if list_transaction.transaction_doption == "pickup" %}
+        <label for="">Pickup Date</label>
         <input type="text" value="{{ list_transaction.transaction_preferred_date }}" class="form-control" disabled>
         <br>
+        {% endif %}
+        
         
         {% if list_transaction.transaction_orderstatus == "Pending" %}
             

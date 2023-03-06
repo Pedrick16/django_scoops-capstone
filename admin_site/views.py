@@ -170,6 +170,7 @@ def view_pic(request,id):
     }
     return render(request,'admin_site/user/view_pic.html',context)    
 
+
 def edit_reseller(request,id):
     list_reseller = Reseller.objects.get(id = id)
     context={

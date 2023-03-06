@@ -67,13 +67,14 @@
         <br> 
         <label for="">Delivery option</label>
         <input type="text" value="{{ list_transaction.transaction_doption }}" class="form-control" disabled>
-        <br> 
-        <label for="">Preferred Date</label>
-        <input type="text" value="{{ list_transaction.transaction_preferred_date }}" class="form-control" disabled>
-
+        <br>
         
-        <br>
-        <br>
+        {% if list_transaction.transaction_doption == "pickup" %}
+        <label for="">Pickup Date</label>
+        <input type="text" value="{{ list_transaction.transaction_preferred_date }}" class="form-control" disabled>
+        {% endif %}
+        
+        
   
   
       

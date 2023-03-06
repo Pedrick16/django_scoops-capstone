@@ -7,6 +7,7 @@ $(document).ready(function(){
     // })
 
 
+
     $('#btn_compute').on('click', function (e) {
         e.preventDefault();
         var total_amount = parseInt($('#total_amount').val())
