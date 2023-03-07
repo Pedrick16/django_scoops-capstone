@@ -18,8 +18,8 @@
     </div>
 </form>
 
-{% for messsage in messages  %}
-<p class='alert alert-success mt-3'>{{messsage}}</p>
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
 {% endfor %}
     
 

@@ -45,24 +45,30 @@ def cart_reseller(request):
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
     pos = Pos.objects.get(id =productid)
-    current_qty = int(pos.pos_quantity)
-    result = current_qty - 1
-    pos.pos_quantity = result
-    pos.save()
+    if pos.pos_quantity == 0:
+        messages.error(request,("quantity already 0"))
+        return redirect('reseller_site:add_cart')
+    else:
 
-    current_amount = int(pos.pos_amount)
-    current_price = int(pos.pos_price)
-    result = current_amount - current_price
-    pos.pos_amount = result
-    pos.save()
+
+        current_qty = int(pos.pos_quantity)
+        result = current_qty - 1
+        pos.pos_quantity = result
+        pos.save()
+
+        current_amount = int(pos.pos_ResellerAmount)
+        current_price = int(pos.pos_reseller_price )
+        result = current_amount - current_price
+        pos.pos_ResellerAmount = result
+        pos.save()
     
-    current_pcode = pos.pos_pcode
-    product = Product.objects.get(product_code = current_pcode)
-    current_stock = int(product.product_stock)
-    retrieve_stock = current_stock + 1
-    product.product_stock = retrieve_stock
-    product.save()
-    return redirect('admin_site:pos')
+        current_pcode = pos.pos_pcode
+        product = Product.objects.get(product_code = current_pcode)
+        current_stock = int(product.product_stock)
+        retrieve_stock = current_stock + 1
+        product.product_stock = retrieve_stock
+        product.save()
+        return redirect('reseller_site:add_cart')
 
 
 @login_required(login_url='landing_page:login')
@@ -76,16 +82,16 @@ def add_qty(request,productid):
 
     product = Product.objects.get(product_code = current_pcode)
     if product.product_stock == 0:
-        messages.success(request,("No available Stock"))
+        messages.error(request,("No available Stock"))
         return redirect('admin_site:pos')
     else:
         pos.pos_quantity = result
         pos.save()
 
-        current_amount = int(pos.pos_amount)
-        current_price = int(pos.pos_price)
+        current_amount = int(pos.pos_ResellerAmount)
+        current_price = int(pos.pos_reseller_price )
         result = current_amount + current_price
-        pos.pos_amount = result
+        pos.pos_ResellerAmount = result
         pos.save()
     
 
@@ -94,7 +100,7 @@ def add_qty(request,productid):
         minus_stock = current_stock - 1
         product.product_stock = minus_stock
         product.save()
-        return redirect('admin_site:pos')
+        return redirect('reseller_site:add_cart')
 
 @login_required(login_url='landing_page:login')
 def checkout(request):
@@ -261,18 +267,18 @@ def cart_products(request, productid):
 
         # error trapping for 0 stock    
         if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
-            messages.success(request,("you already have on the cart"))
+            messages.error(request,("you already have on the cart"))
             return redirect('reseller_site:all_products')
         elif  product.product_stock == 0:
-            messages.success(request,("Sorry, No Available Stock"))
+            messages.error(request,("Sorry, No Available Stock"))
             return redirect('reseller_site:all_products')
 
         # error trapping for low stock
         elif avail_stock <  qty:
-            messages.success(request,("sorry available stock not enough"))
+            messages.error(request,("sorry available stock are not enough"))
             return redirect('reseller_site:all_products')
         elif product.product_status =="n/a":
-            messages.success(request,("Sorry, this Product is not Available"))
+            messages.error(request,("Sorry, this Product is not Available"))
             return redirect('reseller_site:all_products')       
         else:
 
@@ -285,9 +291,7 @@ def cart_products(request, productid):
             pos.save()   
 
             
-
-
-            messages.info(request,("Successfully carting Products"))
+            messages.success(request,("Successfully carting Products"))
             return redirect('reseller_site:add_cart')   
 
 

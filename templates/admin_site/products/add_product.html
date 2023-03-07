@@ -4,9 +4,7 @@
 {% block content %}
     
    
-   {% for message in  messages %}
-    <p class="alert alert-success  mt-3">{{ message }}</p>
-   {% endfor %}
+
   
     
     <form action="{% url 'admin_site:add_product' %}" method="POST" class="text-center">

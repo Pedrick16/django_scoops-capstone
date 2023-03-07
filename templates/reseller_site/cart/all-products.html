@@ -2,12 +2,9 @@
 
 
 {% block content %}
-<!-- <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
-<script>
-    {% for message in messages %}
-        swal('{{ message }}');
-    {% endfor %}
-</script> -->
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
 <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
     {% csrf_token %}
     <div class="input-group">
@@ -18,9 +15,7 @@
     </div>
 </form>
 
-{% for messsage in messages  %}
-<p class='alert alert-success mt-3'>{{messsage}}</p>
-{% endfor %}
+
     
 
 {% if list_products %}     

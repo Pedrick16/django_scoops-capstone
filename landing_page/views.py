@@ -55,23 +55,21 @@ def loginView(request):
             elif user.role == "staff" and user.status == "active": 
                 return redirect('staff_site:dashboard')
             elif user.status == "inactive": 
-                messages.success(request, ("Your account is no longer active"))
+                messages.error(request, ("Your account is no longer active"))
                 return redirect('landing_page:login') 
             else: 
-                messages.success(request, ("There was an error logging in, Try Again ..."))
+                messages.error(request, ("Wrong Username and Password"))
                 return redirect('landing_page:login') 
 
         else:
-            messages.success(request, ("There was an error logging in, Try Again ..."))
+            messages.error(request, ("Wrong Username and Password"))
             return redirect('landing_page:login') 
     
     return render(request, 'landing_page/login-folder/login.html')
 
 
 
-         
 
-   
     
 @login_required(login_url='landing_page:login')
 def logoutView(request):

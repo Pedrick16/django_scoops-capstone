@@ -3,8 +3,8 @@
 
 {% block content %}
 
-{% for message in  messages %}
-<p class="alert alert-success  mt-3">{{ message }}</p>
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
 {% endfor %}
 
 <a href="{% url 'admin_site:add_product' %}" class="btn btn-dark">Add Product</a>

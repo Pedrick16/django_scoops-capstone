@@ -54,6 +54,7 @@ def register(request, inquiryid):
             reseller.reseller_status = status  
             reseller.save()
             return redirect('admin_site:send_email')
+            
 
     else:
         form = SignUpForm()
@@ -324,7 +325,7 @@ def add_product(request):
 
 
         messages.success(request,("Successfully Product added"))
-        return redirect('admin_site:add_product')
+        return redirect('admin_site:list_product')
         
     return render(request, 'admin_site/products/add_product.html')    
 
@@ -450,7 +451,7 @@ def update_inventory(request, productid):
 
 
             #activity log for adding stock
-            activity = "Adding stock"
+            activity = "Added stock"
             NewActLog = Activity_log()
             NewActLog.user_name = request.user
             NewActLog.role = request.user.role
@@ -551,24 +552,28 @@ def Click_receipt(request):
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
     pos = Pos.objects.get(id =productid)
-    current_qty = int(pos.pos_quantity)
-    result = current_qty - 1
-    pos.pos_quantity = result
-    pos.save()
+    if pos.pos_quantity == 0:
+        messages.error(request,("quantity already 0"))
+        return redirect('admin_site:pos')
+    else:
+        current_qty = int(pos.pos_quantity)
+        result = current_qty - 1
+        pos.pos_quantity = result
+        pos.save()
 
-    current_amount = int(pos.pos_amount)
-    current_price = int(pos.pos_price)
-    result = current_amount - current_price
-    pos.pos_amount = result
-    pos.save()
+        current_amount = int(pos.pos_amount)
+        current_price = int(pos.pos_price)
+        result = current_amount - current_price
+        pos.pos_amount = result
+        pos.save()
     
-    current_pcode = pos.pos_pcode
-    product = Product.objects.get(product_code = current_pcode)
-    current_stock = int(product.product_stock)
-    retrieve_stock = current_stock + 1
-    product.product_stock = retrieve_stock
-    product.save()
-    return redirect('admin_site:pos')
+        current_pcode = pos.pos_pcode
+        product = Product.objects.get(product_code = current_pcode)
+        current_stock = int(product.product_stock)
+        retrieve_stock = current_stock + 1
+        product.product_stock = retrieve_stock
+        product.save()
+        return redirect('admin_site:pos')
 
      
 @login_required(login_url='landing_page:login')
@@ -688,18 +693,18 @@ def cart_products(request, productid):
 
         # error trapping for 0 stock    
         if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
-            messages.success(request,("you already have on the cart"))
+            messages.error(request,("you already have on the cart"))
             return redirect('admin_site:all_products')
         elif  product.product_stock == 0:
-            messages.success(request,("Sorry, No Available Stock"))
+            messages.error(request,("Sorry, No Available Stock"))
             return redirect('admin_site:all_products')
 
         # error trapping for low stock
         elif avail_stock <  qty:
-            messages.success(request,("sorry available stock not enough"))
+            messages.error(request,("sorry available stock not enough"))
             return redirect('admin_site:all_products')
         elif product.product_status =="n/a":
-            messages.success(request,("Sorry, this Product is not Available"))
+            messages.error(request,("Sorry, this Product is not Available"))
             return redirect('admin_site:all_products')       
         else:
 
@@ -714,7 +719,7 @@ def cart_products(request, productid):
             
 
 
-            messages.info(request,("Successfully carting Products"))
+            messages.success(request,("Successfully carting Products"))
             return redirect('admin_site:pos')      
     
 
@@ -868,7 +873,7 @@ def search_reseller(request):
             list_reseller = Reseller.objects.filter(Q(reseller_status = "active"), Q(reseller_fname__contains=search) | Q(reseller_mname__contains=search) |Q(reseller_lname__contains=search) | Q(reseller_gender__contains=search) | Q(reseller_address__contains=search)| Q(reseller_email__contains=search)) 
             return render(request,'admin_site/user/list_reseller.html', {'list_reseller': list_reseller})
         else:
-           messages.success(request,("No records found!"))   
+           messages.error(request,("No records found!"))   
            return render(request,'admin_site/user/list_reseller.html')
 
 #search bar for reseller
@@ -907,7 +912,7 @@ def search_product(request):
                 product_name__icontains=search) | Q(product_unit__icontains=search) | Q(product_stock__icontains=search) | Q(product_status__icontains=search))
             return render(request, 'admin_site/products/product.html', {'list_products': list_products})
         else:
-           messages.success(request, ("No records found!"))
+           messages.error(request, ("No records found!"))
            return render(request, 'admin_site/products/product.html')
 
 #search bar for Products             
@@ -919,7 +924,7 @@ def search_transaction(request):
             list_transaction= Transaction.objects.filter(Q(transaction_orderstatus = "Pending"),    Q(transaction_no__icontains = search) | Q(transaction_fname__icontains = search) ) 
             return render(request,'admin_site/transaction/orders.html', {'list_transaction':list_transaction})
         else:
-           messages.success(request,("No records found!"))   
+           messages.error(request,("No records found!"))   
            return render(request,'admin_site/transaction/orders.html')
 
 @login_required(login_url='landing_page:login')
@@ -930,7 +935,7 @@ def search_actlog(request):
             list_reports = Activity_log.objects.filter(Q(user_name__icontains = search) |    Q(activity__icontains = search) | Q(role__icontains = search)).order_by('-id')
             return render(request,'admin_site/reports/act_log.html', {'list_reports':list_reports})
         else:
-           messages.success(request,("No records found!"))   
+           messages.error(request,("No records found!"))   
            return render(request,'admin_site/reports/act_log.html')
 
 @login_required(login_url='landing_page:login')

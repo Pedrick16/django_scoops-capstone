@@ -15,30 +15,13 @@
     {% endfor %}
 </script> -->
 {% for message in messages %}
-
-<p class="alert alert-success mt-3">{{ message }}</p>
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
 {% endfor %}
-<a href="{% url 'reseller_site:all_products' %}" class="btn btn-dark">Select Products</a>
-{% if list_pos %}
 
-    <br>
-    <form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
-        {% csrf_token %}
-        <div class="input-group">
-            <input type="text" class="form-control" name="search" placeholder="search" required>
-            <div class="input-group-append">
-                <button class="btn btn-success">Search</button>
-            </div>
-        </div>
-    </form>
-    
- 
-    
-    
-    
-        
-    
-  
+<div class="text-end">
+<a href="{% url 'reseller_site:all_products' %}" class="btn btn-dark">Select Products</a>
+</div>
+{% if list_pos %}
 
 
     <table class="table table-hover text-center" >
