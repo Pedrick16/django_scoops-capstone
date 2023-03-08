@@ -1,22 +1,27 @@
 {% extends 'admin_site/base.html' %}
 
 {% block content %}
-    <table>
+    <table class="table table-hover">
         <thead>
             <tr>
-                <th>Promo Code</th>
-                <th>Promo Name</th>
-                <th></th>
-                <th></th>
+                <th>Promo No</th>
+                <th>Amount</th>
+                <th>Discount</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         <tbody>
+            
+            {% for list in list_promo %}
             <tr>
-                <td></td>
-                <td></td>
-                <td></td>
-                <td></td>
+                <td>{{ list.promo_no }}</td>
+                <td>{{ list.promo_amount }}</td>
+                <td>{{ list.promo_discount }}</td>
+                <td>{{ list.promo_status }}</td>
+                <td><a href="" class="btn btn-dark">Edit</a></td>
             </tr>
+            {% endfor %}
         </tbody>
     </table>
 {% endblock content %}

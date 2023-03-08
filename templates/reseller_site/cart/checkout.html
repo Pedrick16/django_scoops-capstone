@@ -25,13 +25,17 @@
             <td>{{ list.pos_category }}</td>
             <td>{{ list.pos_name }}</td>
             <td>{{ list.pos_quantity }}</td>
-            <td>{{ list.pos_amount }}</td>
+            <td>{{ list.pos_ResellerAmount }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Grand Total:    {{ sum_amount.data }} </label>
+        <label style="font-weight: bolder;" > Amount:  <input type="text" style="text-align: right;"  value="{{ peso_sales }}" readonly>       </label>
+        <br>
+        <label style="font-weight: bolder;" > Discount:     <input type="text" style="text-align: right;" value="{{ sum_amount  }}" readonly>   </label>
+        <br>
+        <label style="font-weight: bolder;" > Grand Total:   <input type="text"style="text-align: right;" value="{{ sum_amount  }}" readonly>   </label>
     </div>
     <br>
     <br>
@@ -67,7 +71,6 @@
                 <h3 id="h3_date">Preferred Delivery date</h3>
                 <input type="date" id="input_date" name="prefer_date" class="form-control">
             </div>
-            
             
         </div>
         <br>

@@ -29,6 +29,7 @@ def dashboard_admin(request):
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
     transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Delivery").count()
     transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
+    
     context = {
         'transaction_OnlineSales': transaction_OnlineSales,
         'transaction_pos_payment':transaction_pos_payment,
@@ -329,12 +330,22 @@ def add_product(request):
         
     return render(request, 'admin_site/products/add_product.html')    
 
+
+
+#settings
 def settings_profile(request):
     list_profile = Profile.objects.filter(list_user = request.user)
     context={
         'list_profile':list_profile
     }
     return render(request,'admin_site/profile/settings_profile.html', context)
+
+def promo(request):
+    list_promo = Promo.objects.filter(promo_status = "active")
+    context={
+        'list_promo':list_promo
+    }
+    return render(request,'admin_site/settings/promo.html', context)
 
 
 def add_profile(request):
@@ -485,11 +496,14 @@ def pos(request):
     current_user = request.user
     list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(total =Sum('pos_amount'))['total']
+    list_pospayment = Pos_Payment.objects.filter(pos_status = "not Print")
     
 
     context = {
         'list_pos':list_pos,
-        'sum_amount':sum_amount
+        'sum_amount':sum_amount,
+        'list_pospayment':list_pospayment
+
         }
     return render(request, 'admin_site/pos/pos_admin.html', context)
 

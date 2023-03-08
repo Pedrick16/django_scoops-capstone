@@ -3,7 +3,9 @@ from admin_site.models import *
 from django.db.models import Sum
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-import random
+import random, locale
+from decimal import Decimal
+
 
 
 
@@ -34,11 +36,18 @@ def dashboard(request):
 def cart_reseller(request):
     total_item = Pos.objects.filter(pos_user = request.user).count()
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = request.user).all().aggregate(data =Sum('pos_ResellerAmount'))
+    sum_amount = Pos.objects.filter(pos_user = request.user).aggregate(sum_amount =Sum('pos_ResellerAmount'))
+    
+    locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
+    decimal_sales = Decimal(sum_amount['sum_amount'])
+    peso_sales = locale.currency(decimal_sales, grouping=True, symbol=True)
+    
+  
     context = {
         'list_cart':list_cart,
-        'sum_amount':sum_amount,
+        'peso_sales':peso_sales,
         'total_item':total_item
+      
     }
     return render(request, 'reseller_site/cart/checkout.html', context)
 

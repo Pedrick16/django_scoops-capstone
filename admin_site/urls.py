@@ -16,7 +16,6 @@ urlpatterns = [
     path('edit-reseller/<int:id>/', views.edit_reseller, name='edit_reseller'),
     path('archive-reseller/<int:resellerid>/', views.archive_reseller, name='archive_reseller'),
 
-    path('settings_profile/', views.settings_profile, name='settings_profile'),
     path('add_profile/', views.add_profile, name='add_profile'),
     path('update_profile/<int:profileid>', views.update_profile, name='update_profile'),
     path('My-profile/', views.my_profile, name='my_profile'),
@@ -49,7 +48,7 @@ urlpatterns = [
 
     path('pos/', views.pos ,name='pos'),
     path('pos-receipt/', views.pos_receipt ,name='pos_receipt'),
-    path('settings-receipt/', views.Click_receipt ,name='click_receipt'),
+    path('pos-receipt/', views.Click_receipt ,name='click_receipt'),
     
     path('pos/add-receipt/', views.pos_addreceipt ,name='add_receipt'),
     path('pos/receipt-process/', views.pos_receipt_process ,name='receipt_process'),
@@ -92,7 +91,9 @@ urlpatterns = [
     path('register/<int:inquiryid>/', views.register, name='register'),
     path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
 
-    #edit
+    #search 
+    path('settings_profile/', views.settings_profile, name='settings_profile'),
+    path('settings-promo/', views.promo, name='settings_promo'),
 
 
 

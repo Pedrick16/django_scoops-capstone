@@ -26,10 +26,18 @@
 
 
     
+    
+    {% if list_pospayment %}
+        
+    
+        
+
     {% if user.role == "admin" %}
     <a href="{% url 'admin_site:click_receipt' %}">Recent Activity</a>
      {% elif  user.role == "staff"%} 
      <a href="{% url 'admin_site:click_receipt' %}">Recent Activity</a>
+    {% endif %}
+    
     {% endif %}
 
     

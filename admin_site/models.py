@@ -122,7 +122,7 @@ class Transaction(models.Model):
     transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
     transaction_preferred_date = models.CharField(max_length=250,  null=True,   verbose_name='Preferred Date') 
-    transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Total Price')
+    transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True,default=0, verbose_name='Total Price')
     created_at =models.DateField(default=timezone.now,  verbose_name='Date Ordered')
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')
@@ -155,6 +155,14 @@ class Profile(models.Model):
 
     def __str__(self):
         return self.profile_email
+
+class Promo(models.Model):
+    PROMOSTATUS = ( ("",""),("active","active"),("inactive","inactive"))
+    promo_no = models.CharField(max_length=250, null=False, verbose_name="Promo Code")
+    promo_amount = models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
+    promo_discount = models.DecimalField(max_digits=10, decimal_places=2,null=True, verbose_name='Discount')
+    promo_status = models.CharField(max_length=250, choices= PROMOSTATUS, null=True, verbose_name='Promo Status')
+
 
 class Activity_log(models.Model):
     user_name = models.CharField(max_length=250, verbose_name=' Username')
