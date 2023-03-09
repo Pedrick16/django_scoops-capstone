@@ -2,6 +2,8 @@
 
 
 {% block content %}
+{% load humanize %}
+
 {% for message in messages %}
 <p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
 {% endfor %}
@@ -28,11 +30,7 @@
             <th>Unit</th>
             <th>Reseller Price</th>
 
-            {% if user.role == "admin" %}
-            <th>Price</th>
-            {% elif user.role == "staff" %}
-            <th>Price</th>
-            {% endif %}
+         
 
 
            
@@ -56,14 +54,9 @@
             <td>{{ list.product_name }}</td>
             <td>{{ list.product_category }}</td>
             <td>{{ list.product_unit }}</td>
-            <td>{{ list.product_ResellerPrice }}</td>
+            <td>&#8369;{{ list.product_ResellerPrice|floatformat:2|intcomma  }}</td>
             
-            {% if user.role == "admin" %}
-            <td>{{ list.product_price }}</td>
-            {% elif user.role == "staff" %}
-            <td>{{ list.product_price }}</td>
-                
-            {% endif %}
+        
                 
           
 

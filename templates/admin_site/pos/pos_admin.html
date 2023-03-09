@@ -6,6 +6,7 @@
 
 {% block content %}
 {% load static %}
+{% load humanize %}
 
 
 <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
@@ -87,13 +88,13 @@
                     <td>{{ list.pos_unit }}</td>
 
                     {% if user.role == "reseller" %}
-                    <td>{{ list.pos_reseller_price }}</td>
+                    <td>&#8369;{{ list.pos_reseller_price|floatformat:2|intcomma  }}</td>
                         
                     {% endif %}
 
 
                     {% if user.role == "admin" %}
-                    <td>{{ list.pos_price}}</td>
+                    <td>&#8369;{{ list.pos_price|floatformat:2|intcomma }}</td>
                     {% elif user.role == "staff" %}
                     <td>{{ list.pos_price}}</td>
                     {% endif %}
@@ -111,7 +112,7 @@
 
 
 
-                    <td>{{ list.pos_amount }} </td>
+                    <td>&#8369;{{ list.pos_amount|floatformat:2|intcomma }} </td>
                     <form method="POST" action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
                         <td><button type="submit" class="btn btn-dark">Cancel</button></td>
@@ -141,7 +142,10 @@
         <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
         {% csrf_token %}
         <label style="font-weight: bolder;">Total Amount:</label>
-        <input type="number" name="total_amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount"   readonly="readonly"> 
+        <input type="text"  style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}"  step="0.01" min="0" class="form-control"   readonly="readonly">
+
+        <!-- for hide -->
+        <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly">  
 
         <!-- <input type="text" id="total_amount"> -->
 
@@ -167,7 +171,7 @@
          <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
             {% csrf_token %}
             <label style="font-weight: bolder;">Total Amount:</label>
-            <input type="number" name="total_amount" style="font-weight: bolder;" value="{{ sum_amount }}" class="form-control" id="total_amount"   readonly="readonly"> 
+            <input type="number" name="total_amount" style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}" class="form-control" id="total_amount"   readonly="readonly"> 
 
             <!-- <input type="text" id="total_amount"> -->
 

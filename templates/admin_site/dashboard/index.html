@@ -2,16 +2,18 @@
 
 
 {% block content %}
+{% load humanize %}
 
   
      <br>
      <div class="fw-bolder">
       <label for="">Online Sales</label>
-      <input type="text" style="font-weight: bolder;" value="{{ transaction_OnlineSales }}"  class="form-control" readonly>
+      <input type="text" style="font-weight: bolder;" value="&#8369;{{ transaction_OnlineSales|floatformat:2|intcomma }}"  step="0.01" min="0"  class="form-control" readonly>
        <br>
-       <label for="">Walk-in Sales</label>
-      <input type="text" style="font-weight: bolder;" value="{{ transaction_pos_payment }}"  class="form-control" readonly>
+      <label for="">Walk-in Sales</label>
+      <input type="text" style="font-weight: bolder;" value="&#8369;{{ transaction_pos_payment|floatformat:2|intcomma }}"  step="0.01" min="0"  class="form-control" readonly>
       <br>
+    
       <!-- <label for="">Overall Transaction</label>
       <input type="text" style="font-weight: bolder;" value="{{ transaction_count }}"  class="form-control" disabled>
       <br> -->

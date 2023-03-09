@@ -12,14 +12,17 @@ $(document).ready(function(){
         e.preventDefault();
         var total_amount = parseInt($('#total_amount').val())
         var cash = parseInt($('#cash').val())
+
         var result =  cash - total_amount
         var msg = $('#msg')
         var pos_id = $('#pos_id').val()
 
+        var formattedValue = result.toLocaleString('es-MX', { style: 'currency', currency: 'MXN' });
+
 
         if(cash >= total_amount){
             $('#get_id').val(pos_id)
-            $('#change').val(result)
+            $('#change').val(formattedValue)
             $('#btn-receipt').removeAttr('hidden');
             
             // $('#form').submit()

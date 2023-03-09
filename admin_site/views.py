@@ -7,7 +7,9 @@ from django.core.mail import send_mail
 from datetime import datetime,date
 from landing_page.forms import SignUpForm
 from landing_page.models import User
-import random
+
+import random, locale
+from decimal import Decimal
 
 
 
@@ -135,6 +137,8 @@ def add_reseller(request):
         email = request.POST['email']
         valid_id = request.POST['valid-ID']
         business_permit = request.POST['Business-permit']
+
+
 
 
         #finding if email already exist
@@ -305,15 +309,25 @@ def add_product(request):
         pcategory = request.POST['category']
         pname = request.POST['product_name']
         product_unit = request.POST['unit']
-        reseller_price = request.POST['reseller_price']
-        pprice = request.POST['price']
+        r_price = int(request.POST['reseller_price'])
+        pprice = int(request.POST['price'])
         pstock = 0
         pstatus = "not available"
+
+        # locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
+        # decimal_sales = Decimal(r_price)
+        # reseller_price = locale.currency(decimal_sales, grouping=True, symbol=True)
+
+        # locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
+        # decimal_sales = Decimal(pprice)
+        # pos_price = locale.currency(decimal_sales, grouping=True, symbol=True)
+
+
         while Product.objects.filter(product_code = product_code) is None:
             product_code = 'S4U'+str(random.randint(1111111,9999999))
 
         #inserting to database 
-        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_ResellerPrice =reseller_price, product_price = pprice, product_stock = pstock, product_status = pstatus)
+        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_ResellerPrice =r_price, product_price = pprice, product_stock = pstock, product_status = pstatus)
         product.save()
         
         #activity log
@@ -499,6 +513,7 @@ def pos(request):
     list_pospayment = Pos_Payment.objects.filter(pos_status = "not Print")
     
 
+
     context = {
         'list_pos':list_pos,
         'sum_amount':sum_amount,
@@ -679,8 +694,8 @@ def cart_products(request, productid):
         qty = int(request.POST['quantity'])
         p_stock = int(request.POST['stock'])
         pcode = request.POST['product_code']
-        p_reseller_price = float(request.POST['product_reseller_price'])
-        p_price = float(request.POST['product_price'])
+        p_reseller_price = int(request.POST['product_reseller_price'])
+        p_price = int(request.POST['product_price'])
         p_unit = request.POST['product_unit']
         p_category = request.POST['product_category']
         p_name = request.POST['product_name']
@@ -729,6 +744,9 @@ def cart_products(request, productid):
             #inserting product in pos table
             pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit,pos_reseller_price =p_reseller_price , pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart,  pos_ResellerAmount =reseller_cart )
             pos.save()   
+
+            pos_payment = Pos_Payment.objects.filter(pos_user = request.user, pos_status="not Print")
+            pos_payment.delete()
 
             
 

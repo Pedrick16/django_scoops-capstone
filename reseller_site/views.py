@@ -36,16 +36,14 @@ def dashboard(request):
 def cart_reseller(request):
     total_item = Pos.objects.filter(pos_user = request.user).count()
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = request.user).aggregate(sum_amount =Sum('pos_ResellerAmount'))
+    sum_amount = Pos.objects.filter(pos_user = request.user).aggregate(sum_amount =Sum('pos_ResellerAmount'))['sum_amount']
     
-    locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
-    decimal_sales = Decimal(sum_amount['sum_amount'])
-    peso_sales = locale.currency(decimal_sales, grouping=True, symbol=True)
+    
     
   
     context = {
         'list_cart':list_cart,
-        'peso_sales':peso_sales,
+        'sum_amount':sum_amount,
         'total_item':total_item
       
     }
@@ -129,9 +127,8 @@ def checkout(request):
             NewTransaction.transaction_contactno= request.POST.get('contact_no')
             NewTransaction.transaction_doption = request.POST.get('option')
             NewTransaction.transaction_preferred_date = preferred_date 
-            NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
+            NewTransaction.transaction_totalprice = int(request.POST.get('total_amount'))
             NewTransaction.transaction_orderstatus = status
-
 
         
             while Transaction.objects.filter(transaction_no = trackno) is None:
@@ -171,7 +168,7 @@ def checkout(request):
             NewTransaction.transaction_contactno= request.POST.get('contact_no')
             NewTransaction.transaction_doption = request.POST.get('option')
             NewTransaction.transaction_preferred_date = no_specific
-            NewTransaction.transaction_totalprice = float(request.POST.get('total_amount'))
+            NewTransaction.transaction_totalprice = request.POST.get('total_amount')
             NewTransaction.transaction_orderstatus = status
 
         
@@ -202,7 +199,7 @@ def checkout(request):
                     OrderItem_amount= item.pos_amount
                 )
                 pos.delete()
-            messages.success(request, ("Please wait for your order"))
+            messages.success(request, ("Please wait for your orders"))
             return redirect('reseller_site:transaction_orders')
 
 

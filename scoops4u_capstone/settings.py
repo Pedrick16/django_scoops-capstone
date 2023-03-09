@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'reseller_site',
     'staff_site',
     'rider_site',
+    'django.contrib.humanize',
 ]
 
 MIDDLEWARE = [
@@ -59,6 +60,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'scoops4u_capstone.urls'

@@ -52,17 +52,12 @@ class Product(models.Model):
     product_category =  models.CharField(max_length=200, verbose_name='Category')
     product_name=  models.CharField(max_length=200, verbose_name='Product Name')
     product_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    product_ResellerPrice =  models.DecimalField( max_digits=10,  decimal_places=2,null=True, verbose_name='Reseller Price')
-    product_price =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Price')
+    product_ResellerPrice =   models.BigIntegerField(null=True, verbose_name='Reseller Price')
+    product_price =   models.BigIntegerField(null=True, verbose_name='Pos Price')
     product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
 
-    # def update_status(self):
-    #     if self.product_stock <= 100:
-    #         self.product_status = "low stock"
-    #         self.update()
-
-
+   
     def __str__(self):
         return self.product_code
 
@@ -85,11 +80,11 @@ class Pos(models.Model):
     pos_category =  models.CharField(max_length=200, verbose_name='Category')
     pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
     pos_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    pos_reseller_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Reseller Price')
-    pos_price =   models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Price')
-    pos_quantity =  models.BigIntegerField( null=True, verbose_name='quantity')
-    pos_ResellerAmount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Reseller Amount')
-    pos_amount =  models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Pos Amount')
+    pos_reseller_price =   models.BigIntegerField(null=True, verbose_name='Reseller Price')
+    pos_price =   models.BigIntegerField(null=True, verbose_name='POS Price')
+    pos_quantity =  models.BigIntegerField(null=True, verbose_name='quantity')
+    pos_ResellerAmount =   models.BigIntegerField(null=True, verbose_name='Reseller Amount')
+    pos_amount =  models.BigIntegerField(null=True, verbose_name='POS Amount')
 
 
     def __str__(self):
@@ -99,7 +94,7 @@ class Pos_Payment(models.Model):
     STATUS = (("Printed","Printed"),("not Print","not Print"))
     pos_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
     pos_no = models.CharField(max_length=200, null=True,  verbose_name='Pos No')
-    pos_TotalAmount =  models.DecimalField( max_digits=12, decimal_places=2,null=True, verbose_name='Total Amount')
+    pos_TotalAmount =  models.BigIntegerField(null=True, verbose_name='Total Amount')
     pos_cash = models.BigIntegerField( null=True, verbose_name='Cash')
     pos_change =  models.DecimalField(  max_digits=12, decimal_places=2,null=True, verbose_name='Change')
     pos_status = models.CharField(max_length=250, null=True, choices=STATUS, verbose_name='Status')
@@ -122,7 +117,7 @@ class Transaction(models.Model):
     transaction_contactno = models.BigIntegerField( null=True, verbose_name='Contact Number')
     transaction_doption = models.CharField(max_length=250, choices= DELIVERY_OPTION, null=True, verbose_name='Delivery Option')
     transaction_preferred_date = models.CharField(max_length=250,  null=True,   verbose_name='Preferred Date') 
-    transaction_totalprice =  models.DecimalField( max_digits=10, decimal_places=2,null=True,default=0, verbose_name='Total Price')
+    transaction_totalprice =  models.BigIntegerField(null=True, default=0, verbose_name='Total Price')
     created_at =models.DateField(default=timezone.now,  verbose_name='Date Ordered')
     transaction_orderstatus = models.CharField(max_length=250, choices=ORDERSTATUS, null=True, default='Pending',verbose_name='Status')
     transaction_delivered = models.DateTimeField(null=True, blank=True, verbose_name='Delivered Time')

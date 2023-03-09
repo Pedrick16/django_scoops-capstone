@@ -2,6 +2,7 @@
 
 
 {% block content %}
+{% load humanize %}
     <div id="form-date" class="text-end">
         <form action="{% url 'admin_site:search_pos_sales' %}" method="post">
             {% csrf_token %}
@@ -24,14 +25,14 @@
                 {% for list in pos_payment %}
                 <tr>
                     <td>{{ list.id }}</td>
-                    <td>{{ list.pos_TotalAmount}}</td>
+                    <td>&#8369;{{ list.pos_TotalAmount|floatformat|intcomma}}</td>
                     <td>{{ list.pos_date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>
     </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Total Sales: {{ list_transaction }}    </label>
+        <label style="font-weight: bolder;" > Total Sales: &#8369;{{ list_transaction|floatformat:2|intcomma }}    </label>
     </div>
 
 {% endblock content %}

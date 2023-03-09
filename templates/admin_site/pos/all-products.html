@@ -61,12 +61,12 @@
             <td>{{ list.product_name }}</td>
             <td>{{ list.product_category }}</td>
             <td>{{ list.product_unit }}</td>
-            <td>{{ list.product_ResellerPrice }}</td>
+            <td>&#8369;{{ list.product_ResellerPrice|floatformat:2 }}</td>
             
             {% if user.role == "admin" %}
-            <td>{{ list.product_price }}</td>
+            <td>&#8369;{{ list.product_price|floatformat:2 }}</td>
             {% elif user.role == "staff" %}
-            <td>{{ list.product_price }}</td>
+            <td>&#8369;{{ list.product_price|floatformat:2 }}</td>
                 
             {% endif %}
                 

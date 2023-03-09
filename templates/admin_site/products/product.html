@@ -2,6 +2,8 @@
 
 
 {% block content %}
+{% load humanize %}
+
 
 {% for message in messages %}
 <p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
@@ -46,8 +48,8 @@
         <td>{{ list.product_name }}</td>
         <td>{{ list.product_category }}</td>
         <td>{{ list.product_unit }}</td>
-        <td>{{ list.product_ResellerPrice }}</td>
-        <td>{{ list.product_price }}</td>
+        <td>&#8369;{{ list.product_ResellerPrice|floatformat:2|intcomma  }}</td>
+        <td>&#8369;{{ list.product_price|floatformat:2|intcomma}}</td>
         <td>{{ list.product_stock }}</td>
         <td>{{ list.product_status }}</td>
     </tr>

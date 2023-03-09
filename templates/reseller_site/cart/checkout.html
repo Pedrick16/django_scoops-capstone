@@ -4,6 +4,7 @@
 {% block content %}
 
 {% load static %}
+{% load humanize %}
 
 {% if list_cart %}
     
@@ -25,13 +26,13 @@
             <td>{{ list.pos_category }}</td>
             <td>{{ list.pos_name }}</td>
             <td>{{ list.pos_quantity }}</td>
-            <td>{{ list.pos_ResellerAmount }}</td>
+            <td>&#8369;{{ list.pos_ResellerAmount|floatformat|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Amount:  <input type="text" style="text-align: right;"  value="{{ peso_sales }}" readonly>       </label>
+        <label style="font-weight: bolder;" > Amount:   &#8369;{{sum_amount|floatformat:2|intcomma}}      </label>
         <br>
         <label style="font-weight: bolder;" > Discount:     <input type="text" style="text-align: right;" value="{{ sum_amount  }}" readonly>   </label>
         <br>
@@ -41,7 +42,7 @@
     <br>
     <form action="{% url 'reseller_site:checkout' %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="total_amount"value="{{ sum_amount.data }}">
+        <input type="hidden" name="total_amount"value="{{ sum_amount }}">
         <h1 class="text-center" id="bdetails">Basic Details</h1>
         <label for="" id="fname">First Name</label>
         <input type="text" placeholder="Enter your First Name" class="form-control" name="fname" required>

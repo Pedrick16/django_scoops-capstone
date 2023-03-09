@@ -1,5 +1,6 @@
 
 {% load static %}
+{% load humanize %}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -44,8 +45,10 @@
 
                 <div>
                     <p class="product" style="font-weight: bolder;">{{ list.pos_name }}</p>
-                    <p class="price">{{ list.pos_amount }}</p>
-                    <p>{{ list.pos_quantity }} X {{ list.pos_price }}</p>
+                    <p class="price">&#8369;{{ list.pos_amount|floatformat:2|intcomma }}</p>
+                    <p>{{ list.pos_quantity }} X &#8369;{{ list.pos_price|floatformat:2|intcomma }}</p>
+
+                    
                 </div>
                 {% endfor %}
 
@@ -57,13 +60,13 @@
                     <h3 class="text-center">Total Amount</h3>
 
                     <label for="" style="font-weight: bolder;"> total amount</label>
-                    <p class="total_price">{{ sum_amount }} </p>
+                    <p class="total_price">&#8369;{{ sum_amount|floatformat:2|intcomma }} </p>
                     <br>
                     <label for="" style="font-weight: bolder;"> cash</label>
-                    <p class="cash">{{ pos_payment.pos_cash }}</p>
+                    <p class="cash">&#8369;{{ pos_payment.pos_cash|floatformat:2|intcomma }}</p>
                     <br>
                     <label for="" style="font-weight: bolder;">Change</label>
-                    <p class="Change">{{ pos_payment.pos_change }}</p>
+                    <p class="Change">&#8369;{{ pos_payment.pos_change|floatformat:2|intcomma }}</p>
                     <input type="hidden" name="payment_id" id="payment_id" value="{{ pos_payment.id }}">
                 </div>
 
