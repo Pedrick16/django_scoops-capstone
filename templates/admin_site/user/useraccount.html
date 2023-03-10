@@ -1,11 +1,10 @@
 {% extends 'admin_site/base.html' %}
 
-
 {% block content %}
 {% for message in messages %}
 <p class="alert alert-success mt-3">{{ message }}</p>
 {% endfor %}
-
+<a href="{% url 'admin_site:add_useraccount' %}" class="btn btn-dark">add account</a>
     <table class="table table-hover">
         <thead>
             <tr>

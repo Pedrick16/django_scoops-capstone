@@ -2,6 +2,10 @@
 
 
 {% block content %}
+{% load humanize%}
+
+
+    
 {% if list_transaction %} 
 
 {% for message in messages %}
@@ -39,7 +43,7 @@
             <tr>
                 <td>{{ list.created_at}}</td>
                 <td>{{ list.transaction_no }}</td>
-                <td>{{ list.transaction_totalprice }}</td>
+                <td>&#8369;{{ list.transaction_totalprice|floatformat|intcomma }}</td>
                 <td>{{ list.transaction_orderstatus }}</td>
 
                 <form action="{% url 'reseller_site:transaction_view' list.id %} " method="GET">

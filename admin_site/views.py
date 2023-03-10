@@ -10,12 +10,7 @@ from landing_page.models import User
 
 import random, locale
 from decimal import Decimal
-
-
-
-
 from django.contrib.auth.decorators import login_required, permission_required
-
 
 
 # Create your views here.
@@ -29,7 +24,7 @@ def dashboard_admin(request):
     transaction_count = Transaction.objects.count()
     transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
     transaction_completed = Transaction.objects.filter(transaction_orderstatus = "Completed").count()
-    transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Delivery").count()
+    transaction_shipped = Transaction.objects.filter(transaction_orderstatus = "Out for Shipping").count()
     transaction_decline = Transaction.objects.filter(transaction_orderstatus = "Decline").count()
     
     context = {
@@ -43,6 +38,17 @@ def dashboard_admin(request):
     }
     return render(request, 'admin_site/dashboard/index.html', context)
 
+
+
+def add_useraccount(request):
+    if request.method =="POST":
+        form = SignUpForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('admin_site:send_email')
+    else:
+        form = SignUpForm()
+    return render(request, 'admin_site/user/add_useraccount.html',{'form':form})     
 
 
 def register(request, inquiryid):
@@ -122,6 +128,8 @@ def list_inquiry(request):
 def add_reseller(request):
     if request.method =="POST":
 
+
+
         #activity log function
         current_user = request.user
         activity = "Adding Reseller"
@@ -182,7 +190,6 @@ def edit_reseller(request,id):
     context={
         'list_reseller':list_reseller,
     }
-
     return render(request,'admin_site/edit/edit_reseller.html',context)   
 
 
@@ -212,22 +219,8 @@ def archive_reseller(request,resellerid):
         return redirect('admin_site:list_reseller')
 
 
-#SETTINGS FEATURES
-@login_required(login_url='landing_page:login')
-def list_archive(request):
-    list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "inactive") 
-    context = {'list_reseller':list_reseller}
-    return render(request, 'admin_site/user/archive.html', context)    
 
-@login_required(login_url='landing_page:login')
-def retrieve_reseller(request,id):
-    # changing status to actice
-    reseller = Reseller.objects.get(id = id)
-    status = "active"
-    reseller.reseller_status = status
-    reseller.save()
-    messages.success(request,("Successfully Retrieved"))
-    return redirect('admin_site:list_archive')
+
 
 
 @login_required(login_url='landing_page:login')
@@ -354,12 +347,23 @@ def settings_profile(request):
     }
     return render(request,'admin_site/profile/settings_profile.html', context)
 
-def promo(request):
-    list_promo = Promo.objects.filter(promo_status = "active")
-    context={
-        'list_promo':list_promo
-    }
-    return render(request,'admin_site/settings/promo.html', context)
+
+
+@login_required(login_url='landing_page:login')
+def list_archive(request):
+    list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "inactive") 
+    context = {'list_reseller':list_reseller}
+    return render(request, 'admin_site/user/archive.html', context)    
+
+@login_required(login_url='landing_page:login')
+def retrieve_reseller(request,id):
+    # changing status to actice
+    reseller = Reseller.objects.get(id = id)
+    status = "active"
+    reseller.reseller_status = status
+    reseller.save()
+    messages.success(request,("Successfully Retrieved"))
+    return redirect('admin_site:list_archive')
 
 
 def add_profile(request):
@@ -413,10 +417,8 @@ def my_profile(request):
 
 
 
-  
-       
 #FOR INVENTORY FEATURES
-      
+
 #list inventory 
 @login_required(login_url='landing_page:login')
 def inventory(request):
@@ -773,18 +775,23 @@ def cart_products(request, productid):
 @login_required(login_url='landing_page:login') 
 def Transaction_orders(request):
     list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Pending")).order_by('-id')
+    transaction_pending = Transaction.objects.filter(transaction_orderstatus = "Pending").count()
+    context = {
+        'list_transaction':list_transaction,
+        'transaction_pending':transaction_pending
+    }
+    return render(request, 'admin_site/transaction/orders.html', context)
+
+
+@login_required(login_url='landing_page:login') 
+def Transaction_outshipping(request):
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Shipping")).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }
     return render(request, 'admin_site/transaction/orders.html', context)
 
-@login_required(login_url='landing_page:login') 
-def Transaction_outshipping(request):
-    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Delivery")).order_by('-id')
-    context = {
-        'list_transaction':list_transaction
-    }
-    return render(request, 'admin_site/transaction/orders.html', context)
+
 
 @login_required(login_url='landing_page:login') 
 def Transaction_completed(request):
@@ -801,10 +808,13 @@ def delivery_process(request):
     if request.method == "POST":
         transaction_no = request.POST['transaction_no']
         transaction = Transaction.objects.get(transaction_no = transaction_no)
-        transaction.transaction_orderstatus = "Out for Delivery"
+        transaction.transaction_orderstatus = "Out for Shipping"
         transaction.save()
-        messages.success(request,("Out for Delivery"))
+        messages.success(request,("Out for Shipping"))
         return redirect('admin_site:transaction_outshipping')
+
+
+
 
 
 @login_required(login_url='landing_page:login')
@@ -818,40 +828,31 @@ def completed_process(request):
         return redirect('admin_site:transaction_completed')
 
 
+
+
+
+
+
 @login_required(login_url='landing_page:login') 
 def transaction_view(request, id):
     if request.method == "GET":
         transaction = Transaction.objects.get(id = id)
 
-        
-       
         transaction_no = transaction.transaction_no
         list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
 
-       
         list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
-       
         context = {
             'list_orderitem':list_orderitem,
             'list_total':list_total,
             'list_transaction':transaction,
-     
         }
     return render(request, 'admin_site/transaction/view_orders.html', context)
 
 
 
 
-
-
-
-
-
-
-
-
 #FOR REPORTS FEATURES
-
 #reports VIEW
 @login_required(login_url='landing_page:login') 
 def report_actlog(request):
@@ -862,14 +863,17 @@ def report_actlog(request):
     return render(request, 'admin_site/reports/act_log.html', context)
 
 
+
 @login_required(login_url='landing_page:login') 
 def report_pos_sales(request):
     pos_payment = Pos_Payment.objects.filter(pos_status = 'Printed')
     context = {
         'pos_payment':pos_payment
     }
-
     return render(request, 'admin_site/reports/pos_sales.html',context)
+
+
+
 
 @login_required(login_url='landing_page:login') 
 def report_online_sales(request):
@@ -878,12 +882,6 @@ def report_online_sales(request):
         'transaction':transaction
     }
     return render(request, 'admin_site/reports/online_sales.html',context) 
-
-
-
-
-
-
 
 
 
@@ -932,6 +930,7 @@ def search_inventory(request):
            messages.success(request,("No records found!"))   
            return render(request,'admin_site/inventory/add-stock.html')
 
+    
 #search bar for Products             
 
 
@@ -946,6 +945,7 @@ def search_product(request):
         else:
            messages.error(request, ("No records found!"))
            return render(request, 'admin_site/products/product.html')
+
 
 #search bar for Products             
 @login_required(login_url='landing_page:login')
@@ -970,6 +970,7 @@ def search_actlog(request):
            messages.error(request,("No records found!"))   
            return render(request,'admin_site/reports/act_log.html')
 
+
 @login_required(login_url='landing_page:login')
 def search_date_actlog(request):
     if request.method == "POST":
@@ -977,7 +978,7 @@ def search_date_actlog(request):
         end_date = request.POST['end_date']
 
         list_reports = Activity_log.objects.filter(date_time__date__range=[start_date, end_date])
-     
+
         context ={
             'list_reports':list_reports
         }

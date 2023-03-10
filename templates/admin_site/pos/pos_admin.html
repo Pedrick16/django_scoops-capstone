@@ -115,7 +115,7 @@
                     <td>&#8369;{{ list.pos_amount|floatformat:2|intcomma }} </td>
                     <form method="POST" action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
-                        <td><button type="submit" class="btn btn-dark">Cancel</button></td>
+                        <td><button type="submit" class="btn btn-dark">Remove</button></td>
                         <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
                         <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
                         <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">

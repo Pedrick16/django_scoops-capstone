@@ -106,7 +106,7 @@ class Pos_Payment(models.Model):
 
 
 class Transaction(models.Model):
-    ORDERSTATUS = ( ("Pending","Pending"),("Out for Delivery","Out for Delivery"),("Completed","Completed"))
+    ORDERSTATUS = ( ("Pending","Pending"),("Out for Shipping","Out for Shipping"),("Completed","Completed"))
     DELIVERY_OPTION = ( ("pickup","pickup"),("delivery","delivery"))
 
     transaction_no =  models.CharField(unique=True, max_length=200, null=False,verbose_name='Transaction Number')
@@ -154,8 +154,8 @@ class Profile(models.Model):
 class Promo(models.Model):
     PROMOSTATUS = ( ("",""),("active","active"),("inactive","inactive"))
     promo_no = models.CharField(max_length=250, null=False, verbose_name="Promo Code")
-    promo_amount = models.DecimalField( max_digits=10, decimal_places=2,null=True, verbose_name='Amount')
-    promo_discount = models.DecimalField(max_digits=10, decimal_places=2,null=True, verbose_name='Discount')
+    promo_amount = models.BigIntegerField(null=True, verbose_name='Amount')
+    promo_discount = models.BigIntegerField(null=True, verbose_name='Discount')
     promo_status = models.CharField(max_length=250, choices= PROMOSTATUS, null=True, verbose_name='Promo Status')
 
 

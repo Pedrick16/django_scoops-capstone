@@ -8,7 +8,8 @@ app_name = 'admin_site'
 urlpatterns = [
     path('', views.dashboard_admin, name='dashboard'),
     path('user-list/', views.user_list , name='user_list'),
-    path('edit-user-list/<int:userid>/', views.edit_user_account , name='edit_user_account'),
+    path('edit-user-list/<int:userid>/', views.edit_user_account, name='edit_user_account'),
+    path('add-useraccount/', views.add_useraccount, name='add_useraccount'),
     path('update-user-list/<int:userid>/', views.update_user_account , name='update_user_account'),
 
     path('list-inquiry/', views.list_inquiry, name='list_inquiry'),
@@ -93,8 +94,6 @@ urlpatterns = [
 
     #search 
     path('settings_profile/', views.settings_profile, name='settings_profile'),
-    path('settings-promo/', views.promo, name='settings_promo'),
-
-
+   
 
 ]

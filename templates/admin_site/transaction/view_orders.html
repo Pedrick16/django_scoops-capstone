@@ -2,6 +2,7 @@
 
 
 {% block content %}
+{% load humanize %}
 
 {% if list_orderitem %}
 <div class="text-end">
@@ -30,13 +31,13 @@
             <td>{{ list.OrderItem_category }}</td>
             <td>{{ list.OrderItem_unit}}</td>
             <td>{{ list.OrderItem_quantity}}</td>
-            <td>{{ list.OrderItem_amount }}</td>
+            <td>&#8369;{{ list.OrderItem_amount|floatformat:2|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Grand Total:    {{ list_total.data }} </label>
+        <label style="font-weight: bolder;" > Grand Total:    <td>&#8369;{{ list_total.data|floatformat:2|intcomma }} </label>
         <br>
         <label style="font-weight: bolder;" > Transaction No:  {{ list_transaction.transaction_no}}   </label>
  
@@ -86,7 +87,7 @@
         </form>
         {% endif %}
 
-        {% if list_transaction.transaction_orderstatus == "Out for Delivery" %}
+        {% if list_transaction.transaction_orderstatus == "Out for Shipping" %}
         <form action="{% url 'admin_site:completed_process' %}" method="POST" class="text-end">
             {% csrf_token %}
             <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">

@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+{% load humanize %}
 {% if list_orderitem %}
 <div class="text-end">
     <a href="{% url 'reseller_site:transaction_orders' %}" class="btn btn-dark">Back</a>
@@ -29,13 +29,13 @@
             <td>{{ list.OrderItem_category }}</td>
             <td>{{ list.OrderItem_unit}}</td>
             <td>{{ list.OrderItem_quantity}}</td>
-            <td>{{ list.OrderItem_amount }}</td>
+            <td>&#8369;{{ list.OrderItem_amount|floatformat|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Grand Total:    {{ list_total.data }} </label><br>
+        <label style="font-weight: bolder;" > Grand Total:    &#8369;{{ list_total|floatformat|intcomma }} </label><br>
         <label style="font-weight: bolder;" > Transaction Number:    {{ list_transaction.transaction_no }} </label>
  
         

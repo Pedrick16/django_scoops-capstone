@@ -2,10 +2,12 @@
 
 
 {% block content %}
+{% load humanize %}
 {% for message in messages %}
 
 <p class="alert alert-success mt-3">{{ message }}</p>
 {% endfor %}
+
 {% if list_transaction %} 
 <form action="{% url 'admin_site:search_transaction' %}" method="GET" class="my-3 ">
     {% csrf_token %}
@@ -24,11 +26,11 @@
     <table class="table table-hover text-center" >
         <thead>
             <tr>
-               <th>Order Date</th>
-               <th>Transaction NUmber</th>
-               <th>Total Price</th>
-               <th>Status</th>
-               <th>Action</th>
+                <th>Order Date</th>
+                <th>Transaction Number</th>
+                <th>Total Price</th>
+                <th>Status</th>
+                <th>Action</th>
             </tr>
         </thead>
         
@@ -38,15 +40,13 @@
             <tr>
                 <td>{{ list.created_at}}</td>
                 <td>{{ list.transaction_no }}</td>
-                <td>{{ list.transaction_totalprice }}</td>
+                <td>&#8369;{{ list.transaction_totalprice|floatformat:2|intcomma }}</td>
                 <td>{{ list.transaction_orderstatus }}</td>
 
                 <form action="{% url 'admin_site:transaction_view' list.id  %} " method="GET" >
                     {% csrf_token %}
-                     <td><input type="submit" class="btn btn-dark" value="View"></td>
- 
+                    <td><input type="submit" class="btn btn-dark" value="View"></td>
                 </form>
-
             </tr>
             {% endfor %}
         </tbody>

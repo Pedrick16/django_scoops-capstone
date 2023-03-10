@@ -32,11 +32,14 @@
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Amount:   &#8369;{{sum_amount|floatformat:2|intcomma}}      </label>
+        <label style="font-weight: bolder;" > Amount:   <input type="text" style="text-align: right;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}" readonly>        </label>
         <br>
-        <label style="font-weight: bolder;" > Discount:     <input type="text" style="text-align: right;" value="{{ sum_amount  }}" readonly>   </label>
+        
+  
+            
+        <label style="font-weight: bolder;" > Discount:     <input type="text" style="text-align: right;" value=" &#8369;{{ promo|floatformat:2|intcomma  }}" readonly>   </label>
         <br>
-        <label style="font-weight: bolder;" > Grand Total:   <input type="text"style="text-align: right;" value="{{ sum_amount  }}" readonly>   </label>
+        <label style="font-weight: bolder;" > Grand Total:   <input type="text"style="text-align: right;" value="" readonly>   </label>
     </div>
     <br>
     <br>

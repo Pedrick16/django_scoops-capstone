@@ -44,7 +44,7 @@ class SignUpForm(UserCreationForm):
             'name':"password2",
             'id':'password2',
             'type':'password',
-            'placeholder':'password',
+            'placeholder':'re-enter password',
             'maxlength':'40',
             'minlength':'12'
         })

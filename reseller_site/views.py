@@ -14,7 +14,7 @@ from decimal import Decimal
 def dashboard(request):
     list_numberorder =    Transaction.objects.filter(transaction_user = request.user).count()
     transaction_pending = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Pending").count()
-    transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Delivery").count()
+    transaction_shipped = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Out for Shipping").count()
     transaction_decline = Transaction.objects.filter(transaction_user = request.user,transaction_orderstatus = "Decline").count()
     context={
         'list_numberorder':list_numberorder,
@@ -38,14 +38,26 @@ def cart_reseller(request):
     list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
     sum_amount = Pos.objects.filter(pos_user = request.user).aggregate(sum_amount =Sum('pos_ResellerAmount'))['sum_amount']
     
+    times_amount = int(sum_amount) * 0.02
+
+
+
+    # promo = Promo.objects.get(promo_amount =sum_amount)
+
+    # if sum_amount >= 5000:
+    #     promo = 100
+        
+    # elif
+
+
+
     
-    
-  
+
     context = {
         'list_cart':list_cart,
         'sum_amount':sum_amount,
-        'total_item':total_item
-      
+        'total_item':total_item,
+        'promo':times_amount
     }
     return render(request, 'reseller_site/cart/checkout.html', context)
 
@@ -196,7 +208,7 @@ def checkout(request):
                     OrderItem_name = item.pos_name,
                     OrderItem_unit = item.pos_unit,
                     OrderItem_quantity  = item.pos_quantity,
-                    OrderItem_amount= item.pos_amount
+                    OrderItem_amount= item.pos_ResellerAmount
                 )
                 pos.delete()
             messages.success(request, ("Please wait for your orders"))
@@ -310,7 +322,7 @@ def transaction_view(request,id):
         transaction_no = transaction.transaction_no
         list_orderitem = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).order_by('-id')
 
-        list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).all().aggregate(data=Sum('OrderItem_amount'))
+        list_total = OrderItem.objects.filter(OrderItem_transactionNo = transaction_no).aggregate(data=Sum('OrderItem_amount'))['data']
 
         context = {
             'list_orderitem':list_orderitem,
