@@ -82,21 +82,21 @@
                 
                 {% for list in  list_pos %}       
                 <tr>
-                    <td>{{ list.pos_pcode }}</td>
-                    <td>{{ list.pos_name }}</td>
-                    <td>{{ list.pos_category }}</td>
-                    <td>{{ list.pos_unit }}</td>
+                    <td>{{ list.cart_pcode }}</td>
+                    <td>{{ list.cart_name }}</td>
+                    <td>{{ list.cart_category }}</td>
+                    <td>{{ list.cart_unit }}</td>
 
                     {% if user.role == "reseller" %}
-                    <td>&#8369;{{ list.pos_reseller_price|floatformat:2|intcomma  }}</td>
+                    <td>&#8369;{{ list.cart_reseller_price|floatformat:2|intcomma  }}</td>
                         
                     {% endif %}
 
 
                     {% if user.role == "admin" %}
-                    <td>&#8369;{{ list.pos_price|floatformat:2|intcomma }}</td>
+                    <td>&#8369;{{ list.cart_price|floatformat:2|intcomma }}</td>
                     {% elif user.role == "staff" %}
-                    <td>{{ list.pos_price}}</td>
+                    <td>{{ list.cart_price}}</td>
                     {% endif %}
 
                     
@@ -104,7 +104,7 @@
                     <td>
                         <a href="{% url 'admin_site:minus_qty' list.id  %}" class="btn btn-dark" id="d_minus">-</a>
                         <button
-                            class="btn btn-success" >{{ list.pos_quantity }}
+                            class="btn btn-success" >{{ list.cart_quantity }}
                         </button>
                             <a href="{% url 'admin_site:add_qty' list.id  %}"
                             class="btn btn-dark">+</a>
@@ -112,12 +112,12 @@
 
 
 
-                    <td>&#8369;{{ list.pos_amount|floatformat:2|intcomma }} </td>
+                    <td>&#8369;{{ list.cart_amount|floatformat:2|intcomma }} </td>
                     <form method="POST" action="{% url 'admin_site:pos_cancel' list.id %}" onsubmit="return submitForm(this);">
                         {% csrf_token %}
                         <td><button type="submit" class="btn btn-dark">Remove</button></td>
-                        <input type="hidden" name="current_pcode" value="{{ list.pos_pcode }}">
-                        <input type="hidden" name="current_qty" value="{{ list.pos_quantity }}">
+                        <input type="hidden" name="current_pcode" value="{{ list.cart_pcode }}">
+                        <input type="hidden" name="current_qty" value="{{ list.cart_quantity }}">
                         <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
                     </form>
                 </tr>
@@ -224,7 +224,7 @@
 
 
 
-<script src="{% static 'js/pos.js' %}"></script>
+<script src="{% static 'js/poss.js' %}"></script>
 
 
 {% endblock content %}

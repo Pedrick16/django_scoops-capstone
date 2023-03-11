@@ -23,10 +23,10 @@
         
         {% for list in list_cart %}
         <tr>
-            <td>{{ list.pos_category }}</td>
-            <td>{{ list.pos_name }}</td>
-            <td>{{ list.pos_quantity }}</td>
-            <td>&#8369;{{ list.pos_ResellerAmount|floatformat|intcomma }}</td>
+            <td>{{ list.cart_category }}</td>
+            <td>{{ list.cart_name }}</td>
+            <td>{{ list.cart_quantity }}</td>
+            <td>&#8369;{{ list.cart_ResellerAmount|floatformat:2|intcomma }}</td>
         </tr>
         {% endfor %}
     </tbody>

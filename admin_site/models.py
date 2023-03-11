@@ -74,34 +74,34 @@ class By_Batch(models.Model):
     def __str__(self):
         return self.product_code
 
-class Pos(models.Model):
-    pos_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
-    pos_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
-    pos_category =  models.CharField(max_length=200, verbose_name='Category')
-    pos_name=  models.CharField(max_length=200, verbose_name='Product Name')
-    pos_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    pos_reseller_price =   models.BigIntegerField(null=True, verbose_name='Reseller Price')
-    pos_price =   models.BigIntegerField(null=True, verbose_name='POS Price')
-    pos_quantity =  models.BigIntegerField(null=True, verbose_name='quantity')
-    pos_ResellerAmount =   models.BigIntegerField(null=True, verbose_name='Reseller Amount')
-    pos_amount =  models.BigIntegerField(null=True, verbose_name='POS Amount')
+class Cart(models.Model):
+    cart_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
+    cart_pcode =  models.CharField(max_length=200, verbose_name='Product Code')
+    cart_category =  models.CharField(max_length=200, verbose_name='Category')
+    cart_name=  models.CharField(max_length=200, verbose_name='Product Name')
+    cart_unit =  models.CharField(max_length=200, verbose_name='Unit')
+    cart_reseller_price =   models.BigIntegerField(null=True, verbose_name='Reseller Price')
+    cart_price =   models.BigIntegerField(null=True, verbose_name='POS Price')
+    cart_quantity =  models.BigIntegerField(null=True, verbose_name='quantity')
+    cart_ResellerAmount =   models.BigIntegerField(null=True, verbose_name='Reseller Amount')
+    cart_amount =  models.BigIntegerField(null=True, verbose_name='POS Amount')
 
 
     def __str__(self):
-        return self.pos_user
+        return self.cart_user
 
-class Pos_Payment(models.Model):
+class Cart_Payment(models.Model):
     STATUS = (("Printed","Printed"),("not Print","not Print"))
-    pos_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
-    pos_no = models.CharField(max_length=200, null=True,  verbose_name='Pos No')
-    pos_TotalAmount =  models.BigIntegerField(null=True, verbose_name='Total Amount')
-    pos_cash = models.BigIntegerField( null=True, verbose_name='Cash')
-    pos_change =  models.DecimalField(  max_digits=12, decimal_places=2,null=True, verbose_name='Change')
-    pos_status = models.CharField(max_length=250, null=True, choices=STATUS, verbose_name='Status')
-    pos_date = models.DateField(default=timezone.now, verbose_name='Date')
+    cart_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
+    cart_no = models.CharField(max_length=200, null=True,  verbose_name='Pos No')
+    cart_TotalAmount =  models.BigIntegerField(null=True, verbose_name='Total Amount')
+    cart_cash = models.BigIntegerField( null=True, verbose_name='Cash')
+    cart_change =  models.DecimalField(  max_digits=12, decimal_places=2,null=True, verbose_name='Change')
+    cart_status = models.CharField(max_length=250, null=True, choices=STATUS, verbose_name='Status')
+    cart_date = models.DateField(default=timezone.now, verbose_name='Date')
 
     def __str__(self):
-        return self.pos_user
+        return self.cart_user
 
 
 

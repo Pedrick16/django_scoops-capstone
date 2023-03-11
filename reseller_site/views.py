@@ -34,9 +34,9 @@ def dashboard(request):
 
 @login_required(login_url='landing_page:login')
 def cart_reseller(request):
-    total_item = Pos.objects.filter(pos_user = request.user).count()
-    list_cart = Pos.objects.filter(pos_user = request.user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = request.user).aggregate(sum_amount =Sum('pos_ResellerAmount'))['sum_amount']
+    total_item = Cart.objects.filter(cart_user = request.user).count()
+    list_cart = Cart.objects.filter(cart_user = request.user).order_by('-id')
+    sum_amount = Cart.objects.filter(cart_user = request.user).aggregate(sum_amount =Sum('cart_ResellerAmount'))['sum_amount']
     
     times_amount = int(sum_amount) * 0.02
 
@@ -63,25 +63,25 @@ def cart_reseller(request):
 
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
-    pos = Pos.objects.get(id =productid)
-    if pos.pos_quantity == 0:
+    pos = Cart.objects.get(id =productid)
+    if pos.cart_quantity == 0:
         messages.error(request,("quantity already 0"))
         return redirect('reseller_site:add_cart')
     else:
 
 
-        current_qty = int(pos.pos_quantity)
+        current_qty = int(pos.cart_quantity)
         result = current_qty - 1
-        pos.pos_quantity = result
+        pos.cart_quantity = result
         pos.save()
 
-        current_amount = int(pos.pos_ResellerAmount)
-        current_price = int(pos.pos_reseller_price )
+        current_amount = int(pos.cart_ResellerAmount)
+        current_price = int(pos.cart_reseller_price )
         result = current_amount - current_price
-        pos.pos_ResellerAmount = result
+        pos.cart_ResellerAmount = result
         pos.save()
     
-        current_pcode = pos.pos_pcode
+        current_pcode = pos.cart_pcode
         product = Product.objects.get(product_code = current_pcode)
         current_stock = int(product.product_stock)
         retrieve_stock = current_stock + 1
@@ -92,12 +92,12 @@ def minus_qty(request, productid):
 
 @login_required(login_url='landing_page:login')
 def add_qty(request,productid):
-    pos = Pos.objects.get(id =productid)
-    current_qty = int(pos.pos_quantity)
+    pos = Cart.objects.get(id =productid)
+    current_qty = int(pos.cart_quantity)
     result = current_qty + 1
 
     #for checking product code
-    current_pcode = pos.pos_pcode
+    current_pcode = pos.cart_pcode
 
     product = Product.objects.get(product_code = current_pcode)
     if product.product_stock == 0:
@@ -107,10 +107,10 @@ def add_qty(request,productid):
         pos.pos_quantity = result
         pos.save()
 
-        current_amount = int(pos.pos_ResellerAmount)
-        current_price = int(pos.pos_reseller_price )
+        current_amount = int(pos.cart_ResellerAmount)
+        current_price = int(pos.cart_reseller_price )
         result = current_amount + current_price
-        pos.pos_ResellerAmount = result
+        pos.cart_ResellerAmount = result
         pos.save()
     
 
@@ -125,7 +125,7 @@ def add_qty(request,productid):
 def checkout(request):
     if request.method == "POST":
         current_user = request.user
-        pos = Pos.objects.filter(pos_user = current_user)
+        pos = Cart.objects.filter(cart_user = current_user)
         preferred_date = request.POST['prefer_date']
         no_specific = "None"
         status = "Pending"
@@ -158,15 +158,15 @@ def checkout(request):
             NewActLog.save()
         
 
-            NewOrderItems = Pos.objects.filter(pos_user = request.user)
+            NewOrderItems = Cart.objects.filter(cart_user = request.user)
             for item in NewOrderItems:
                 OrderItem.objects.create(
                     OrderItem_transactionNo = trackno,
-                    OrderItem_category = item.pos_category,
-                    OrderItem_name = item.pos_name,
-                    OrderItem_unit = item.pos_unit,
-                    OrderItem_quantity  = item.pos_quantity,
-                    OrderItem_amount= item.pos_amount
+                    OrderItem_category = item.cart_category,
+                    OrderItem_name = item.cart_name,
+                    OrderItem_unit = item.cart_unit,
+                    OrderItem_quantity  = item.cart_quantity,
+                    OrderItem_amount= item.cart_amount
                 )
                 pos.delete()
             messages.success(request, ("Please wait for your order"))
@@ -200,15 +200,15 @@ def checkout(request):
             NewActLog.save()
         
 
-            NewOrderItems = Pos.objects.filter(pos_user = request.user)
+            NewOrderItems = Cart.objects.filter(cart_user = request.user)
             for item in NewOrderItems:
                 OrderItem.objects.create(
                     OrderItem_transactionNo = trackno,
-                    OrderItem_category = item.pos_category,
-                    OrderItem_name = item.pos_name,
-                    OrderItem_unit = item.pos_unit,
-                    OrderItem_quantity  = item.pos_quantity,
-                    OrderItem_amount= item.pos_ResellerAmount
+                    OrderItem_category = item.cart_category,
+                    OrderItem_name = item.cart_name,
+                    OrderItem_unit = item.cart_unit,
+                    OrderItem_quantity  = item.cart_quantity,
+                    OrderItem_amount= item.cart_ResellerAmount
                 )
                 pos.delete()
             messages.success(request, ("Please wait for your orders"))
@@ -228,8 +228,8 @@ def transaction_orders(request):
 @login_required(login_url='landing_page:login')
 def add_cart(request):
     current_user = request.user
-    list_pos = Pos.objects.filter(pos_user = current_user).order_by('-id')
-    sum_amount = Pos.objects.filter(pos_user = current_user).all().aggregate(total =Sum('pos_ResellerAmount'))['total']
+    list_pos = Cart.objects.filter(cart_user = current_user).order_by('-id')
+    sum_amount = Cart.objects.filter(cart_user = current_user).all().aggregate(total =Sum('cart_ResellerAmount'))['total']
     
 
     context = {
@@ -284,7 +284,7 @@ def cart_products(request, productid):
         
 
         # error trapping for 0 stock    
-        if Pos.objects.filter(pos_user=request.user, pos_pcode = pcode):
+        if Cart.objects.filter(cart_user=request.user, cart_pcode = pcode):
             messages.error(request,("you already have on the cart"))
             return redirect('reseller_site:all_products')
         elif  product.product_stock == 0:
@@ -305,13 +305,12 @@ def cart_products(request, productid):
             product.save()
 
             #inserting product in pos table
-            pos = Pos(pos_user=current_user, pos_pcode=pcode, pos_category= p_category,  pos_name = p_name, pos_unit= p_unit,pos_reseller_price =p_reseller_price , pos_price = p_price, pos_quantity = qty, pos_amount = amount_cart,  pos_ResellerAmount =reseller_cart )
+            pos = Cart(cart_user=current_user, cart_pcode=pcode, cart_category= p_category,  cart_name = p_name, cart_unit= p_unit,cart_reseller_price =p_reseller_price , cart_price = p_price, cart_quantity = qty, cart_amount = amount_cart,  cart_ResellerAmount =reseller_cart )
             pos.save()   
 
             
             messages.success(request,("Successfully carting Products"))
-            return redirect('reseller_site:add_cart')   
-
+            return redirect('reseller_site:add_cart') 
 
 @login_required(login_url='landing_page:login') 
 def transaction_view(request,id):
@@ -338,7 +337,7 @@ def transaction_view(request,id):
 @login_required(login_url='landing_page:login')
 def cart_cancel(request,productid):
     if request.method == "POST":
-        cancel = Pos.objects.get(id =productid)
+        cancel = Cart.objects.get(id =productid)
         current_pcode = request.POST['current_pcode']
         product = Product.objects.get(product_code = current_pcode)
 
@@ -360,7 +359,7 @@ def cart_cancel(request,productid):
 
         #removing in pos payment
         # pos_id = request.POST['pos_id']
-        pos_payment = Pos_Payment.objects.filter(pos_user =request.user.role, pos_status="not Print")
+        pos_payment = Cart_Payment.objects.filter(cart_user =request.user.role, cart_status="not Print")
         pos_payment.delete()
     
 

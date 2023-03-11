@@ -18,13 +18,13 @@ class ProductView(admin.ModelAdmin):
 class BatchView(admin.ModelAdmin):
     list_display = ['product_code','product_name','product_batch','product_quantity','product_expired','created_at']
     search_fields = ['product_code','product_name', 'product_batch','product_quantity','product_expired','created_at']
-class PosView(admin.ModelAdmin):
-    list_display = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_reseller_price','pos_price','pos_quantity','pos_amount']
-    search_fields = ['pos_user','pos_pcode', 'pos_category', 'pos_name', 'pos_unit','pos_reseller_price','pos_price','pos_quantity''pos_amount']
+class CartView(admin.ModelAdmin):
+    list_display = ['cart_user','cart_pcode', 'cart_category', 'cart_name', 'cart_unit','cart_reseller_price','cart_price','cart_quantity','cart_amount']
+    search_fields = ['cart_user','cart_pcode', 'cart_category', 'cart_name', 'cart_unit','cart_reseller_price','cart_price','cart_quantity''cart_amount']
 
-class Pos_PaymentView(admin.ModelAdmin):
-    list_display = ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status','pos_date']
-    search_fields =  ['pos_user','pos_TotalAmount','pos_cash','pos_change','pos_status','pos_date']
+class Cart_PaymentView(admin.ModelAdmin):
+    list_display = ['cart_user','cart_TotalAmount','cart_cash','cart_change','cart_status','cart_date']
+    search_fields =  ['cart_user','cart_TotalAmount','cart_cash','cart_change','cart_status','cart_date']
 class TransactionView(admin.ModelAdmin):
     list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_totalprice','transaction_doption','created_at','transaction_preferred_date','transaction_delivered','transaction_orderstatus']
     search_fields = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_doption','transaction_preferred_date','transaction_totalprice','created_at','transaction_delivered','transaction_orderstatus']
@@ -55,10 +55,10 @@ class Activity_logView(admin.ModelAdmin):
 admin.site.register(Reseller, ResellerView),
 admin.site.register(Product, ProductView),
 admin.site.register(By_Batch, BatchView),
-admin.site.register(Pos, PosView),
+admin.site.register(Cart, CartView),
 admin.site.register(Transaction, TransactionView),
 admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
 admin.site.register(Profile, ProfileView),
-admin.site.register(Pos_Payment, Pos_PaymentView),
+admin.site.register(Cart_Payment, Cart_PaymentView),
 admin.site.register(Promo,PromoView),
