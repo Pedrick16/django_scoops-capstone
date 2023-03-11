@@ -32,20 +32,22 @@
     </tbody>
 </table>
     <div class="text-end px-5">
-        <label style="font-weight: bolder;" > Amount:   <input type="text" style="text-align: right;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}" readonly>        </label>
+        <label style="font-weight: bolder;" > Amount:   <input type="text" style="text-align: right;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}"  readonly>        </label>
         <br>
-        
+        <input type="hidden" id="amount" value="{{sum_amount}}" >
+        <input type="hidden" id="discount" value="{{promo}}">
   
-            
+
         <label style="font-weight: bolder;" > Discount:     <input type="text" style="text-align: right;" value=" &#8369;{{ promo|floatformat:2|intcomma  }}" readonly>   </label>
         <br>
-        <label style="font-weight: bolder;" > Grand Total:   <input type="text"style="text-align: right;" value="" readonly>   </label>
+        <label style="font-weight: bolder;" > Grand Total:   <input type="text"style="text-align: right;" name="grand_total"  id="gtotal"  readonly >   </label>
+       
     </div>
     <br>
     <br>
     <form action="{% url 'reseller_site:checkout' %}" method="POST">
         {% csrf_token %}
-        <input type="hidden" name="total_amount"value="{{ sum_amount }}">
+        <input type="hidden" name="total_amount" id="stotal">
         <h1 class="text-center" id="bdetails">Basic Details</h1>
         <label for="" id="fname">First Name</label>
         <input type="text" placeholder="Enter your First Name" class="form-control" name="fname" required>
@@ -88,7 +90,7 @@
 {% endif %}    
 
 
-<script src="{% static 'js/checkout_order.js' %}"></script>
+<script src="{% static 'js/checkout_reseller.js' %}"></script>
 
 
 

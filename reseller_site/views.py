@@ -38,7 +38,12 @@ def cart_reseller(request):
     list_cart = Cart.objects.filter(cart_user = request.user).order_by('-id')
     sum_amount = Cart.objects.filter(cart_user = request.user).aggregate(sum_amount =Sum('cart_ResellerAmount'))['sum_amount']
     
-    times_amount = int(sum_amount) * 0.02
+    times_amount = None
+    if sum_amount >= 5000:
+        times_amount = int(sum_amount) * 0.02
+    else:
+        times_amount = 0
+        
 
 
 
