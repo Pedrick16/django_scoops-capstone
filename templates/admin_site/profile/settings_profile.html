@@ -2,6 +2,9 @@
 
 
 {% block template %}
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
     <h4>My Profile</h4>
     <br>
         
@@ -9,7 +12,7 @@
         
         {% for list in list_profile %}
          
-        <div class="input-group">
+        <div class="input-group pb-5">
             <div class="input-group-append">
                 <form action="{% url 'admin_site:update_profile' list.id %}" method="POST" enctype="multipart/form-data" >
                     {% csrf_token %}
@@ -75,21 +78,16 @@
             {% endif %}
 
             <div class="input-group-append px-5">
-                <form action=""></form>
-                <h3>Change Password</h3>
-                <label for="">old password</label>
-                <input type="text"  name="contact" class="form-control" required>
-      
-                <label for="">New password1</label>
-                <input type="text"  name="Address" class="form-control" required>
-
-                <label for="">New password2</label>
-                <input type="text"  name="Address" class="form-control" required>
-                <br>
-                <input type="submit"  class="btn btn-dark"  value="Save" required>
+                <h2>Change Password</h2>
+                <form method="post">
+                  {% csrf_token %}
+                  {{ form }}
+                  <button type="submit">Save</button>
                 </form>
+              
             </div>
         </div>
+       
     
 
 

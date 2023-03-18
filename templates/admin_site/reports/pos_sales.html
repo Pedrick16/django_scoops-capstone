@@ -25,8 +25,8 @@
                 {% for list in pos_payment %}
                 <tr>
                     <td>{{ list.id }}</td>
-                    <td>&#8369;{{ list.pos_TotalAmount|floatformat|intcomma}}</td>
-                    <td>{{ list.pos_date}}</td>
+                    <td>&#8369;{{ list.cart_TotalAmount|floatformat:2|intcomma}}</td>
+                    <td>{{ list.cart_date}}</td>
                 </tr>
                 {% endfor %}
             </tbody>

@@ -1,3 +1,4 @@
+
 $(document).ready(function(){
     // var form = $('#form')
     // form.on('submit', function (e) {
@@ -16,6 +17,7 @@ $(document).ready(function(){
         var result =  cash - total_amount
         var msg = $('#msg')
         var pos_id = $('#pos_id').val()
+
 
       
 

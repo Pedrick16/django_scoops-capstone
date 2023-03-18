@@ -19,6 +19,7 @@ urlpatterns = [
 
     path('add_profile/', views.add_profile, name='add_profile'),
     path('update_profile/<int:profileid>', views.update_profile, name='update_profile'),
+    # path('change-password/', views.change_password, name='change_password'),
     path('My-profile/', views.my_profile, name='my_profile'),
 
 

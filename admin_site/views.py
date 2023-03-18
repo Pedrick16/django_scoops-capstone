@@ -5,8 +5,11 @@ from django.db.models import Sum, Q,F, Max
 from django.core.mail import send_mail
 
 from datetime import datetime,date
-from landing_page.forms import SignUpForm
+from landing_page.forms import SignUpForm,ChangePasswordForm
 from landing_page.models import User
+
+from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth import update_session_auth_hash
 
 import random, locale
 from decimal import Decimal
@@ -48,7 +51,26 @@ def add_useraccount(request):
             return redirect('admin_site:send_email')
     else:
         form = SignUpForm()
-    return render(request, 'admin_site/user/add_useraccount.html',{'form':form})     
+    return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
+
+# def change_password(request):
+#     if request.method == 'POST':
+#         form = ChangePasswordForm(request.POST)
+#         if form.is_valid():
+#             user = request.user
+#             current_password = form.cleaned_data['current_password']
+#             new_password = form.cleaned_data['new_password']
+#             if user.check_password(current_password):
+#                 user.set_password(new_password)
+#                 user.save()
+#                 update_session_auth_hash(request, user)
+#                 messages.success(request, 'Your password was successfully updated!')
+#                 return redirect('admin_site:change_password')
+#             else:
+#                 form.add_error('current_password', 'Incorrect password')
+#     else:
+#         form = ChangePasswordForm()
+#     return render(request, 'admin_site/user/changepass.html', {'form': form})     
 
 
 def register(request, inquiryid):
@@ -341,9 +363,27 @@ def add_product(request):
 
 #settings
 def settings_profile(request):
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+        if form.is_valid():
+            user = request.user
+            current_password = form.cleaned_data['current_password']
+            new_password = form.cleaned_data['new_password']
+            if user.check_password(current_password):
+                user.set_password(new_password)
+                user.save()
+                update_session_auth_hash(request, user)
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('admin_site:settings_profile')
+            else:
+                form.add_error('current_password', 'Incorrect password')
+    else:
+        form = ChangePasswordForm()
+    
     list_profile = Profile.objects.filter(list_user = request.user)
     context={
-        'list_profile':list_profile
+        'list_profile':list_profile,
+        'form':form
     }
     return render(request,'admin_site/profile/settings_profile.html', context)
 
@@ -866,7 +906,7 @@ def report_actlog(request):
 
 @login_required(login_url='landing_page:login') 
 def report_pos_sales(request):
-    pos_payment = Cart_Payment.objects.filter(pos_status = 'Printed')
+    pos_payment = Cart_Payment.objects.filter(cart_status = 'Printed')
     context = {
         'pos_payment':pos_payment
     }
