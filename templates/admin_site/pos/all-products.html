@@ -31,7 +31,7 @@
             <th>Product Name</th>
             <th>Category</th>
             <th>Unit</th>
-            <th>Reseller Price</th>
+           
 
             {% if user.role == "admin" %}
             <th>Price</th>
@@ -61,7 +61,7 @@
             <td>{{ list.product_name }}</td>
             <td>{{ list.product_category }}</td>
             <td>{{ list.product_unit }}</td>
-            <td>&#8369;{{ list.product_ResellerPrice|floatformat:2 }}</td>
+            
             
             {% if user.role == "admin" %}
             <td>&#8369;{{ list.product_price|floatformat:2 }}</td>

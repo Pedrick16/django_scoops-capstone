@@ -50,7 +50,7 @@ def orders_completed(request, orderid):
 
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):
-    status = "Out for Delivery"
+    status = "Out for Shipping"
     list_transaction = Transaction.objects.filter(transaction_orderstatus = status).order_by('-id')
     context = {
         'list_transaction':list_transaction

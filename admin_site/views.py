@@ -46,9 +46,14 @@ def dashboard_admin(request):
 def add_useraccount(request):
     if request.method =="POST":
         form = SignUpForm(request.POST)
+
         if form.is_valid():
             form.save()
             return redirect('admin_site:send_email')
+        else:
+            messages.info(request,("Please try again"))
+            form = SignUpForm()
+            return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
@@ -1033,13 +1038,12 @@ def search_online_sales(request):
         end_date = request.POST['end_date']
         transaction = Transaction.objects.filter(created_at__range=[start_date,end_date])
         list_transaction = Transaction.objects.filter(created_at__range=[start_date,end_date]).aggregate(total=Sum('transaction_totalprice'))['total']
-
         context = {
             'transaction':transaction,
             'list_transaction':list_transaction
-
         }
         return render(request, 'admin_site/reports/online_sales.html',context)
+    return render(request, 'admin_site/reports/online_sales.html')
 
 @login_required(login_url='landing_page:login')
 def search_pos_sales(request):
@@ -1047,13 +1051,14 @@ def search_pos_sales(request):
         start_date= request.POST['start_date']
         end_date = request.POST['end_date']
         pos_payment = Cart_Payment.objects.filter(cart_date__range=[start_date,end_date])
-        list_pos_payment = Cart_Payment.objects.filter(cart_status = 'Printed', cart_date__range=[start_date,end_date]).aggregate(total=Sum('pos_TotalAmount'))['total']
+        list_pos_payment = Cart_Payment.objects.filter(cart_status = 'Printed', cart_date__range=[start_date,end_date]).aggregate(total=Sum('cart_TotalAmount'))['total']
 
         context = {
             'pos_payment':pos_payment,
             'list_transaction':list_pos_payment
         }
         return render(request, 'admin_site/reports/pos_sales.html',context)
+    return render(request, 'admin_site/reports/pos_sales.html')
     
 
 

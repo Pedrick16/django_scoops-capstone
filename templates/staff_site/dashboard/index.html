@@ -1,10 +1,12 @@
 {% extends 'admin_site/base.html' %}
 
 
+
 {% block content %}
+{% load humanize %}
 <div class="fw-bolder">
     <label for="">Walk-in Sales</label>
-    <input type="text" style="font-weight: bolder;"  value="{{ transaction_pos_payment }}" class="form-control" readonly>
+    <input type="text" style="font-weight: bolder;"  value="&#8369;{{ transaction_pos_payment|floatformat:2|intcomma }}" class="form-control" readonly>
     <br>
     <label for="">Pending Order</label>
     <input type="text" style="font-weight: bolder;" value="{{ transaction_pending }}"  class="form-control" disabled>

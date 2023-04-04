@@ -167,20 +167,23 @@
         
 
 
-         {% elif user.role == "staff" %}
-         <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
+        {% elif user.role == "staff" %}
+        <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
             {% csrf_token %}
             <label style="font-weight: bolder;">Total Amount:</label>
-            <input type="number" name="total_amount" style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}" class="form-control" id="total_amount"   readonly="readonly"> 
-
+            <input type="text"  style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}"  step="0.01" min="0" class="form-control"   readonly="readonly">
+    
+            <!-- for hide -->
+            <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly">  
+    
             <!-- <input type="text" id="total_amount"> -->
-
+    
             <label for="">Cash</label>
             <p id="msg" style=" display:none;"></p>
             <input type="number" name="cash"  class="form-control"  id="cash" required>
         
             <label for="">Change</label>
-            <input type="number" name="change" class="form-control" id="change"  readonly="readonly">
+            <input type="number" name="change"  class="form-control" id="change"  readonly="readonly">
             <input type="hidden" name="get_id" id="get_id">
     
             <div class="text-center pt-2" >
@@ -189,9 +192,7 @@
             </div>
     
             </form>
-            
-            
-
+        
         {% endif %}
         <br>
 
