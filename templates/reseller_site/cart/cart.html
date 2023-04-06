@@ -22,7 +22,7 @@
 <div class="text-end">
 <a href="{% url 'reseller_site:all_products' %}" class="btn btn-dark">Select Products</a>
 </div>
-{% if list_pos %}
+    {% if list_pos %}
 
 
     <table class="table table-hover text-center" >
@@ -37,9 +37,7 @@
                 <th>Amount</th>
                 <th></th>
                 <th></th>
-
             </tr>
-
             <tbody>
                 
                 {% for list in  list_pos %}       
@@ -63,7 +61,7 @@
                         {% csrf_token %}
                         <td><button type="submit" class="btn btn-dark">Remove</button></td>
                         <input type="hidden" name="current_pcode" value="{{ list.cart_pcode }}">
-                        <input type="hidden" name="current_qty" value="{{ list.cart_quantity }}">
+                        <input type="hidden" name="current_qty" id="qty" value="{{ list.cart_quantity }}">
                         <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
                 
                     </form>
@@ -89,7 +87,7 @@
     <input type="text" name="amount"  style="font-weight: bolder;" value="&#8369;{{ sum_amount|floatformat:2|intcomma}}" class="form-control" id="total_amount" disabled>
     <br>
     <div class="text-end">
-    <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark">Checkout</a>
+    <a href="{% url 'reseller_site:cart_reseller' %}" class="text-end  btn btn-dark" id="btn_checkout">Checkout</a>
     </div>
    
 
@@ -119,7 +117,7 @@
 
 
 
-<script src="{% static 'js/pos.js' %}"></script>
+<script src="{% static 'js/cart_reseller.js' %}"></script>
 
 
 {% endblock content %}

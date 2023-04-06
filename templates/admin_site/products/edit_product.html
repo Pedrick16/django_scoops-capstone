@@ -1,0 +1,27 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+
+
+    <form action="{% url 'admin_site:update_product' list_product.id  %}" method="POST" class="text-center">
+        {% csrf_token %}
+        <h1>Edit Product</h1>    
+
+
+    <input type="text" placeholder="Update Product Name" name="product_name" class="form-control" value="{{ list_product.product_name }}">
+    <br>
+    <input type="text" placeholder="Update Product Category" name="product_category" class="form-control" value="{{ list_product.product_category }}">
+    <br>
+    <input type="text" placeholder="Update Product Unit" name="product_unit" class="form-control" value="{{ list_product.product_unit }}">
+    <br>
+    <input type="number" placeholder="Update Reseller Price" name="reseller_price" class="form-control" value="{{ list_product.product_ResellerPrice}}">
+    <br>
+    <input type="number" placeholder="Update Pos Price" name="pos_price" class="form-control" value="{{ list_product.product_price }}">
+    <br>
+
+    <input type="submit" class="btn btn-dark" value="Update">
+    </form>    
+{% endblock content %}
+    
+    

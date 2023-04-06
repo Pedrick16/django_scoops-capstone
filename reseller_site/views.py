@@ -109,7 +109,7 @@ def add_qty(request,productid):
         messages.error(request,("No available Stock"))
         return redirect('admin_site:pos')
     else:
-        pos.pos_quantity = result
+        pos.cart_quantity = result
         pos.save()
 
         current_amount = int(pos.cart_ResellerAmount)

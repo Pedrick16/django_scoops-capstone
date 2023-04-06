@@ -34,6 +34,7 @@
         <th>Pos Price</th>
         <th>Available Stock</th>
         <th>Status</th>
+        <th>action</th>
       
         
   
@@ -52,6 +53,8 @@
         <td>&#8369;{{ list.product_price|floatformat:2|intcomma}}</td>
         <td>{{ list.product_stock }}</td>
         <td>{{ list.product_status }}</td>
+        <td><a href="{% url 'admin_site:edit_product' list.id %}" class="btn btn-dark">Edit</a></td>
+
     </tr>
         {% endfor %}
     </tbody>

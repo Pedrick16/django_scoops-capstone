@@ -364,6 +364,26 @@ def add_product(request):
         
     return render(request, 'admin_site/products/add_product.html')    
 
+def edit_product(request, productid):
+    product = Product.objects.get(pk = productid)
+    context = {
+        'list_product':product
+    }
+    return render(request, 'admin_site/products/edit_product.html',context)
+
+def update_product(request, productid):
+    product = Product.objects.get(pk = productid)
+    product.product_name = request.POST.get('product_name')
+    product.product_category = request.POST.get('product_category')
+    product.product_unit = request.POST.get('product_unit')
+    product.product_ResellerPrice = request.POST.get('reseller_price')
+    product.product_price = request.POST.get('pos_price')
+    product.save()
+    messages.success(request, ("Successfully Updated"))
+    return redirect('admin_site:list_product')
+    
+
+
 
 
 #settings
