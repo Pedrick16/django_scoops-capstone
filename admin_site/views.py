@@ -268,6 +268,8 @@ def send_email(request):
 
     return render(request, 'admin_site/user/send_email.html')        
 
+
+
 #process inquiry for reseller
 def process_inquiry(request):
     if request.method =="POST":

@@ -28,7 +28,7 @@ urlpatterns = [
     path('retrieve-reseller/<int:id>/', views.retrieve_reseller, name='retrieve_reseller'),
 
 
-
+  
     path('send-email/', views.send_email, name='send_email'),
 
 
