@@ -320,12 +320,20 @@ def view_product(request, productid):
         'latest_bnumber': latest_bnumber
     }
     return render(request, 'admin_site/products/view_product.html', context)
-    
+
+def add_product(request):
+        list_settings = Settings.objects.all()
+        context={
+            'list_settings':list_settings
+        }
+        return render(request, 'admin_site/products/add_product.html',context)
+
 
 #adding product for tbl product
 @login_required(login_url='landing_page:login')
-def add_product(request):
+def process_product(request):
     if request.method == "POST":
+
         product_code = 'S4UPR'+str(random.randint(1111111,9999999))
 
         pcategory = request.POST['category']
@@ -363,8 +371,9 @@ def add_product(request):
 
         messages.success(request,("Successfully Product added"))
         return redirect('admin_site:list_product')
+   
         
-    return render(request, 'admin_site/products/add_product.html')    
+
 
 def edit_product(request, productid):
     product = Product.objects.get(pk = productid)
@@ -470,6 +479,40 @@ def my_profile(request):
         'current_profile':current_profile
     }
     return render(request, 'admin_site/profile/my_profile.html',context)
+
+def settings_product(request):
+    settings = Settings.objects.all()
+    context ={
+        'settings':settings
+    }
+    return render(request, 'admin_site/settings/product_settings.html',context)
+
+def settings_remove(request, id):
+    settings = Settings.objects.get(pk = id)
+    settings.delete()
+    messages.success(request,("succussfully removed"))
+    return redirect('admin_site:settings_product')
+
+
+    
+
+
+
+def settings_addproduct(request):
+    if request.method == "POST":
+        category = request.POST['category']
+        unit = request.POST['unit']
+        settings = Settings()
+
+        if Settings.objects.filter(Q(settings_category =category) | Q(settings_unit = unit)):
+            messages.error(request,("It is already Exist"))
+            return redirect('admin_site:settings_product')
+        else:
+            settings.settings_category = request.POST.get('category')
+            settings.settings_unit = request.POST.get('unit')
+            settings.save()
+            return redirect('admin_site:settings_product')
+    return render(request, 'admin_site/settings/add_settings.html')
 
 
 
@@ -650,8 +693,8 @@ def Click_receipt(request):
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
     pos = Cart.objects.get(id =productid)
-    if pos.cart_quantity == 0:
-        messages.error(request,("quantity already 0"))
+    if pos.cart_quantity == 1:
+        pos.delete()
         return redirect('admin_site:pos')
     else:
         current_qty = int(pos.cart_quantity)
@@ -1050,6 +1093,7 @@ def search_date_actlog(request):
             'list_reports':list_reports
         }
         return render(request,'admin_site/reports/act_log.html',context)
+    return render(request,'admin_site/reports/act_log.html')
 
 
 

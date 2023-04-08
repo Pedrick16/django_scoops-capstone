@@ -8,7 +8,6 @@ $(document).ready(function(){
     // })
 
 
-
     $('#btn_compute').on('click', function (e) {
         e.preventDefault();
         var total_amount = parseInt($('#total_amount').val())
@@ -17,7 +16,7 @@ $(document).ready(function(){
         var result =  cash - total_amount
         var msg = $('#msg')
         var pos_id = $('#pos_id').val()
-
+        var qty = parseInt($('#qty').val())
 
       
 
@@ -26,10 +25,12 @@ $(document).ready(function(){
             $('#get_id').val(pos_id)
             $('#change').val(result)
             $('#btn-receipt').removeAttr('hidden');
-            
+
+           
             // $('#form').submit()
-
-
+           
+           
+        
         }else{
             $('#msg').css("color", "red")
             // $('#msg').css("fontSize", "20px")

@@ -1,0 +1,16 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+
+
+    
+    <form action="{% url 'admin_site:settings_addproduct' %}" method="post" class="pt-5">
+        {% csrf_token %}
+        <input type="text" class="form-control" name="category" placeholder="Enter Product Category">
+        <br>
+        <input type="text" class="form-control" name="unit" placeholder="Enter Product Unit">
+        <br>
+        <input type="submit" value="Add" class="btn btn-dark">
+    </form>
+{% endblock content %}
+    

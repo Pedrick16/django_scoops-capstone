@@ -117,7 +117,7 @@
                         {% csrf_token %}
                         <td><button type="submit" class="btn btn-dark">Remove</button></td>
                         <input type="hidden" name="current_pcode" value="{{ list.cart_pcode }}">
-                        <input type="hidden" name="current_qty" value="{{ list.cart_quantity }}">
+                        <input type="hidden" name="current_qty" value="{{ list.cart_quantity }}" id="qty">
                         <input type="hidden" name="pos_id" value="{{ list.id}}" id="pos_id">
                     </form>
                 </tr>

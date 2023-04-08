@@ -168,3 +168,10 @@ class Activity_log(models.Model):
     def __str__(self):
         return self.activity
 
+class Settings(models.Model):
+    settings_category = models.CharField(max_length=250, null=True, verbose_name='Category')
+    settings_unit = models.CharField(max_length=250, null=True, verbose_name='Unit')
+
+    def __str__(self):
+        return self.settings_category
+

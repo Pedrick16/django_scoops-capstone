@@ -41,6 +41,7 @@ urlpatterns = [
     path('product/', views.list_products, name='list_product'),
     path('view-product/<int:productid>/', views.view_product, name='view_product'),
     path('add-product/', views.add_product, name='add_product'),
+    path('Process-product/', views.process_product, name='process_product'),
     path('edit-product/<int:productid>/', views.edit_product, name='edit_product'),
     path('update-product/<int:productid>/', views.update_product, name='update_product'),
 
@@ -95,8 +96,12 @@ urlpatterns = [
     path('register/<int:inquiryid>/', views.register, name='register'),
     path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
 
-    #search 
+ 
     path('settings_profile/', views.settings_profile, name='settings_profile'),
+    path('settings_Product/', views.settings_product, name='settings_product'),
+    path('settings_add/', views.settings_addproduct, name='settings_addproduct'),
+    path('remove-settings_product/<int:id>/', views.settings_remove, name='settings_remove'),
+   
    
 
 ]

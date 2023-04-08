@@ -7,7 +7,7 @@
 
   
     
-    <form action="{% url 'admin_site:add_product' %}" method="POST" class="text-center">
+    <form action="{% url 'admin_site:process_product' %}" method="POST" class="text-center">
         {% csrf_token %}
         <h1>Add Product</h1>    
 
@@ -15,10 +15,28 @@
     
     <input type="text" placeholder="Enter Product Name" name="product_name" class="form-control">
     <br>
-    <input type="text" placeholder="Enter Product Category" name="category" class="form-control">
+   
+    <select name="category" id="" class="form-control">
+    <option value=""></option>
+
+    {% for list in list_settings  %}
+    <option value="{{ list.settings_category }}">{{ list.settings_category }}</option>
+    {% endfor %}
+    
+    </select>
+    
     <br>
-    <input type="text" placeholder="Enter Product Unit" name="unit" class="form-control">
+    <select name="unit" id="" class="form-control">
+    <option value=""></option>
+
+    {% for list in list_settings  %}
+    <option value="{{ list.settings_unit }}">{{ list.settings_unit }}</option>
+    {% endfor %}
+    
+    </select>
+    
     <br>
+   
     <input type="number" placeholder="Enter Reseller Price" name="reseller_price" class="form-control">
     <br>
     <input type="number" placeholder="Enter Pos Price" name="price" class="form-control" >

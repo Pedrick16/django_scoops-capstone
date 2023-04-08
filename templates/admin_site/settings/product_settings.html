@@ -1,0 +1,38 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
+<br>
+<a href="{% url 'admin_site:settings_addproduct' %}" class="btn btn-dark">Add </a>
+
+    {% if settings %}
+    <table class="table table-hover text-center">
+        <thead>
+            <tr>
+         
+                <th>Product Category</th>
+                <th>Product Unit</th>
+                <th>action</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            {% for list in settings %}
+                
+            <tr>
+              
+                <td>{{ list.settings_category }}</td>
+                <td>{{ list.settings_unit }}</td>
+          
+                <td><a href="{% url 'admin_site:settings_remove' list.id %}" class="btn btn-dark">Remove</a></td>
+              
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    {% endif %}
+{% endblock content %}
+    
