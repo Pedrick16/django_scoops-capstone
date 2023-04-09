@@ -13,19 +13,22 @@ $(document).ready(function(){
         e.preventDefault();
         var total_amount = parseInt($('#total_amount').val())
         var cash = parseInt($('#cash').val())
-        var result =  cash - total_amount
 
-        var formattedValue = Globalize.formatNumber(result, "c", "en-PH");
+        var result =  cash - total_amount
+;
+        // var formattedNumber = new result.toLocaleString('en-PH', options);
+        var currency = parseFloat(result).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
         var msg = $('#msg')
         var pos_id = $('#pos_id').val()
 
 
-
+      
 
 
         if(cash >= total_amount){
             $('#get_id').val(pos_id)
-            $('#change').val(formattedValue)
+            $('#vchange').val(currency)
+            $('#change').val(result)
             $('#btn-receipt').removeAttr('hidden');
             
             // $('#form').submit()

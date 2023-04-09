@@ -16,7 +16,13 @@
             <div class="input-group-append">
                 <form action="{% url 'admin_site:update_profile' list.id %}" method="POST" enctype="multipart/form-data" >
                     {% csrf_token %}
+                
+                {% if list.profile_pic %}
                 <img src="/media/{{ list.profile_pic}}" alt="Profile-pic" width="200" class="rounded-circle">
+                {% else %}
+                <img src="/media/image_path/default.jpg" alt="Profile-pic" width="200" class="rounded-circle">
+                {% endif %}
+
                 <br>
                 <input type="file"  name="profile_pic" >
                 <br>

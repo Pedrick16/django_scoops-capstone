@@ -2,9 +2,12 @@
 
 {% block content %}
 
-
-{% for message in messages %}
-<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% for field in form %}
+    
+    {% for error in  field.errors %}
+        <p class="alert alert-danger mt-3">{{ error}}</p>
+    {% endfor %}
+    
 {% endfor %}
     
 <form  method="post">

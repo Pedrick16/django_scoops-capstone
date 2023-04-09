@@ -154,7 +154,8 @@
         <input type="number" name="cash"  class="form-control"  id="cash" required>
     
         <label for="">Change</label>
-        <input type="number" name="change"  class="form-control" id="change"  readonly="readonly">
+        <input type="text" name="vchange"  class="form-control" id="vchange"  readonly="readonly">
+        <input type="hidden" name="change"  class="form-control" id="change"  readonly="readonly">
         <input type="hidden" name="get_id" id="get_id">
 
         <div class="text-center pt-2" >
@@ -183,7 +184,8 @@
             <input type="number" name="cash"  class="form-control"  id="cash" required>
         
             <label for="">Change</label>
-            <input type="number" name="change"  class="form-control" id="change"  readonly="readonly">
+            <input type="text" name="vchange"  class="form-control" id="vchange"  readonly="readonly">
+            <input type="hidden" name="change"  class="form-control" id="change"  readonly="readonly">
             <input type="hidden" name="get_id" id="get_id">
     
             <div class="text-center pt-2" >
@@ -225,7 +227,7 @@
 
 
 
-<script src="{% static 'js/pos.js' %}"></script>
+<script src="{% static 'js/pos_admin.js' %}"></script>
 
 
 {% endblock content %}

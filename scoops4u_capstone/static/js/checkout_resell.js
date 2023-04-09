@@ -2,8 +2,12 @@ $(document).ready(function(){
     var total_amount = parseInt($('#amount').val())
     var discount = parseInt($('#discount').val())
 
-    var result =   total_amount -discount
+    var result =   total_amount - discount
+    var currency = parseFloat(result).toLocaleString('en-PH', { style: 'currency', currency: 'PHP' });
 
+
+
+    $('#vgtotal').val(currency)
     $('#gtotal').val(result)
     $('#stotal').val(result)
 

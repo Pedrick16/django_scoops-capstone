@@ -46,14 +46,9 @@ def dashboard_admin(request):
 def add_useraccount(request):
     if request.method =="POST":
         form = SignUpForm(request.POST)
-
         if form.is_valid():
             form.save()
             return redirect('admin_site:send_email')
-        else:
-            messages.info(request,("Please try again"))
-            form = SignUpForm()
-            return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
@@ -85,13 +80,10 @@ def register(request, inquiryid):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-
             #changing status for reseller
             reseller.reseller_status = status  
             reseller.save()
             return redirect('admin_site:send_email')
-            
-
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/register.html',{'form':form})      
