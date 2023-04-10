@@ -15,6 +15,7 @@ urlpatterns = [
     path('list-inquiry/', views.list_inquiry, name='list_inquiry'),
     path('list-reseller/', views.list_reseller, name='list_reseller'),
     path('edit-reseller/<int:id>/', views.edit_reseller, name='edit_reseller'),
+    path('update-reseller/<int:id>/', views.update_reseller, name='update_reseller'),
     path('archive-reseller/<int:resellerid>/', views.archive_reseller, name='archive_reseller'),
 
     path('add_profile/', views.add_profile, name='add_profile'),

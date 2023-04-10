@@ -4,7 +4,7 @@
     
         {% block content%}
         
-        <form action="" method="GET"  class="text-center">
+        <form action="{% url 'admin_site:update_reseller' list_reseller.id %}" method="POST"  class="text-center">
             {% csrf_token %}
             
         
@@ -28,19 +28,17 @@
             </select>
             <br>
         
-            <input type="text" class="form-control" name="cnum" placeholder="Edit Number" value="{{ list_reseller.reseller_contact}}" required>
+            <input type="text" class="form-control" name="cnumber" placeholder="Edit Number" value="{{ list_reseller.reseller_contact}}" required>
 
             <br>
-            <textarea name="address" class="form-control" placeholder="Edit address" required>
-            {{ list_reseller.reseller_address}}
-            </textarea>
+            <textarea name="address" class="form-control " name="address" placeholder="Edit address" required>{{list_reseller.reseller_address}}</textarea>
             <br>
     
             <input type="email" class="form-control"name="email" placeholder="Edit Email" value="{{ list_reseller.reseller_email }}" required>
             <br>
             <label for="">Valid ID</label>
     
-            <input type="File" class="form-control" name="valid-ID" accept=".jpg, .jpeg, .png" disabled>
+            <input type="File" class="form-control" name="valid_id" accept=".jpg, .jpeg, .png" disabled>
             <br>
             <label for="">Business Permit</label>
             <br>

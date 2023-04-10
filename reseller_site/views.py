@@ -69,8 +69,9 @@ def cart_reseller(request):
 @login_required(login_url='landing_page:login')
 def minus_qty(request, productid):
     pos = Cart.objects.get(id =productid)
-    if pos.cart_quantity == 0:
-        messages.error(request,("quantity already 0"))
+    if pos.cart_quantity == 1:
+
+        pos.delete()
         return redirect('reseller_site:add_cart')
     else:
 
@@ -92,8 +93,12 @@ def minus_qty(request, productid):
         retrieve_stock = current_stock + 1
         product.product_stock = retrieve_stock
         product.save()
-        return redirect('reseller_site:add_cart')
+        if product.product_stock > 0:
+            product.product_status = "available"
+            product.save()
 
+        return redirect('reseller_site:add_cart')
+       
 
 @login_required(login_url='landing_page:login')
 def add_qty(request,productid):
@@ -124,6 +129,10 @@ def add_qty(request,productid):
         minus_stock = current_stock - 1
         product.product_stock = minus_stock
         product.save()
+
+        if product.product_stock == 0:
+            product.product_status = "not available"
+            product.save()
         return redirect('reseller_site:add_cart')
 
 @login_required(login_url='landing_page:login')
@@ -311,7 +320,10 @@ def cart_products(request, productid):
 
             #inserting product in pos table
             pos = Cart(cart_user=current_user, cart_pcode=pcode, cart_category= p_category,  cart_name = p_name, cart_unit= p_unit,cart_reseller_price =p_reseller_price , cart_price = p_price, cart_quantity = qty, cart_amount = amount_cart,  cart_ResellerAmount =reseller_cart )
-            pos.save()   
+            pos.save()
+            if product.product_stock == 0:
+                product.product_status = "not available"
+                product.save()
 
             
             messages.success(request,("Successfully carting Products"))
@@ -366,6 +378,11 @@ def cart_cancel(request,productid):
         # pos_id = request.POST['pos_id']
         pos_payment = Cart_Payment.objects.filter(cart_user =request.user.role, cart_status="not Print")
         pos_payment.delete()
+
+        if product.product_stock != 0:
+            product.product_status = "available"
+            product.save()
+    
     
 
         

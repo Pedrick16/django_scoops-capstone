@@ -70,7 +70,6 @@ class By_Batch(models.Model):
     product_expired =  models.DateField( null=True, verbose_name='Expiration Date')
     created_at =models.DateTimeField(default=timezone.now,  verbose_name='created')
     
-
     def __str__(self):
         return self.product_code
 

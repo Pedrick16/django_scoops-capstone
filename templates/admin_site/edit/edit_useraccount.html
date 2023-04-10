@@ -18,8 +18,8 @@
     </select>
     <br>
     <select name="status" class="form-control"  required>
-        <option value="active"{% if list_users.role == 'active' %}selected{% endif %}>active</option>
-        <option value="inactive"{% if list_users.role == 'inactive' %}selected{% endif %}>inactive</option>
+        <option value="active"{% if list_users.status == 'active' %}selected{% endif %}>active</option>
+        <option value="inactive"{% if list_users.status == 'inactive' %}selected{% endif %}>inactive</option>
     </select>
   
     <br>

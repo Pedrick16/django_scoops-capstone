@@ -8,7 +8,8 @@
         {% csrf_token %}
         <h1>Edit Product</h1>    
 
-
+    <input type="text" placeholder="Product Code" name="product_name" class="form-control" value="{{ list_product.product_code }}" readonly>
+    <br>
     <input type="text" placeholder="Update Product Name" name="product_name" class="form-control" value="{{ list_product.product_name }}">
     <br>
     <input type="text" placeholder="Update Product Category" name="product_category" class="form-control" value="{{ list_product.product_category }}">
@@ -19,6 +20,13 @@
     <br>
     <input type="number" placeholder="Update Pos Price" name="pos_price" class="form-control" value="{{ list_product.product_price }}">
     <br>
+    <select name="status" class="form-control" id="gender" required >
+        <option value="available"{% if list_product.product_status == 'available' %}selected{% endif %}>availaable</option>
+        <option value="not available"{% if list_product.product_status == 'not available' %}selected{% endif %}>not available</option>
+    </select>
+    <br>
+   
+
 
     <input type="submit" class="btn btn-dark" value="Update">
     </form>    

@@ -130,9 +130,6 @@ def update_user_account(request,userid):
         messages.success(request,"successfully updated")
         return redirect('admin_site:user_list')
 
-     
-      
-
 
 #showing to the table data 
 @login_required(login_url='landing_page:login')
@@ -140,6 +137,7 @@ def list_inquiry(request):
     list_inquiry = Reseller.objects.order_by('-id').filter(reseller_status = "pending")
     context = {'list_inquiry':list_inquiry}
     return render(request, 'admin_site/user/list_inquiry.html', context)
+
 
 
 #adding reseller to table 
@@ -187,7 +185,6 @@ def add_reseller(request):
             NewActLog.save()
     
 
-            
             #showing message
             messages.info(request,"Successfully")
             return redirect('admin_site:add_reseller')
@@ -210,6 +207,23 @@ def edit_reseller(request,id):
         'list_reseller':list_reseller,
     }
     return render(request,'admin_site/edit/edit_reseller.html',context)   
+
+def update_reseller(request,id ):
+    if request.method == "POST":
+        reseller = Reseller.objects.get(pk=id)
+        reseller.reseller_fname = request.POST.get('fname')
+        reseller.reseller_mname = request.POST.get('mname')
+        reseller.reseller_lname = request.POST.get('lname')
+        reseller.reseller_gender = request.POST.get('gender')
+        reseller.reseller_contact = request.POST.get('cnumber')
+        reseller.reseller_address = request.POST.get('address')
+        reseller.reseller_email = request.POST.get('email')
+        reseller.save()
+        messages.success(request,("Successfully Updated"))
+        return redirect('admin_site:list_reseller')
+   
+
+    
 
 
 
@@ -381,6 +395,7 @@ def update_product(request, productid):
     product.product_unit = request.POST.get('product_unit')
     product.product_ResellerPrice = request.POST.get('reseller_price')
     product.product_price = request.POST.get('pos_price')
+    product.product_status = request.POST.get('status')
     product.save()
     messages.success(request, ("Successfully Updated"))
     return redirect('admin_site:list_product')
@@ -576,9 +591,6 @@ def update_inventory(request, productid):
 
 
 
-
-
-
             #activity log for adding stock
             activity = "Added stock"
             NewActLog = Activity_log()
@@ -631,14 +643,14 @@ def pos_receipt(request):
     pos = Cart.objects.filter(cart_user = request.user )
     pos_payment = Cart_Payment.objects.get(cart_user = request.user.role, cart_status = "not Print")
     sum_amount = Cart.objects.filter(cart_user = request.user).all().aggregate(total =Sum('cart_amount'))['total']
-   
+
     context = {
         'list_pos':pos,
         'sum_amount':sum_amount,
         'pos_payment':pos_payment
-     
     }
     return render(request, 'admin_site/pos/receipt.html', context)    
+
 
 def pos_receipt_process(request):
     if request.method == "POST":
@@ -650,12 +662,9 @@ def pos_receipt_process(request):
         pos = Cart.objects.filter(cart_user = request.user)
         pos.delete()
         return redirect('admin_site:pos')
-        
-        
 
 def pos_addreceipt(request):
     if request.method == "POST":
-       
 
         #saving to pos payment in databse
         pos_id = request.POST['get_id']
@@ -706,6 +715,10 @@ def minus_qty(request, productid):
         retrieve_stock = current_stock + 1
         product.product_stock = retrieve_stock
         product.save()
+
+        if product.product_stock > 0:
+                product.product_status = "available"
+                product.save()
         return redirect('admin_site:pos')
 
      
@@ -738,6 +751,11 @@ def add_qty(request,productid):
         minus_stock = current_stock - 1
         product.product_stock = minus_stock
         product.save()
+
+        if product.product_stock == 0:
+            product.product_status = "not available"
+            product.save()
+
         return redirect('admin_site:pos')
 
 
@@ -753,6 +771,8 @@ def pos_cancel(request,productid):
 
         return_stock = current_stock + current_qty
         product.product_stock = return_stock
+        
+
         product.save()
         cancel.delete()
 
@@ -768,6 +788,10 @@ def pos_cancel(request,productid):
         # pos_id = request.POST['pos_id']
         pos_payment = Cart_Payment.objects.filter(cart_user =request.user.role, cart_status="not Print")
         pos_payment.delete()
+
+        if product.product_stock != 0:
+                product.product_status = "available"
+                product.save()
     
 
         
@@ -852,9 +876,13 @@ def cart_products(request, productid):
             pos_payment = Cart_Payment.objects.filter(cart_user = request.user, cart_status="not Print")
             pos_payment.delete()
 
+            if product.product_stock == 0:
+                product.product_status = "not available"
+                product.save()
             
 
 
+        
             messages.success(request,("Successfully carting Products"))
             return redirect('admin_site:pos')      
     

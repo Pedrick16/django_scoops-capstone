@@ -96,7 +96,7 @@
                     {% if user.role == "admin" %}
                     <td>&#8369;{{ list.cart_price|floatformat:2|intcomma }}</td>
                     {% elif user.role == "staff" %}
-                    <td>{{ list.cart_price}}</td>
+                    <td>&#8369;{{ list.cart_price|floatformat:2|intcomma }}</td>
                     {% endif %}
 
                     
