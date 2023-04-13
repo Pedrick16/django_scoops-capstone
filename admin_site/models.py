@@ -57,7 +57,7 @@ class Product(models.Model):
     product_stock =  models.BigIntegerField(null=True, verbose_name='Available Stock')
     product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
 
-   
+
     def __str__(self):
         return self.product_code
 
