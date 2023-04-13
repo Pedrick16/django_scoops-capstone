@@ -1,10 +1,11 @@
 from django.shortcuts import render, redirect
 from admin_site.models import *
-from django.db.models import Sum
+from django.db.models import Sum,Q,F, Max
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
 import random, locale
 from decimal import Decimal
+
 
 
 
@@ -243,14 +244,19 @@ def transaction_orders(request):
 def add_cart(request):
     current_user = request.user
     list_pos = Cart.objects.filter(cart_user = current_user).order_by('-id')
+    cart =  Cart.objects.filter(cart_user = current_user)
     sum_amount = Cart.objects.filter(cart_user = current_user).all().aggregate(total =Sum('cart_ResellerAmount'))['total']
     
-
-    context = {
-        'list_pos':list_pos,
-        'sum_amount':sum_amount
-        }
-    return render(request, 'reseller_site/cart/cart.html', context)
+    now = datetime.now()
+    if Cart.objects.filter(created_at = now):
+        context = {
+            'list_pos':list_pos,
+            'sum_amount':sum_amount
+            }
+        return render(request, 'reseller_site/cart/cart.html', context)
+    else:
+        cart.delete()
+        
 
 @login_required(login_url='landing_page:login')
 def all_products(request):

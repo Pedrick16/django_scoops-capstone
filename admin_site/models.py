@@ -84,6 +84,9 @@ class Cart(models.Model):
     cart_quantity =  models.BigIntegerField(null=True, verbose_name='quantity')
     cart_ResellerAmount =   models.BigIntegerField(null=True, verbose_name='Reseller Amount')
     cart_amount =  models.BigIntegerField(null=True, verbose_name='POS Amount')
+    created_at =models.DateField(default=timezone.now,null=True,   verbose_name='Date Created')
+    
+    
 
 
     def __str__(self):
