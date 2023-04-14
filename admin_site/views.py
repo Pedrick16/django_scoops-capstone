@@ -860,7 +860,7 @@ def cart_products(request, productid):
         elif avail_stock <  qty:
             messages.error(request,("sorry available stock not enough"))
             return redirect('admin_site:all_products')
-        elif product.product_status =="n/a":
+        elif product.product_status =="not available":
             messages.error(request,("Sorry, this Product is not Available"))
             return redirect('admin_site:all_products')       
         else:

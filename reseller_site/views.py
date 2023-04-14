@@ -218,6 +218,7 @@ def checkout(request):
             NewOrderItems = Cart.objects.filter(cart_user = request.user)
             for item in NewOrderItems:
                 OrderItem.objects.create(
+
                     OrderItem_transactionNo = trackno,
                     OrderItem_category = item.cart_category,
                     OrderItem_name = item.cart_name,
@@ -246,8 +247,9 @@ def add_cart(request):
     list_pos = Cart.objects.filter(cart_user = current_user).order_by('-id')
     cart =  Cart.objects.filter(cart_user = current_user)
     sum_amount = Cart.objects.filter(cart_user = current_user).all().aggregate(total =Sum('cart_ResellerAmount'))['total']
-    
-    now = datetime.now()
+
+   
+    now = None
     if Cart.objects.filter(created_at = now):
         context = {
             'list_pos':list_pos,
@@ -255,8 +257,18 @@ def add_cart(request):
             }
         return render(request, 'reseller_site/cart/cart.html', context)
     else:
+        for carts in cart:
+            products = Product.objects.get(product_code = carts.cart_pcode)
+            cart_quantity = int(carts.cart_quantity)
+            current_stock = int(products.product_stock)
+            return_stock = cart_quantity + current_stock
+            products.product_status = "available"
+            products.product_stock = return_stock
+            products.save()
         cart.delete()
-        
+        return render(request, 'reseller_site/cart/cart.html')
+
+
 
 @login_required(login_url='landing_page:login')
 def all_products(request):
@@ -315,7 +327,7 @@ def cart_products(request, productid):
         elif avail_stock <  qty:
             messages.error(request,("sorry available stock are not enough"))
             return redirect('reseller_site:all_products')
-        elif product.product_status =="n/a":
+        elif product.product_status =="not available":
             messages.error(request,("Sorry, this Product is not Available"))
             return redirect('reseller_site:all_products')       
         else:
