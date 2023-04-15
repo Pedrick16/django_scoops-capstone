@@ -32,7 +32,7 @@ EMAIL_HOST_PASSWORD = 'tzllfqwfqifnnkfm'
 EMAIL_PORT = '587'
 EMAIL_USE_TLS = True
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = ['.vercel.app']
 
 
 # Application definition
@@ -87,12 +87,12 @@ WSGI_APPLICATION = 'scoops4u_capstone.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/4.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 
 # Password validation
@@ -136,7 +136,7 @@ STATICFILES_DIRS = (os.path.join(BASE_DIR, "scoops4u_capstone/static"),)
 # STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 
-MEDIA_URLS = '/media/'
+MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 
