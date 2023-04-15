@@ -153,12 +153,7 @@ class Profile(models.Model):
     def __str__(self):
         return self.profile_email
 
-class Promo(models.Model):
-    PROMOSTATUS = ( ("",""),("active","active"),("inactive","inactive"))
-    promo_no = models.CharField(max_length=250, null=False, verbose_name="Promo Code")
-    promo_amount = models.BigIntegerField(null=True, verbose_name='Amount')
-    promo_discount = models.BigIntegerField(null=True, verbose_name='Discount')
-    promo_status = models.CharField(max_length=250, choices= PROMOSTATUS, null=True, verbose_name='Promo Status')
+
 
 
 class Activity_log(models.Model):

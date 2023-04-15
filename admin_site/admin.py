@@ -41,9 +41,6 @@ class ProfileView(admin.ModelAdmin):
     list_display = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email','profile_pic']
     search_fields = ['list_user','profile_fname', 'profile_mname', 'profile_lname', 'profile_cnumber','profile_address','profile_email']
 
-class PromoView(admin.ModelAdmin):
-    list_display = ['promo_no','promo_amount','promo_discount','promo_status']
-    search_fields = ['promo_no','promo_amount','promo_discount','promo_status']
 
 class Activity_logView(admin.ModelAdmin):
     list_display = ['user_name','activity','role','date_time']
@@ -65,5 +62,4 @@ admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
 admin.site.register(Profile, ProfileView),
 admin.site.register(Cart_Payment, Cart_PaymentView),
-admin.site.register(Promo,PromoView),
 admin.site.register(Settings,SettingsView),

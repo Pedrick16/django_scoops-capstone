@@ -54,6 +54,7 @@ urlpatterns = [
 
     path('pos/', views.pos ,name='pos'),
     path('pos-receipt/', views.pos_receipt ,name='pos_receipt'),
+    path('pos-remove/', views.pos_removeall ,name='pos_removeall'),
     path('pos-receipt/', views.Click_receipt ,name='click_receipt'),
     
     path('pos/add-receipt/', views.pos_addreceipt ,name='add_receipt'),

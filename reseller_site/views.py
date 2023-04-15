@@ -38,26 +38,23 @@ def cart_reseller(request):
     total_item = Cart.objects.filter(cart_user = request.user).count()
     list_cart = Cart.objects.filter(cart_user = request.user).order_by('-id')
     sum_amount = Cart.objects.filter(cart_user = request.user).aggregate(sum_amount =Sum('cart_ResellerAmount'))['sum_amount']
-    
+    cart = Cart.objects.filter(cart_user = request.user)
     times_amount = None
-    if sum_amount >= 5000:
-        times_amount = int(sum_amount) * 0.02
-    else:
-        times_amount = 0
+    if Cart.objects.filter(cart_user = request.user):
+
+                
+        for carts in cart:     
+            products = Product.objects.get(product_code = carts.cart_pcode)
+            if products.product_stock < carts.cart_quantity:
+                messages.error(request,("Some Product out of stock"))
+                return redirect('reseller_site:add_cart')
+
+
+        if sum_amount >= 5000:
+            times_amount = int(sum_amount) * 0.02
+        else:
+            times_amount = 0
         
-
-
-
-    # promo = Promo.objects.get(promo_amount =sum_amount)
-
-    # if sum_amount >= 5000:
-    #     promo = 100
-        
-    # elif
-
-
-
-    
 
     context = {
         'list_cart':list_cart,
@@ -89,14 +86,14 @@ def minus_qty(request, productid):
         pos.save()
     
         current_pcode = pos.cart_pcode
-        product = Product.objects.get(product_code = current_pcode)
-        current_stock = int(product.product_stock)
-        retrieve_stock = current_stock + 1
-        product.product_stock = retrieve_stock
-        product.save()
-        if product.product_stock > 0:
-            product.product_status = "available"
-            product.save()
+        # product = Product.objects.get(product_code = current_pcode)
+        # current_stock = int(product.product_stock)
+        # retrieve_stock = current_stock + 1
+        # product.product_stock = retrieve_stock
+        # product.save()
+        # if product.product_stock > 0:
+        #     product.product_status = "available"
+        #     product.save()
 
         return redirect('reseller_site:add_cart')
        
@@ -125,15 +122,15 @@ def add_qty(request,productid):
         pos.save()
     
 
-        product = Product.objects.get(product_code = current_pcode)
-        current_stock = int(product.product_stock)
-        minus_stock = current_stock - 1
-        product.product_stock = minus_stock
-        product.save()
+        # product = Product.objects.get(product_code = current_pcode)
+        # current_stock = int(product.product_stock)
+        # minus_stock = current_stock - 1
+        # product.product_stock = minus_stock
+        # product.save()
 
-        if product.product_stock == 0:
-            product.product_status = "not available"
-            product.save()
+        # if product.product_stock == 0:
+        #     product.product_status = "not available"
+        #     product.save()
         return redirect('reseller_site:add_cart')
 
 @login_required(login_url='landing_page:login')
@@ -176,6 +173,7 @@ def checkout(request):
             NewOrderItems = Cart.objects.filter(cart_user = request.user)
             for item in NewOrderItems:
                 OrderItem.objects.create(
+
                     OrderItem_transactionNo = trackno,
                     OrderItem_category = item.cart_category,
                     OrderItem_name = item.cart_name,
@@ -183,9 +181,25 @@ def checkout(request):
                     OrderItem_quantity  = item.cart_quantity,
                     OrderItem_amount= item.cart_amount
                 )
+                
+            
+           
+            if Cart.objects.filter(cart_user = request.user):
+                for carts in pos:
+                    products = Product.objects.get(product_code = carts.cart_pcode)
+                    cart_quantity = int(carts.cart_quantity)
+                    current_stock = int(products.product_stock)
+                    minus_stock =  current_stock - cart_quantity
+                    products.product_stock = minus_stock
+                    products.save()
+            
+                    if products.product_stock == 0:
+                        products.product_status = "not available"
+                        products.save()
                 pos.delete()
-            messages.success(request, ("Please wait for your order"))
-            return redirect('reseller_site:transaction_orders')
+                messages.success(request, ("Please wait for your order"))
+                return redirect('reseller_site:transaction_orders')
+            
         else:
             NewTransaction = Transaction()
             NewTransaction.transaction_user = request.user
@@ -226,9 +240,28 @@ def checkout(request):
                     OrderItem_quantity  = item.cart_quantity,
                     OrderItem_amount= item.cart_ResellerAmount
                 )
+               
+            
+            
+            if Cart.objects.filter(cart_user = request.user):
+
+
+                for carts in pos:
+
+
+                    products = Product.objects.get(product_code = carts.cart_pcode)
+                    cart_quantity = int(carts.cart_quantity)
+                    current_stock = int(products.product_stock)
+                    minus_stock =   current_stock - cart_quantity
+                    products.product_stock = minus_stock
+                    products.save()
+            
+                    if products.product_stock == 0:
+                        products.product_status = "not available"
+                        products.save()
                 pos.delete()
-            messages.success(request, ("Please wait for your orders"))
-            return redirect('reseller_site:transaction_orders')
+                messages.success(request, ("Please wait for your orders"))
+                return redirect('reseller_site:transaction_orders')
 
 
 @login_required(login_url='landing_page:login') 
@@ -245,28 +278,17 @@ def transaction_orders(request):
 def add_cart(request):
     current_user = request.user
     list_pos = Cart.objects.filter(cart_user = current_user).order_by('-id')
-    cart =  Cart.objects.filter(cart_user = current_user)
     sum_amount = Cart.objects.filter(cart_user = current_user).all().aggregate(total =Sum('cart_ResellerAmount'))['total']
 
+    context = {
+
+        'list_pos':list_pos,
+        'sum_amount':sum_amount
+    }
+    return render(request, 'reseller_site/cart/cart.html', context)
+
+        
    
-    now = None
-    if Cart.objects.filter(created_at = now):
-        context = {
-            'list_pos':list_pos,
-            'sum_amount':sum_amount
-            }
-        return render(request, 'reseller_site/cart/cart.html', context)
-    else:
-        for carts in cart:
-            products = Product.objects.get(product_code = carts.cart_pcode)
-            cart_quantity = int(carts.cart_quantity)
-            current_stock = int(products.product_stock)
-            return_stock = cart_quantity + current_stock
-            products.product_status = "available"
-            products.product_stock = return_stock
-            products.save()
-        cart.delete()
-        return render(request, 'reseller_site/cart/cart.html')
 
 
 
@@ -301,7 +323,7 @@ def cart_products(request, productid):
         current_user = request.user
         
         # minus or adding to the stock
-        diff = p_stock -  qty 
+        # diff = p_stock -  qty 
         amount_cart = p_price * qty
         reseller_cart = p_reseller_price * qty
         
@@ -333,8 +355,8 @@ def cart_products(request, productid):
         else:
 
             #updating product stock
-            product.product_stock = diff
-            product.save()
+            # product.product_stock = diff
+            # product.save()
 
             #inserting product in pos table
             pos = Cart(cart_user=current_user, cart_pcode=pcode, cart_category= p_category,  cart_name = p_name, cart_unit= p_unit,cart_reseller_price =p_reseller_price , cart_price = p_price, cart_quantity = qty, cart_amount = amount_cart,  cart_ResellerAmount =reseller_cart )
@@ -373,15 +395,15 @@ def transaction_view(request,id):
 def cart_cancel(request,productid):
     if request.method == "POST":
         cancel = Cart.objects.get(id =productid)
-        current_pcode = request.POST['current_pcode']
-        product = Product.objects.get(product_code = current_pcode)
+        # current_pcode = request.POST['current_pcode']
+        # product = Product.objects.get(product_code = current_pcode)
 
-        current_qty = int(request.POST['current_qty'])
-        current_stock = int(product.product_stock)
+        # current_qty = int(request.POST['current_qty'])
+        # current_stock = int(product.product_stock)
 
-        return_stock = current_stock + current_qty
-        product.product_stock = return_stock
-        product.save()
+        # return_stock = current_stock + current_qty
+        # product.product_stock = return_stock
+        # product.save()
         cancel.delete()
 
         #activity log for cancelling the product
@@ -397,9 +419,9 @@ def cart_cancel(request,productid):
         pos_payment = Cart_Payment.objects.filter(cart_user =request.user.role, cart_status="not Print")
         pos_payment.delete()
 
-        if product.product_stock != 0:
-            product.product_status = "available"
-            product.save()
+        # if product.product_stock != 0:
+        #     product.product_status = "available"
+        #     product.save()
     
     
 
