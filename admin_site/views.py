@@ -160,8 +160,8 @@ def add_reseller(request):
         contact_num= request.POST['cnum']
         address = request.POST['address']
         email = request.POST['email']
-        valid_id = request.POST['valid-ID']
-        business_permit = request.POST['Business-permit']
+        valid_id = request.FILES.get('valid-ID')
+        business_permit =  request.FILES.get('Business-permit')
 
 
 

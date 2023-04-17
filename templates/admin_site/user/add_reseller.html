@@ -1,7 +1,7 @@
 {%  extends 'admin_site/base.html' %} 
 
         {% block content%}
-        <form action="{% url 'admin_site:add_reseller' %}" method="POST"  class="text-center">
+        <form action="{% url 'admin_site:add_reseller' %}" method="POST"  class="text-center" enctype="multipart/form-data">
             {% csrf_token %}
             
         
