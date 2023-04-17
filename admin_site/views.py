@@ -561,16 +561,18 @@ def update_inventory(request, productid):
         product_stock = int(request.POST['stock'])
         product_qty = int(request.POST['quantity'])
         p_code = request.POST['product_code']
-        p_batch = request.POST['batch_no']
+     
 
-    
-        #the sum of quantity and stock
-        sum = product_stock + product_qty
+        #check batch
+        by_batch = By_Batch.objects.filter(product_code = product.product_code).aggregate(data =Sum('product_batch'))['data']
+        
+        
+        if by_batch == 1:
+            get_batch = int(by_batch) + 1
+            #the sum of quantity and stock
+            sum = product_stock + product_qty
 
-        if By_Batch.objects.filter(product_code = p_code, product_batch =p_batch):
-            messages.info(request,("already have a batch number"))
-            return redirect('admin_site:inventory') 
-        else:
+        
             #update product stock
             product.product_stock = sum 
             product.product_status = "available"
@@ -582,7 +584,7 @@ def update_inventory(request, productid):
             NewBatch = By_Batch()
             NewBatch.product_code = current_product
             NewBatch.product_name = request.POST.get('product_name')
-            NewBatch.product_batch = request.POST.get('batch_no')
+            NewBatch.product_batch = get_batch
             NewBatch.product_quantity = request.POST.get('quantity')
             NewBatch.product_expired = request.POST.get('expdate')
             NewBatch.save()
@@ -600,6 +602,42 @@ def update_inventory(request, productid):
             NewActLog.save()
             messages.info(request,("Successfully Updated"))
             return redirect('admin_site:inventory')  
+        else:
+            get_batch = int(by_batch) 
+            #the sum of quantity and stock
+            sum = product_stock + product_qty
+
+        
+            #update product stock
+            product.product_stock = sum 
+            product.product_status = "available"
+            product.save()
+
+
+            #adding to by batch (database)
+            current_product = product.product_code
+            NewBatch = By_Batch()
+            NewBatch.product_code = current_product
+            NewBatch.product_name = request.POST.get('product_name')
+            NewBatch.product_batch = get_batch
+            NewBatch.product_quantity = request.POST.get('quantity')
+            NewBatch.product_expired = request.POST.get('expdate')
+            NewBatch.save()
+
+
+
+
+
+            #activity log for adding stock
+            activity = "Added stock"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
+            messages.info(request,("Successfully Updated"))
+            return redirect('admin_site:inventory')  
+
 
 
 
