@@ -571,11 +571,11 @@ def update_inventory(request, productid):
      
 
         #check batch
-        by_batch = By_Batch.objects.filter(product_code = product.product_code).aggregate(data =Sum('product_batch'))['data']
+        by_batch = By_Batch.objects.filter(product_code = product.product_code).aggregate(max = Max('product_batch'))['max']
         
         
-        if by_batch == 1:
-            get_batch = int(by_batch) + 1
+        if by_batch == None:
+            get_batch = 1
             #the sum of quantity and stock
             sum = product_stock + product_qty
 
@@ -610,7 +610,7 @@ def update_inventory(request, productid):
             messages.info(request,("Successfully Updated"))
             return redirect('admin_site:inventory')  
         else:
-            get_batch = int(by_batch) 
+            get_batch = int(by_batch) + 1
             #the sum of quantity and stock
             sum = product_stock + product_qty
 
