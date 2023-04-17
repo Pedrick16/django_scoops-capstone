@@ -193,12 +193,19 @@ def add_reseller(request):
 
     return render(request, 'admin_site/user/add_reseller.html')
 
-def view_pic(request,id):
+def viewpic_vid(request,id):
     reseller = Reseller.objects.get(id =id)
     context={
         'reseller':reseller
     }
-    return render(request,'admin_site/user/view_pic.html',context)    
+    return render(request,'admin_site/user/viewpic_vid.html',context)
+
+def viewpic_bpermit(request,id):
+    reseller = Reseller.objects.get(id =id)
+    context={
+        'reseller':reseller
+    }
+    return render(request,'admin_site/user/viewpic_bpermit.html',context)     
 
 
 def edit_reseller(request,id):

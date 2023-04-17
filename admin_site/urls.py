@@ -96,7 +96,8 @@ urlpatterns = [
 
 
     path('register/<int:inquiryid>/', views.register, name='register'),
-    path('viewing-pic/<int:id>/', views.view_pic, name='viewing_pic'),
+    path('viewing-pic/valid-id/<int:id>/', views.viewpic_vid , name='viewingpic_vid'),
+    path('viewing-pic/business-permit/<int:id>/', views.viewpic_bpermit , name='viewingpic_bpermit'),
 
  
     path('settings_profile/', views.settings_profile, name='settings_profile'),
