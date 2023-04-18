@@ -732,21 +732,7 @@ def pos_addreceipt(request):
         #saving to pos payment in databse
         pos_id = request.POST['get_id']
 
-        pos = Cart.objects.filter(cart_user = request.user)
 
-        for carts in pos:
-                    
-
-
-            products = Product.objects.get(product_code = carts.cart_pcode)
-                   
-            
-            if products.product_stock < carts.cart_quantity:
-                 
-                messages.error(request,('Some Products out of stock'))
-                return redirect('admin_site:pos')
-                
-            
         
 
 
@@ -759,7 +745,6 @@ def pos_addreceipt(request):
             new_Cart_Payment.cart_no = pos_id
             new_Cart_Payment.cart_TotalAmount = request.POST.get('total_amount')
             new_Cart_Payment.cart_cash = request.POST.get('cash')
-            
             new_Cart_Payment.cart_change = request.POST.get('change')
             new_Cart_Payment.cart_status = "not Print"
             new_Cart_Payment.save()
@@ -822,6 +807,9 @@ def add_qty(request,productid):
     product = Product.objects.get(product_code = current_pcode)
     if product.product_stock == 0:
         messages.success(request,("No available Stock"))
+        return redirect('admin_site:pos')
+    elif product.product_stock <= pos.cart_quantity:
+        messages.error(request,('The available stock is not enough'))
         return redirect('admin_site:pos')
     else:
         pos.cart_quantity = result
