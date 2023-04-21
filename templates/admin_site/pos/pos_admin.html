@@ -54,6 +54,7 @@
             <tr>
                 <th>Product ID</th>
                 <th>Product Name</th>
+                <th>Flavor</th>
                 <th>Category</th>
                 <th>Unit</th>
 
@@ -84,6 +85,7 @@
                 <tr>
                     <td>{{ list.cart_pcode }}</td>
                     <td>{{ list.cart_name }}</td>
+                    <td>{{ list.cart_flavor }}</td>
                     <td>{{ list.cart_category }}</td>
                     <td>{{ list.cart_unit }}</td>
 
@@ -129,10 +131,16 @@
     <div class="text-end">
         <a href="{% url 'admin_site:pos_removeall' %}" class="btn btn-danger">Remove All</a>
     </div>
-    {% endif %}
+
 
     <br>
 
+    <div class="text-center">
+    <label for="" style="color: black; font-weight: bolder;">checkbox for return</label>
+    <input type="checkbox" name="return" id="return">
+    </div>
+
+    {% endif %}
     {% if list_pos %}         
 
 
@@ -160,7 +168,7 @@
 
         <div class="text-center pt-2" >
         <button id="btn_compute" class="btn btn-success" >compute</button>
-        <button  class="btn btn-success"id="btn-receipt" hidden>Receipt</button>
+        <button  class="btn btn-success"id="btn-receipt" style="display:none;">Receipt</button>
         </div>
 
         </form>
@@ -227,7 +235,7 @@
 
 
 
-<script src="{% static 'js/pos_admin.js' %}"></script>
+<script src="{% static 'js/pos1.js' %}"></script>
 
 
 {% endblock content %}

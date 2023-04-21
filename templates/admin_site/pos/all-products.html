@@ -29,6 +29,7 @@
         <tr>
             <th>Product code </th>
             <th>Product Name</th>
+            <th>Product flavor</th>
             <th>Category</th>
             <th>Unit</th>
            
@@ -59,6 +60,7 @@
         <tr>
             <td>{{ list.product_code }}</td>
             <td>{{ list.product_name }}</td>
+            <td>{{ list.product_flavor }}</td>
             <td>{{ list.product_category }}</td>
             <td>{{ list.product_unit }}</td>
             
@@ -84,6 +86,7 @@
         <input type="hidden" name="product_code" value="{{ list.product_code }}">
         <input type="hidden" name="product_category" value="{{ list.product_category }}">
         <input type="hidden" name="product_name" value="{{ list.product_name}}">
+        <input type="hidden" name="product_flavor" value="{{ list.product_flavor}}">
         <input type="hidden" name="product_unit" value="{{ list.product_unit }}">
         <input type="hidden" name="product_reseller_price" value="{{ list.product_ResellerPrice }}">
         <input type="hidden" name="product_price" value="{{ list.product_price }}">

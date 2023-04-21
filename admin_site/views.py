@@ -84,10 +84,10 @@ def register(request, inquiryid):
             reseller.reseller_status = status  
             reseller.save()
             return redirect('admin_site:send_email')
+        
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/register.html',{'form':form})      
-
 
 
 #list reseller
@@ -266,10 +266,10 @@ def archive_reseller(request,resellerid):
 @login_required(login_url='landing_page:login')
 def send_email(request):
     if request.method == "POST":
-     
+        email = request.POST['email']
         tile_email = "your inquiry successfully approved"
         # tile_email = request.POST['name']
-        email = request.POST['email']
+        
         message = request.POST['message']
         send_mail(
             tile_email,
@@ -335,9 +335,13 @@ def view_product(request, productid):
     return render(request, 'admin_site/products/view_product.html', context)
 
 def add_product(request):
-        list_settings = Settings.objects.all()
+        list_category = Settings_category.objects.all()
+        list_flavor = Settings_flavor.objects.all()
+        list_unit = Settings_unit.objects.all()
         context={
-            'list_settings':list_settings
+            'list_category':list_category,
+            'list_flavor':list_flavor,
+            'list_unit':list_unit,
         }
         return render(request, 'admin_site/products/add_product.html',context)
 
@@ -347,44 +351,44 @@ def add_product(request):
 def process_product(request):
     if request.method == "POST":
 
+
         product_code = 'S4UPR'+str(random.randint(1111111,9999999))
 
-        pcategory = request.POST['category']
+
         pname = request.POST['product_name']
+        flavor = request.POST['flavor']
+        pcategory = request.POST['category']
         product_unit = request.POST['unit']
         r_price = int(request.POST['reseller_price'])
         pprice = int(request.POST['price'])
         pstock = 0
         pstatus = "not available"
 
-        # locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
-        # decimal_sales = Decimal(r_price)
-        # reseller_price = locale.currency(decimal_sales, grouping=True, symbol=True)
 
-        # locale.setlocale(locale.LC_ALL, 'en_PH.UTF-8')
-        # decimal_sales = Decimal(pprice)
-        # pos_price = locale.currency(decimal_sales, grouping=True, symbol=True)
+        if Product.objects.filter(Q(product_name =pname) & Q(product_flavor = flavor) & Q(product_category = pcategory) & Q(product_unit =product_unit)):
+            messages.error(request,'Product already Exist!')
+            return redirect('admin_site:add_product')
+        else:
+
+            while Product.objects.filter(product_code = product_code) is None:
+                product_code = 'S4U'+str(random.randint(1111111,9999999))
 
 
-        while Product.objects.filter(product_code = product_code) is None:
-            product_code = 'S4U'+str(random.randint(1111111,9999999))
-
-        #inserting to database 
-        product = Product(product_code = product_code, product_category = pcategory, product_name = pname, product_unit =product_unit, product_ResellerPrice =r_price, product_price = pprice, product_stock = pstock, product_status = pstatus)
-        product.save()
+            #inserting to database 
+            product = Product(product_code = product_code, product_name =pname, product_flavor = flavor, product_category = pcategory,  product_unit =product_unit, product_ResellerPrice =r_price, product_price = pprice, product_stock = pstock, product_status = pstatus)
+            product.save()
         
-        #activity log
-        activity = "Adding Product"
-        NewActLog = Activity_log()
-        NewActLog.user_name = request.user
-        NewActLog.role = request.user.role
-        NewActLog.activity = activity 
-        NewActLog.save()
+            #activity log
+            activity = "Adding Product"
+            NewActLog = Activity_log()
+            NewActLog.user_name = request.user
+            NewActLog.role = request.user.role
+            NewActLog.activity = activity 
+            NewActLog.save()
 
+            messages.success(request,("Successfully Product added"))
+            return redirect('admin_site:list_product')
 
-        messages.success(request,("Successfully Product added"))
-        return redirect('admin_site:list_product')
-   
         
 
 
@@ -493,45 +497,6 @@ def my_profile(request):
         'current_profile':current_profile
     }
     return render(request, 'admin_site/profile/my_profile.html',context)
-
-def settings_product(request):
-    settings = Settings.objects.all()
-    context ={
-        'settings':settings
-    }
-    return render(request, 'admin_site/settings/product_settings.html',context)
-
-def settings_remove(request, id):
-    settings = Settings.objects.get(pk = id)
-    settings.delete()
-    messages.success(request,("succussfully removed"))
-    return redirect('admin_site:settings_product')
-
-
-    
-
-
-
-def settings_addproduct(request):
-    if request.method == "POST":
-        category = request.POST['category']
-        unit = request.POST['unit']
-        settings = Settings()
-
-        if Settings.objects.filter(Q(settings_category =category) | Q(settings_unit = unit)):
-            messages.error(request,("It is already Exist"))
-            return redirect('admin_site:settings_product')
-        else:
-            settings.settings_category = request.POST.get('category')
-            settings.settings_unit = request.POST.get('unit')
-            settings.save()
-            return redirect('admin_site:settings_product')
-    return render(request, 'admin_site/settings/add_settings.html')
-
-
-
-
-
 
 
 
@@ -709,15 +674,17 @@ def pos_receipt_process(request):
                 products = Product.objects.get(product_code = carts.cart_pcode)
                 cart_quantity = int(carts.cart_quantity)
                 current_stock = int(products.product_stock)
-                minus_stock = cart_quantity - current_stock
+                minus_stock = current_stock - cart_quantity 
                 products.product_stock = minus_stock
                 products.save()
             
-                if products.product_stock == 0:
+                if products.product_stock <= 20:
+                        products.product_status = "low stock"
+                        products.save()     
+                elif products.product_stock == 0:
+
                     products.product_status = "not available"
                     products.save()
-
-           
             pos_payment = Cart_Payment.objects.get(id = get_paymentID)
             pos_payment.cart_status = "Printed"
             pos_payment.save()
@@ -903,6 +870,7 @@ def cart_products(request, productid):
         p_unit = request.POST['product_unit']
         p_category = request.POST['product_category']
         p_name = request.POST['product_name']
+        p_flavor = request.POST['product_flavor']
 
        
          
@@ -919,7 +887,7 @@ def cart_products(request, productid):
 
         #checking if have already product in the cart
 
-        status = "low stock"
+       
 
         
         
@@ -946,7 +914,7 @@ def cart_products(request, productid):
             # product.save()
 
             #inserting product in pos table
-            pos = Cart(cart_user=current_user, cart_pcode=pcode, cart_category= p_category,  cart_name = p_name, cart_unit= p_unit,cart_reseller_price =p_reseller_price , cart_price = p_price, cart_quantity = qty, cart_amount = amount_cart,  cart_ResellerAmount =reseller_cart )
+            pos = Cart(cart_user=current_user, cart_pcode=pcode,   cart_name = p_name, cart_flavor= p_flavor,  cart_category= p_category, cart_unit= p_unit,cart_reseller_price =p_reseller_price , cart_price = p_price, cart_quantity = qty, cart_amount = amount_cart,  cart_ResellerAmount =reseller_cart )
             pos.save()   
 
             pos_payment = Cart_Payment.objects.filter(cart_user = request.user, cart_status="not Print")
@@ -1056,6 +1024,15 @@ def transaction_view(request, id):
     return render(request, 'admin_site/transaction/view_orders.html', context)
 
 
+#return products
+
+@login_required(login_url='landing_page:login')
+def return_product(request):
+        return render(request,'admin_site/transaction/return_products.html')
+
+
+
+
 
 
 #FOR REPORTS FEATURES
@@ -1068,6 +1045,12 @@ def report_actlog(request):
     }
     return render(request, 'admin_site/reports/act_log.html', context)
 
+#list product
+@login_required(login_url='landing_page:login')
+def report_products(request):
+    list_products = Product.objects.all().order_by('-id')
+    context = {'list_products':list_products}
+    return render(request, 'admin_site/reports/product.html', context)
 
 
 @login_required(login_url='landing_page:login') 
@@ -1091,6 +1074,94 @@ def report_online_sales(request):
 
 
 
+#settings feature
+def settings_product(request):
+    list_category = Settings_category.objects.all()
+    list_flavor = Settings_flavor.objects.all()
+    list_unit = Settings_unit.objects.all()
+
+    context ={
+        'list_category':list_category,
+        'list_flavor':list_flavor,
+        'list_unit':list_unit,
+
+    }
+    return render(request, 'admin_site/settings/settings_product.html',context)
+
+
+
+
+
+
+
+#remove category
+def remove_category(request, id):
+    settings = Settings_category.objects.get(pk = id)
+    settings.delete()
+    messages.success(request,("succussfully removed"))
+    return redirect('admin_site:settings_product')
+
+
+
+#remove unit
+def remove_unit(request, id):
+    settings = Settings_unit.objects.get(pk = id)
+    settings.delete()
+    messages.success(request,("succussfully removed"))
+    return redirect('admin_site:settings_product')
+
+
+#remove flavor
+def remove_flavor(request, id):
+    settings = Settings_flavor.objects.get(pk = id)
+    settings.delete()
+    messages.success(request,("succussfully removed"))
+    return redirect('admin_site:settings_product')
+
+
+
+
+def settings_addcategory(request):
+    if request.method == "POST":
+        category = request.POST['category']
+        settings_category = Settings_category()
+
+        if Settings_category.objects.filter(settings_category =category ):
+            messages.error(request,("It is already Exist"))
+            return redirect('admin_site:settings_addcategory')
+        else:
+            settings_category.settings_category = request.POST.get('category')
+            settings_category.save()
+            return redirect('admin_site:settings_product')
+    return render(request, 'admin_site/settings/addcategory_settings.html')
+
+def settings_addflavor(request):
+    if request.method == "POST":
+        flavor = request.POST['flavor']
+        settings_flavor = Settings_flavor()
+
+        if Settings_flavor.objects.filter(settings_flavor = flavor ):
+            messages.error(request,("It is already Exist"))
+            return redirect('admin_site:settings_addflavor')
+        else:
+            settings_flavor.settings_flavor = request.POST.get('flavor')
+            settings_flavor.save()
+            return redirect('admin_site:settings_product')
+    return render(request, 'admin_site/settings/addflavor_settings.html')
+
+def settings_addunit(request):
+    if request.method == "POST":
+        unit = request.POST['unit']
+        settings_unit= Settings_unit()
+
+        if Settings_unit.objects.filter(settings_unit = unit ):
+            messages.error(request,("It is already Exist"))
+            return redirect('admin_site:settings_addunit')
+        else:
+            settings_unit.settings_unit = request.POST.get('unit')
+            settings_unit.save()
+            return redirect('admin_site:settings_product')
+    return render(request, 'admin_site/settings/addunit_settings.html')
 
 
 
@@ -1145,12 +1216,24 @@ def search_product(request):
     if request.method == "GET":
         search = request.GET.get('search')
         if search:
-            list_products = Product.objects.filter(Q(product_code__icontains=search) | Q(product_category__icontains=search) | Q(
+            list_products = Product.objects.filter(Q(product_code__icontains=search) | Q(product_flavor__icontains=search) | Q(product_category__icontains=search) | Q(
                 product_name__icontains=search) | Q(product_unit__icontains=search) | Q(product_stock__icontains=search) | Q(product_status__icontains=search))
             return render(request, 'admin_site/products/product.html', {'list_products': list_products})
         else:
            messages.error(request, ("No records found!"))
            return render(request, 'admin_site/products/product.html')
+        
+@login_required(login_url='landing_page:login')
+def search_reportproduct(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_products = Product.objects.filter(Q(product_code__icontains=search) | Q(product_flavor__icontains=search)| Q(product_category__icontains=search) | Q(
+                product_name__icontains=search) | Q(product_unit__icontains=search) | Q(product_stock__icontains=search) | Q(product_status__icontains=search))
+            return render(request, 'admin_site/reports/product.html', {'list_products': list_products})
+        else:
+           messages.error(request, ("No records found!"))
+           return render(request, 'admin_site/reportss/product.html')
 
 
 #search bar for Products             

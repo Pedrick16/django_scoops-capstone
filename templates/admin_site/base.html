@@ -62,7 +62,7 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{%url 'admin_site:inventory' %}">Add Stock</a></li>
-                  <li><a class="dropdown-item" href="{% url 'admin_site:view_inventory' %}">View</a></li>
+          
                 </ul>
               </li>
             
@@ -78,6 +78,7 @@
                   <li><a class="dropdown-item" href="{% url 'admin_site:transaction_orders' %}">Pending</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:transaction_outshipping' %}">Out For Shipping</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:transaction_completed' %}">Delivered</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:return_product' %}">Return Products</a></li>
                 </ul>
               </li>
 
@@ -90,6 +91,8 @@
                   <li><a class="dropdown-item" href="{% url 'admin_site:report_actlog' %}">Activity Log</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:report_online_sales' %}">Online Sales</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:report_pos_sales' %}">POS Sales</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:report_products' %}">Products</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:view_inventory' %}">View Stock added</a></li>
                 </ul>
                 
               </li>
@@ -103,7 +106,8 @@
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
                   <li><a class="dropdown-item" href="{% url 'admin_site:settings_profile' %}">Edit Profile</a></li>
                   <li><a class="dropdown-item" href="{% url 'admin_site:list_archive' %}">Archive Account</a></li>
-                  <li><a class="dropdown-item" href="{% url 'admin_site:settings_product' %}">Settings Product</a></li>
+                  <li><a class="dropdown-item" href="{% url 'admin_site:settings_product' %}">settings_Product</a></li>
+                
                 
   
                 </ul>
@@ -241,7 +245,7 @@
 
 {% endif %}
 
-{% if user.role == "rider"%}
+{% if user.role == "delivery_staff"%}
  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a class="navbar-brand" href="#">Scoops4u</a>

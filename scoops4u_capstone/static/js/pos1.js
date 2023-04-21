@@ -29,7 +29,8 @@ $(document).ready(function(){
             $('#get_id').val(pos_id)
             $('#vchange').val(currency)
             $('#change').val(result)
-            $('#btn-receipt').removeAttr('hidden');
+            $('#btn-receipt').show()
+          
             
             // $('#form').submit()
 
@@ -62,17 +63,41 @@ $(document).ready(function(){
 
     })
 
+ 
     $('#return').change(function() {
         var defaultCash = 0
-        if($(this).prop('checked')) {
-            $('#cash').value(defaultCash)
-            $('#btn_compute').Attr('hidden')
-            $('#btn-receipt').removeAttr('hidden');
+        if(this.checked) {
+            $('#cash').val(defaultCash)
+            $('#vchange').val("0.00")
+            $('#change').val(0)
+            $('#btn-receipt').show()
+            $('#btn_compute').hide(1000)
+          
         } else {
-            $('#btn_compute').removeAttr('hidden');
+            
+            $('#btn-receipt').fadeOut(1000)
+            $('#btn_compute').show()
+            $('#cash').val("")
+            $('#vchange').val("")
+
+            
         }
+
+        // if($(this).is(':checked')) {
+        //     $('#cash').val(defaultCash)
+        //     $('#btn-receipt').fadeIn(1000)
+            
+        // } else {
+        //     $('#cash').val("")
+        //     $('#btn-receipt').fadeOut(1000)
+        // }
     });
 
+  
+
+    
+
+   
 
 
 

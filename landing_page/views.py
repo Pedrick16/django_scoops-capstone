@@ -51,7 +51,7 @@ def loginView(request):
                 return redirect('admin_site:dashboard') 
             elif user.role == "reseller" and user.status == "active":
                 return redirect('reseller_site:dashboard')
-            elif user.role == "rider" and user.status == "active":    
+            elif user.role == "delivery_staff" and user.status == "active":    
                 return redirect('rider_site:dashboard')
             elif user.role == "staff" and user.status == "active": 
                 return redirect('staff_site:dashboard')

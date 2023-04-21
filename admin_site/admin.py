@@ -15,9 +15,6 @@ class ProductView(admin.ModelAdmin):
     list_display = ['product_code',  'product_name','product_category', 'product_unit','product_ResellerPrice','product_price','product_stock','product_status']
     search_fields = ['product_code', 'product_category', 'product_name', 'product_unit','product_ResellerPrice','product_price','product_stock','product_status']
 
-class SettingsView(admin.ModelAdmin):
-    list_display = ['settings_category','settings_unit']
-    search_fields = ['settings_category','settings_unit']
 
 class BatchView(admin.ModelAdmin):
     list_display = ['product_code','product_name','product_batch','product_quantity','product_expired','created_at']
@@ -62,4 +59,7 @@ admin.site.register(OrderItem, OrderItemView),
 admin.site.register(Activity_log, Activity_logView),
 admin.site.register(Profile, ProfileView),
 admin.site.register(Cart_Payment, Cart_PaymentView),
-admin.site.register(Settings,SettingsView),
+admin.site.register(Return_product),
+admin.site.register(Settings_category),
+admin.site.register(Settings_unit),
+admin.site.register(Settings_flavor),

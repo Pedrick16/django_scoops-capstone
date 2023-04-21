@@ -3,7 +3,9 @@
 
 {% block content %}
     
-   
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
 
   
     
@@ -15,11 +17,23 @@
     
     <input type="text" placeholder="Enter Product Name" name="product_name" class="form-control">
     <br>
+
+
+    <select name="flavor" id="" class="form-control">
+        <option value=""></option>
+    
+        {% for list in list_flavor  %}
+        <option value="{{ list.settings_flavor }}">{{ list.settings_flavor }}</option>
+        {% endfor %}
+        
+        </select>
+
+    <br>
    
     <select name="category" id="" class="form-control">
     <option value=""></option>
 
-    {% for list in list_settings  %}
+    {% for list in list_category  %}
     <option value="{{ list.settings_category }}">{{ list.settings_category }}</option>
     {% endfor %}
     
@@ -29,7 +43,7 @@
     <select name="unit" id="" class="form-control">
     <option value=""></option>
 
-    {% for list in list_settings  %}
+    {% for list in list_unit  %}
     <option value="{{ list.settings_unit }}">{{ list.settings_unit }}</option>
     {% endfor %}
     

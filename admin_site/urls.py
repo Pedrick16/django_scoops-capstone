@@ -89,10 +89,15 @@ urlpatterns = [
     path('search/online-sales', views.search_online_sales, name='search_online_sales'),
     path('search/pos-sales', views.search_pos_sales, name='search_pos_sales'),
 
-    #report
+    #report routes
     path('reports/activity-log/', views.report_actlog, name='report_actlog'),
     path('reports/pos-sales/', views.report_pos_sales, name='report_pos_sales'),
     path('reports/online-sales/', views.report_online_sales, name='report_online_sales'),
+    path('reports-product/', views.report_products, name='report_products'),
+
+    #search product report
+    path('search/report-product/', views.search_reportproduct, name='search_reportproduct'),
+
 
 
     path('register/<int:inquiryid>/', views.register, name='register'),
@@ -100,11 +105,29 @@ urlpatterns = [
     path('viewing-pic/business-permit/<int:id>/', views.viewpic_bpermit , name='viewingpic_bpermit'),
 
  
-    path('settings_profile/', views.settings_profile, name='settings_profile'),
-    path('settings_Product/', views.settings_product, name='settings_product'),
-    path('settings_add/', views.settings_addproduct, name='settings_addproduct'),
-    path('remove-settings_product/<int:id>/', views.settings_remove, name='settings_remove'),
-   
-   
+    
 
+    #settings routes
+
+    path('settings_profile/', views.settings_profile, name='settings_profile'),
+
+    #view
+    path('settings-product/', views.settings_product, name='settings_product'),
+
+    #add 
+    path('add-category/', views.settings_addcategory , name='settings_addcategory'),
+    path('add-unit/', views.settings_addunit , name='settings_addunit'),
+    path('add-flavor/', views.settings_addflavor , name='settings_addflavor'),
+
+
+    #remove
+    path('remove/Product-category/<int:id>/', views.remove_category , name='remove_category'),
+    path('remove/Product-unit/<int:id>/', views.remove_unit , name='remove_unit'),
+    path('remove/Product-flavor/<int:id>/', views.remove_flavor , name='remove_flavor'),
+
+    #return products
+    path('Return/Product/', views.return_product, name='return_product'),
+
+
+    
 ]

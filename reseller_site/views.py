@@ -175,8 +175,9 @@ def checkout(request):
                 OrderItem.objects.create(
 
                     OrderItem_transactionNo = trackno,
-                    OrderItem_category = item.cart_category,
                     OrderItem_name = item.cart_name,
+                    OrderItem_flavor = item.cart_flavor,
+                    OrderItem_category = item.cart_category,
                     OrderItem_unit = item.cart_unit,
                     OrderItem_quantity  = item.cart_quantity,
                     OrderItem_amount= item.cart_amount
@@ -192,8 +193,11 @@ def checkout(request):
                     minus_stock =  current_stock - cart_quantity
                     products.product_stock = minus_stock
                     products.save()
-            
-                    if products.product_stock == 0:
+
+                    if products.product_stock <= 20:
+                        products.product_status = "not available"
+                        products.save()
+                    elif products.product_stock == 0:
                         products.product_status = "not available"
                         products.save()
                 pos.delete()
@@ -234,13 +238,13 @@ def checkout(request):
                 OrderItem.objects.create(
 
                     OrderItem_transactionNo = trackno,
-                    OrderItem_category = item.cart_category,
                     OrderItem_name = item.cart_name,
+                    OrderItem_flavor = item.cart_flavor,
+                    OrderItem_category = item.cart_category,
                     OrderItem_unit = item.cart_unit,
                     OrderItem_quantity  = item.cart_quantity,
                     OrderItem_amount= item.cart_ResellerAmount
                 )
-               
             
             
             if Cart.objects.filter(cart_user = request.user):
@@ -255,8 +259,11 @@ def checkout(request):
                     minus_stock =   current_stock - cart_quantity
                     products.product_stock = minus_stock
                     products.save()
-            
-                    if products.product_stock == 0:
+
+                    if products.product_stock <= 20:
+                        products.product_status = "low stock"
+                        products.save()
+                    elif products.product_stock == 0:
                         products.product_status = "not available"
                         products.save()
                 pos.delete()
