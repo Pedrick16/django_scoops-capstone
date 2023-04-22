@@ -12,8 +12,6 @@
     <form action="{% url 'admin_site:process_product' %}" method="POST" class="text-center">
         {% csrf_token %}
         <h1>Add Product</h1>    
-
-  
     
     <input type="text" placeholder="Enter Product Name" name="product_name" class="form-control">
     <br>

@@ -18,6 +18,7 @@ class SignUpForm(UserCreationForm):
             'minlength':'6'
         })
 
+
         self.fields['email'].widget.attrs.update({
             'class': 'form-control',
             'required':'',

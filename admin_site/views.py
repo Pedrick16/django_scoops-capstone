@@ -77,13 +77,16 @@ def register(request, inquiryid):
     if request.method =="POST":
         reseller = Reseller.objects.get(id = inquiryid)
         status = "active"
+        check_sign = SignUpForm()
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
             #changing status for reseller
             reseller.reseller_status = status  
             reseller.save()
+
             return redirect('admin_site:send_email')
+        
         
     else:
         form = SignUpForm()
@@ -521,6 +524,7 @@ def view_inventory(request):
     context = {'list_inventory':list_inventory}
     return render(request, 'admin_site/inventory/view.html', context)  
 
+
 #updating inventory
 @login_required(login_url='landing_page:login')
 def update_inventory(request, productid):
@@ -533,7 +537,7 @@ def update_inventory(request, productid):
         product_stock = int(request.POST['stock'])
         product_qty = int(request.POST['quantity'])
         p_code = request.POST['product_code']
-     
+
 
         #check batch
         by_batch = By_Batch.objects.filter(product_code = product.product_code).aggregate(max = Max('product_batch'))['max']
@@ -613,21 +617,6 @@ def update_inventory(request, productid):
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 # FOR POS FEATURES
 
 #list pos cart
@@ -667,27 +656,44 @@ def pos_receipt_process(request):
     if request.method == "POST":
         get_paymentID = request.POST['get_id']
         pos = Cart.objects.filter(cart_user = request.user)
+        pos_payment = Cart_Payment.objects.get(id = get_paymentID)
+       
         if Cart.objects.filter(cart_user = request.user):
 
             for carts in pos:
 
                 products = Product.objects.get(product_code = carts.cart_pcode)
+                return_product = Return_product.objects.get(product_code = carts.cart_pcode, product_qty = carts.cart_quantity)
+
                 cart_quantity = int(carts.cart_quantity)
                 current_stock = int(products.product_stock)
                 minus_stock = current_stock - cart_quantity 
                 products.product_stock = minus_stock
                 products.save()
             
-                if products.product_stock <= 20:
-                        products.product_status = "low stock"
-                        products.save()     
-                elif products.product_stock == 0:
-
+                
+                if products.product_stock == 0:
                     products.product_status = "not available"
                     products.save()
+                elif products.product_stock <= 20:
+                        products.product_status = "low stock"
+                        products.save()  
+                
+                if Cart_Payment.objects.filter(cart_cash = 0):
+                    return_product.return_status = "returned"
+                    return_product.save()
+
+                    
+                
+
             pos_payment = Cart_Payment.objects.get(id = get_paymentID)
             pos_payment.cart_status = "Printed"
             pos_payment.save()
+
+            
+            
+           
+                
 
             pos = Cart.objects.filter(cart_user = request.user)
             pos.delete()
@@ -698,9 +704,6 @@ def pos_addreceipt(request):
 
         #saving to pos payment in databse
         pos_id = request.POST['get_id']
-
-
-        
 
 
         if Cart_Payment.objects.filter(cart_user =request.user.role, cart_status="not Print"):
@@ -816,6 +819,7 @@ def pos_cancel(request,productid):
         # product.product_stock = return_stock
         
 
+
         # product.save()
         cancel.delete()
 
@@ -872,8 +876,7 @@ def cart_products(request, productid):
         p_name = request.POST['product_name']
         p_flavor = request.POST['product_flavor']
 
-       
-         
+
         # session,  getting  user name
         current_user = request.user
         
@@ -887,7 +890,6 @@ def cart_products(request, productid):
 
         #checking if have already product in the cart
 
-       
 
         
         
@@ -1028,10 +1030,33 @@ def transaction_view(request, id):
 
 @login_required(login_url='landing_page:login')
 def return_product(request):
-        return render(request,'admin_site/transaction/return_products.html')
+        return_product = Return_product.objects.all()
+        context ={
+            'return_product':return_product 
+        }
+        return render(request,'admin_site/transaction/return_products.html',context)
 
 
 
+
+@login_required(login_url='landing_page:login')
+def add_returnproduct(request):
+    product = Product.objects.all()
+    if request.method == "POST":
+        return_product = Return_product()
+        return_product.product_code = request.POST.get('pcode')
+        return_product.product_qty= request.POST.get('qty')
+        return_product.reseller_name = request.POST.get('reseller_name')
+        return_product.reason =  request.POST.get('reason')
+        return_product.return_date =  request.POST.get('date')
+        return_product.return_status =  "unreturned"
+        return_product.save()
+        messages.success(request,("Successfully added"))
+        return redirect ('admin_site:return_product')
+    context={
+        'product':product
+    }
+    return render(request, 'admin_site/transaction/add_return.html',context)
 
 
 
@@ -1044,6 +1069,8 @@ def report_actlog(request):
         'list_reports':list_reports
     }
     return render(request, 'admin_site/reports/act_log.html', context)
+
+
 
 #list product
 @login_required(login_url='landing_page:login')
@@ -1084,7 +1111,6 @@ def settings_product(request):
         'list_category':list_category,
         'list_flavor':list_flavor,
         'list_unit':list_unit,
-
     }
     return render(request, 'admin_site/settings/settings_product.html',context)
 

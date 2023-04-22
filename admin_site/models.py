@@ -63,14 +63,13 @@ class Product(models.Model):
         return self.product_code
     
 class Return_product(models.Model):
-    STATUS = (("",""),("returned","returned"),("not return","not return"))
-    product_code =  models.CharField(unique=True, max_length=200, verbose_name='Product Code')
-    product_name=  models.CharField(max_length=200, null=True, verbose_name='Product Name')
-    product_unit =  models.CharField(max_length=200, verbose_name='Unit')
-    product_qty =  models.BigIntegerField(null=True, verbose_name='Available Stock')
-    return_date = models.DateField(default=timezone.now, verbose_name='Return Date')
-    product_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
-
+    STATUS = (("",""),("returned","returned"),("unreturned","unreturned"))
+    product_code =  models.CharField(max_length=200, verbose_name='Product Code')
+    product_qty =     models.BigIntegerField(null=True, verbose_name='Available Stock')
+    reseller_name =  models.CharField(null=True,max_length=200, verbose_name='Reseller Name')
+    reason = models.TextField(null=True, verbose_name='Reason')
+    return_date =     models.CharField(max_length=200, null=True,verbose_name='Return Date')
+    return_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
 
     def __str__(self):
         return self.return_date
@@ -87,7 +86,8 @@ class By_Batch(models.Model):
     
     def __str__(self):
         return self.product_code
-
+    
+    
 class Cart(models.Model):
     cart_user =  models.CharField(max_length=200, null=False, default=None, verbose_name='List user')
     cart_pcode =  models.CharField(max_length=200, verbose_name='Product Code')

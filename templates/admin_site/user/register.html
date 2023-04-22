@@ -2,7 +2,7 @@
 
 
 {% block content %}
-
+{% load static %}
 {% for field in form %}
     
     {% for error in  field.errors %}
@@ -29,8 +29,14 @@
     <label for="">Status</label>
         {{ form.status }}
 
+
+    
     
   <input type="submit"  value="Register" class="btn btn-pill text-white btn-block btn-primary">
 </form>
+
+
 {% endblock content %}
+<script src="{% static 'js/register.js' %}"></script>
+
     

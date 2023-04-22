@@ -127,6 +127,7 @@ urlpatterns = [
 
     #return products
     path('Return/Product/', views.return_product, name='return_product'),
+    path('Add/Return-Product/', views.add_returnproduct , name='add_returnproduct'),
 
 
     

@@ -1,0 +1,32 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+    <form action="{% url 'admin_site:add_returnproduct' %}" method="POST">
+        {% csrf_token %}
+
+        <select name="pcode" id="" class="form-control">
+            <option value=""></option>
+            
+            {% for list in product %}
+            
+
+            <option value="{{ list.product_code }}">{{ list.product_code }}</option>
+
+            {% endfor %}
+        </select>
+       <br>
+        <input type="number" class="form-control" name="qty" placeholder="Quantity">
+        <br>
+        <input type="text"  class="form-control" name="reseller_name" placeholder="Full Name">
+        <br>
+        <textarea name="reason" id="" cols="100" rows="10">
+
+        </textarea>
+        <input type="date" name="date"   class="form-control">
+        <br>
+    
+        
+        <input type="submit" value="add" class="btn btn-dark">
+    </form>
+{% endblock content %}
+    
