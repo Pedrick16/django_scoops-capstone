@@ -1,0 +1,31 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+    <form action="{% url 'admin_site:update_returnproduct' return_product.id %}" method="POST">
+        {% csrf_token %}
+
+        <select name="pcode" id="" class="form-control" >
+
+            <option value="{{ return_product.product_code }}">{{ return_product.product_code }}</option>
+
+        </select>
+        <br>
+        <input type="number" class="form-control" value="{{return_product.product_qty}}" name="qty" placeholder="Quantity">
+        <br>
+        <input type="text"  class="form-control" value="{{return_product.reseller_name}}" name="reseller_name" placeholder="Full Name">
+        <br>
+        <textarea name="reason" id="" cols="100" rows="10">
+            {{return_product.reason}}
+        </textarea>
+        <input type="date" name="date"  value="{{return_product.return_date}}" class="form-control">
+        <br>
+        <select name="status" id="" class="form-control">
+            <option value="returned" {% if return_product.return_status == 'returned' %}selected{% endif %}>returned</option>
+            <option value="unreturned" {% if return_product.return_status == 'unreturned' %}selected{% endif %}>unreturned</option>
+        </select>
+    
+        
+        <input type="submit" value="add" class="btn btn-dark">
+    </form>
+{% endblock content %}
+    

@@ -80,7 +80,7 @@ class By_Batch(models.Model):
     product_name = models.CharField( max_length=200, null=True,verbose_name='Product Name')
     product_flavor = models.CharField( max_length=200, null=True, verbose_name='Product Flavor')
     product_batch =  models.CharField(max_length=200, null=True, verbose_name='Batch Number')
-    product_quantity =  models.BigIntegerField(null=True,  verbose_name='Quantity')
+    product_quantity =  models.IntegerField(null=True,  verbose_name='Quantity')
     product_expired =  models.DateField( null=True, verbose_name='Expiration Date')
     created_at =models.DateTimeField(default=timezone.now,  verbose_name='created')
     

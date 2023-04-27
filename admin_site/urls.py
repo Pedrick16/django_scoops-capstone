@@ -88,6 +88,7 @@ urlpatterns = [
     path('search/activity-log-date/', views.search_date_actlog, name='search_date_actlog'),
     path('search/online-sales', views.search_online_sales, name='search_online_sales'),
     path('search/pos-sales', views.search_pos_sales, name='search_pos_sales'),
+    path('search/pos/all-products/', views.search_allpos, name='search_allpos'),
 
     #report routes
     path('reports/activity-log/', views.report_actlog, name='report_actlog'),
@@ -128,6 +129,9 @@ urlpatterns = [
     #return products
     path('Return/Product/', views.return_product, name='return_product'),
     path('Add/Return-Product/', views.add_returnproduct , name='add_returnproduct'),
+    path('edit/Return-Product/<int:id>/', views.edit_returnproduct , name='edit_returnproduct'),
+    path('update/Return-Product/<int:id>/', views.update_returnproduct , name='update_returnproduct'),
+
 
 
     

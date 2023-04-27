@@ -329,7 +329,7 @@ def view_product(request, productid):
     list_product = Product.objects.get(id = productid)
     current_pcode = list_product.product_code
     list_batch = By_Batch.objects.filter(product_code = current_pcode)
-    latest_bnumber = By_Batch.objects.filter(product_code = current_pcode).aggregate(max = Max('product_batch'))['max']
+    latest_bnumber = By_Batch.objects.filter(product_code = current_pcode).count()
     context ={
         'list_product':list_product,
         'list_batch':list_batch,
@@ -540,7 +540,7 @@ def update_inventory(request, productid):
 
 
         #check batch
-        by_batch = By_Batch.objects.filter(product_code = product.product_code).aggregate(max = Max('product_batch'))['max']
+        by_batch = By_Batch.objects.filter(product_code = product.product_code).count()
         
         
         if by_batch == None:
@@ -679,7 +679,7 @@ def pos_receipt_process(request):
                         products.product_status = "low stock"
                         products.save()  
                 
-                if Cart_Payment.objects.filter(cart_cash = 0):
+                if Cart_Payment.objects.filter(cart_user = request.user,cart_cash = 0):
                     return_product.return_status = "returned"
                     return_product.save()
 
@@ -1058,6 +1058,38 @@ def add_returnproduct(request):
     }
     return render(request, 'admin_site/transaction/add_return.html',context)
 
+@login_required(login_url='landing_page:login')
+def edit_returnproduct(request,id):
+    return_product = Return_product.objects.get(pk = id)
+  
+    context={
+        'return_product':return_product
+    }
+    return render(request, 'admin_site/transaction/edit_return.html',context)
+
+
+@login_required(login_url='landing_page:login')
+def update_returnproduct(request,id):
+    return_product = Return_product.objects.get(pk = id)
+    if request.method == "POST":
+        return_product.product_code = request.POST.get('pcode')
+        return_product.product_qty= request.POST.get('qty')
+        return_product.reseller_name = request.POST.get('reseller_name')
+        return_product.reason =  request.POST.get('reason')
+        return_product.return_date =  request.POST.get('date')
+        return_product.return_status =  request.POST.get('status')
+        return_product.save()
+        messages.success(request,("Successfully Updated"))
+        return redirect ('admin_site:return_product')
+
+
+
+
+
+
+    
+
+
 
 
 #FOR REPORTS FEATURES
@@ -1248,6 +1280,18 @@ def search_product(request):
         else:
            messages.error(request, ("No records found!"))
            return render(request, 'admin_site/products/product.html')
+        
+@login_required(login_url='landing_page:login')
+def search_allpos(request):
+    if request.method == "GET":
+        search = request.GET.get('search')
+        if search:
+            list_products = Product.objects.filter(Q(product_code__icontains=search) | Q(product_flavor__icontains=search) | Q(product_category__icontains=search) | Q(
+                product_name__icontains=search) | Q(product_unit__icontains=search) | Q(product_stock__icontains=search) | Q(product_status__icontains=search))
+            return render(request, 'admin_site/pos/all-products.html', {'list_products': list_products})
+        else:
+           messages.error(request, ("No records found!"))
+           return render(request, 'admin_site/pos/all-products.html')
         
 @login_required(login_url='landing_page:login')
 def search_reportproduct(request):

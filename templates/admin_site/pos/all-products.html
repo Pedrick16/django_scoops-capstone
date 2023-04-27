@@ -8,7 +8,7 @@
         swal('{{ message }}');
     {% endfor %}
 </script> -->
-<form action="{% url 'admin_site:search_product' %}" method="get" class="my-3 ">
+<form action="{% url 'admin_site:search_allpos' %}" method="get" class="my-3 ">
     {% csrf_token %}
     <div class="input-group">
         <input type="text" class="form-control" name="search" placeholder="search" required>
@@ -27,7 +27,7 @@
 <table class="table table-hover text-center">
     <thead>
         <tr>
-            <th>Product code </th>
+            <th>Product code</th>
             <th>Product Name</th>
             <th>Product flavor</th>
             <th>Category</th>
