@@ -1,0 +1,58 @@
+{% extends 'admin_site/base.html' %}
+
+
+{% block content %}
+{% load humanize %}
+
+
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
+
+
+<form action="" method="GET" class="my-2">
+    {% csrf_token %}
+    <div class="input-group">
+        <input type="text" class="form-control" name="search" placeholder="search" required>
+        <div class="input-group-append">
+            <button class="btn btn-success" type="submit">Search</button>
+        </div>
+    </div>
+</form>
+
+
+        
+<table class="table table-hover text-center">
+    
+    <thead>
+    <tr>
+        <th>Product Code</th>
+        <th>quantity</th>
+        <th>Resellers Name</th>
+        <th>Reason</th>
+        <th>Date of Return order</th>
+        <th>status</th>
+ 
+    </tr>
+    </thead>
+
+    <tbody>        
+
+    {% for list in return_product %}
+    
+    <tr>
+        <td>{{ list.product_code }}</td>
+        <td>{{ list.product_qty }}</td>
+        <td>{{ list.reseller_name  }}</td>
+        <td>{{ list.reason}}</td>
+        <td>{{ list.return_date}}</td>
+        <td>{{ list.return_status}}</td>
+    </tr> 
+    {% endfor %}
+    </tbody>
+</table>
+
+
+
+{% endblock content %}
+    

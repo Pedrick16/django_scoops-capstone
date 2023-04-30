@@ -1060,12 +1060,32 @@ def transaction_view(request, id):
 #return products
 
 @login_required(login_url='landing_page:login')
-def return_product(request):
-        return_product = Return_product.objects.all()
-        context ={
-            'return_product':return_product 
-        }
-        return render(request,'admin_site/transaction/return_products.html',context)
+def unreturned_product(request):
+    return_product = Return_product.objects.filter(return_status= "unreturned")
+    context ={
+        'return_product':return_product 
+    }
+    return render(request,'admin_site/transaction/unreturned_products.html',context)
+
+
+@login_required(login_url='landing_page:login')
+def returned_product(request):
+    return_product = Return_product.objects.filter(return_status= "returned")
+    context ={
+        'return_product':return_product 
+    }
+    return render(request,'admin_site/transaction/returned_products.html',context)
+
+
+@login_required(login_url='landing_page:login')
+def returned_completed(request, id):
+    return_product = Return_product.objects.get(pk = id)
+    return_product.return_status = "returned"
+    return_product.save()
+
+    return redirect('admin_site:returned_product')
+
+
 
 
 
@@ -1083,7 +1103,7 @@ def add_returnproduct(request):
         return_product.return_status =  "unreturned"
         return_product.save()
         messages.success(request,("Successfully added"))
-        return redirect ('admin_site:return_product')
+        return redirect ('admin_site:unreturned_product')
     context={
         'product':product
     }

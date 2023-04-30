@@ -13,6 +13,9 @@
 
     <title>Document</title>
 </head>
+{% for message in messages %}
+<p class="alert alert-{{ message.tags }} mt-3">{{ message }}</p>
+{% endfor %}
 
 <body>
 
