@@ -88,11 +88,6 @@ def logoutView(request):
 
 
 
-       
-
-
-
-
 
 # def loginView(request):
 #     # current_user =  User.objects.get(pk=user.pk)

@@ -13,6 +13,7 @@
                 <th>Role</th>
                 <th>Status</th>
                 <th>Actions</th>
+                <th></th>
             </tr>
             <tbody>
                 
@@ -23,6 +24,8 @@
                     <td>{{ list.role }}</td>
                     <td>{{ list.status }}</td>
                     <td><a href="{% url 'admin_site:edit_user_account' list.id %}" class="btn btn-dark" >Edit</a></td>
+                    <td><a href="{% url 'admin_site:send_email' list.id %}" class="btn btn-success">Send email</a></td>
+                    
                 </tr>
                 {% endfor %}
             </tbody>

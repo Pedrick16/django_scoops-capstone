@@ -30,7 +30,7 @@
         <th>quantity</th>
         <th>Resellers Name</th>
         <th>Reason</th>
-        <th>Return Date</th>
+        <th>Date of Return order</th>
         <th>status</th>
         <th>action</th>
     </tr>
@@ -48,6 +48,7 @@
         <td>{{ list.return_date}}</td>
         <td>{{ list.return_status}}</td>
         <td><a href="{% url 'admin_site:edit_returnproduct' list.id %}" class="btn btn-dark">Edit</a></td>
+        <td><a href="" class="btn btn-dark">Completed</a></td>
     </tr> 
     {% endfor %}
     </tbody>

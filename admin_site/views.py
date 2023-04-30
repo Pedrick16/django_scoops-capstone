@@ -48,7 +48,7 @@ def add_useraccount(request):
         form = SignUpForm(request.POST)
         if form.is_valid():
             form.save()
-            return redirect('admin_site:send_email')
+            return redirect('admin_site:user_list')
     else:
         form = SignUpForm()
     return render(request, 'admin_site/user/add_useraccount.html',{'form':form})
@@ -79,13 +79,14 @@ def register(request, inquiryid):
         status = "active"
         check_sign = SignUpForm()
         form = SignUpForm(request.POST)
+
         if form.is_valid():
             form.save()
             #changing status for reseller
             reseller.reseller_status = status  
             reseller.save()
 
-            return redirect('admin_site:send_email')
+            return redirect('admin_site:list_reseller')
         
         
     else:
@@ -267,10 +268,13 @@ def archive_reseller(request,resellerid):
 
 
 @login_required(login_url='landing_page:login')
-def send_email(request):
+def send_email(request,id):
+    user = User.objects.get(pk = id)
     if request.method == "POST":
         email = request.POST['email']
         tile_email = "your inquiry successfully approved"
+
+       
         # tile_email = request.POST['name']
         
         message = request.POST['message']
@@ -281,9 +285,40 @@ def send_email(request):
             [email],
             fail_silently=False)
         return redirect('admin_site:list_reseller')
+    
+    context = {
+        'user':user,
+    }
 
-    return render(request, 'admin_site/user/send_email.html')        
+    return render(request, 'admin_site/user/send_email.html',context)        
 
+@login_required(login_url='landing_page:login')
+def send_email_reseller(request,id):
+    reseller = Reseller.objects.get(pk = id)
+
+    email_reseller = reseller.reseller_email
+
+    user = User.objects.get(email = email_reseller)
+    if request.method == "POST":
+        email = request.POST['email']
+        tile_email = "your inquiry successfully approved"
+    
+        
+        message = request.POST['message']
+        send_mail(
+            tile_email,
+            message,
+            'settings.EMAIL_HOST_USER',
+            [email],
+            fail_silently=False)
+        return redirect('admin_site:list_reseller')
+    
+    context = {
+        'reseller':reseller,
+        'user':user,
+    }
+
+    return render(request, 'admin_site/user/send_email_reseller.html',context)  
 
 
 #process inquiry for reseller
@@ -663,7 +698,7 @@ def pos_receipt_process(request):
             for carts in pos:
 
                 products = Product.objects.get(product_code = carts.cart_pcode)
-                return_product = Return_product.objects.get(product_code = carts.cart_pcode, product_qty = carts.cart_quantity)
+                # return_product = Return_product.objects.get(Q(product_code = carts.cart_pcode) & Q(product_qty = carts.cart_quantity))
 
                 cart_quantity = int(carts.cart_quantity)
                 current_stock = int(products.product_stock)
@@ -679,21 +714,17 @@ def pos_receipt_process(request):
                         products.product_status = "low stock"
                         products.save()  
                 
-                if Cart_Payment.objects.filter(cart_user = request.user,cart_cash = 0):
-                    return_product.return_status = "returned"
-                    return_product.save()
+                # if Cart_Payment.objects.filter(cart_user = request.user,cart_cash = 0):
+                #     return_product.return_status = "returned"
+                #     return_product.save()
 
-                    
-                
 
             pos_payment = Cart_Payment.objects.get(id = get_paymentID)
             pos_payment.cart_status = "Printed"
             pos_payment.save()
 
             
-            
-           
-                
+
 
             pos = Cart.objects.filter(cart_user = request.user)
             pos.delete()

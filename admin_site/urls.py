@@ -30,11 +30,11 @@ urlpatterns = [
 
 
   
-    path('send-email/', views.send_email, name='send_email'),
+    path('send-email/<int:id>/', views.send_email, name='send_email'),
+    path('send-email-reseller/<int:id>/', views.send_email_reseller, name='send_email_reseller'),
 
 
-
-    path('process/inquiry', views.process_inquiry, name='process_inquiry'),
+    path('process/inquiry/', views.process_inquiry, name='process_inquiry'),
 
     #adding reseller 
     path('adding-reseller/', views.add_reseller, name='add_reseller'),
@@ -49,7 +49,7 @@ urlpatterns = [
 
     path('inventory/', views.inventory, name='inventory'),
     path('view-inventory/', views.view_inventory, name='view_inventory'),
-   
+
     path('update-inventory/<int:productid>/', views.update_inventory, name='update_inventory'),
 
     path('pos/', views.pos ,name='pos'),

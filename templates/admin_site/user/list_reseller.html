@@ -43,6 +43,8 @@
             
                 <th>action</th>
                 <th></th>
+                <th></th>
+              
             </tr>
             <tbody>
                 {% for list in list_reseller %}
@@ -64,6 +66,10 @@
                         {% csrf_token %}
                     <td> <input type="submit" class="btn btn-dark"  value="Archive"></td>
                     </form>
+                    <td><a href="{% url 'admin_site:send_email_reseller' list.id %}" class="btn btn-success">Send email</a></td>
+
+
+
                     <script>
                         function submitForm(form) {
                             swal({

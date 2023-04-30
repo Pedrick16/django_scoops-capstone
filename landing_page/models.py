@@ -8,3 +8,6 @@ class User(AbstractUser):
     STAT = ((" "," "),("active","active"),("inactive","inactive"))
     role = models.CharField(max_length=50, null=True, default=None, choices=ROLE)
     status = models.CharField(max_length=50, null=True, default=None , choices=STAT)
+
+
+

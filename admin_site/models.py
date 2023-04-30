@@ -62,6 +62,7 @@ class Product(models.Model):
     def __str__(self):
         return self.product_code
     
+    
 class Return_product(models.Model):
     STATUS = (("",""),("returned","returned"),("unreturned","unreturned"))
     product_code =  models.CharField(max_length=200, verbose_name='Product Code')
