@@ -1,0 +1,19 @@
+{% extends 'admin_site/base.html' %}
+
+{% block content %}
+   
+
+        <input type="text" value="{{unreturned_product.product_code }}" placeholder="product code" class="form-control" readonly>
+        <br>
+        <input type="number" class="form-control" name="qty" value="{{unreturned_product.product_qty }}" class="form-control"  placeholder="Quantity" readonly>
+        <br>
+        <input type="text"  class="form-control" value="{{unreturned_product.reseller_name}}" class="form-control" readonly>
+        <br>
+        <textarea name="reason" id="" cols="100" rows="10" readonly>
+            {{unreturned_product.reason }}
+        </textarea>
+        <input type="text" value="{{unreturned_product.return_date}}" readonly class="form-control">
+        <br>
+    
+{% endblock content %}
+    

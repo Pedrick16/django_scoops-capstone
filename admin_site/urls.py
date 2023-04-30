@@ -130,6 +130,7 @@ urlpatterns = [
     path('unreturned/Product/', views.unreturned_product, name='unreturned_product'),
     path('returned/Product/', views.returned_product, name='returned_product'),
     path('returned/completed/<int:id>/', views.returned_completed, name='returned_completed'),
+    path('view-unreturned/<int:id>/', views.view_unreturned, name='view_unreturned'),
     path('Add/Return-Product/', views.add_returnproduct , name='add_returnproduct'),
     path('edit/Return-Product/<int:id>/', views.edit_returnproduct , name='edit_returnproduct'),
     path('update/Return-Product/<int:id>/', views.update_returnproduct , name='update_returnproduct'),

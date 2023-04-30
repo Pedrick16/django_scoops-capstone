@@ -1085,6 +1085,18 @@ def returned_completed(request, id):
 
     return redirect('admin_site:returned_product')
 
+@login_required(login_url='landing_page:login')
+def view_unreturned(request, id):
+    unreturned_product = Return_product.objects.get(pk = id)
+    context = {
+        'unreturned_product': unreturned_product,
+
+    }
+    return render(request, 'admin_site/transaction/view_unreturned.html',context)
+    
+
+
+
 
 
 

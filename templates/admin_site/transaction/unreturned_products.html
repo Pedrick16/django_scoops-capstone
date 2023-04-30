@@ -41,7 +41,7 @@
     {% for list in return_product %}
     
     <tr>
-        <td>{{ list.product_code }}</td>
+        <td><a href="{% url 'admin_site:view_unreturned' list.id %}">{{ list.product_code }}</a></td>
         <td>{{ list.product_qty }}</td>
         <td>{{ list.reseller_name  }}</td>
         <td>{{ list.reason}}</td>
