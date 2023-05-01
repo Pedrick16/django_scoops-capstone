@@ -23,17 +23,21 @@
         </thead>
             <tbody>
                 {% for list in pos_payment %}
+                
+                {% if list.cart_cash > 0 %}
                 <tr>
                     <td>{{ list.id }}</td>
                     <td>&#8369;{{ list.cart_TotalAmount|floatformat:2|intcomma}}</td>
                     <td>{{ list.cart_date}}</td>
                 </tr>
+                {% endif %}
                 {% endfor %}
             </tbody>
     </table>
     <div class="text-end px-5">
         <label style="font-weight: bolder;" > Total Sales: &#8369;{{ list_transaction|floatformat:2|intcomma }}    </label>
     </div>
-
+        <br>
+        
 {% endblock content %}
     

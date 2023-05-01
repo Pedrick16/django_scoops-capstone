@@ -135,17 +135,15 @@
 
     <br>
 
-    <div class="text-center">
-    <label for="" style="color: black; font-weight: bolder;">checkbox for return</label>
-    <input type="checkbox" name="return" id="return">
-    </div>
-
     {% endif %}
     {% if list_pos %}         
 
 
-
         {% if user.role == "admin"%} 
+        <div class="text-center">
+            <label for="" style="color: black; font-weight: bolder;">checkbox for return</label>
+            <input type="checkbox" name="return" id="return">
+        </div>
         
         <form action="{% url 'admin_site:add_receipt' %}" method="POST" id="form" >
         {% csrf_token %}
@@ -153,7 +151,8 @@
         <input type="text"  style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}"  step="0.01" min="0" class="form-control"   readonly="readonly">
 
         <!-- for hide -->
-        <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly">  
+        <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly"> 
+        <input type="hidden" value="{{sum_amount}}" class="form-control" id="sum_amount"   readonly="readonly">   
 
         <!-- <input type="text" id="total_amount"> -->
 
@@ -183,7 +182,8 @@
             <input type="text"  style="font-weight: bolder;" value="&#8369;{{sum_amount|floatformat:2|intcomma}}"  step="0.01" min="0" class="form-control"   readonly="readonly">
     
             <!-- for hide -->
-            <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly">  
+            <input type="hidden" name="total_amount"  value="{{sum_amount}}" class="form-control" id="total_amount"   readonly="readonly"> 
+        
     
             <!-- <input type="text" id="total_amount"> -->
     
@@ -198,7 +198,7 @@
     
             <div class="text-center pt-2" >
             <button id="btn_compute" class="btn btn-success" >compute</button>
-            <button  class="btn btn-success"id="btn-receipt" hidden>Receipt</button>
+            <button  class="btn btn-success"id="btn-receipt" style="display:none;">Receipt</button>
             </div>
     
             </form>
@@ -235,7 +235,7 @@
 
 
 
-<script src="{% static 'js/pos1.js' %}"></script>
+<script src="{% static 'js/pos2.js' %}"></script>
 
 
 {% endblock content %}

@@ -4,7 +4,7 @@
     <form action="{% url 'admin_site:add_returnproduct' %}" method="POST">
         {% csrf_token %}
 
-        <select name="pcode" id="" class="form-control">
+        <select name="pcode" id="" class="form-control" required>
             <option value=""></option>
             
             {% for list in product %}
@@ -15,14 +15,14 @@
             {% endfor %}
         </select>
        <br>
-        <input type="number" class="form-control" name="qty" placeholder="Quantity">
+        <input type="number" class="form-control" name="qty" placeholder="Quantity" required>
         <br>
-        <input type="text"  class="form-control" name="reseller_name" placeholder="Full Name">
+        <input type="text"  class="form-control" name="reseller_name" placeholder="Full Name" readonly>
         <br>
         <textarea name="reason" id="" cols="100" rows="10">
 
         </textarea>
-        <input type="date" name="date"   class="form-control">
+        <input type="date" name="date"   class="form-control" required>
         <br>
     
         

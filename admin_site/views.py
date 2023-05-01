@@ -1177,7 +1177,7 @@ def report_products(request):
 
 @login_required(login_url='landing_page:login') 
 def report_pos_sales(request):
-    pos_payment = Cart_Payment.objects.filter(cart_status = 'Printed')
+    pos_payment = Cart_Payment.objects.filter(Q(cart_status = 'Printed'))
     context = {
         'pos_payment':pos_payment
     }
