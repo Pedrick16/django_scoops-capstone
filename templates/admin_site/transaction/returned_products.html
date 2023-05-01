@@ -31,7 +31,9 @@
         <th>Resellers Name</th>
         <th>Reason</th>
         <th>Date of Return order</th>
+        <th>Returned Completed date</th>
         <th>status</th>
+       
  
     </tr>
     </thead>
@@ -46,6 +48,7 @@
         <td>{{ list.reseller_name  }}</td>
         <td>{{ list.reason}}</td>
         <td>{{ list.return_date}}</td>
+        <td>{{ list.return_completed_date}}</td>
         <td>{{ list.return_status}}</td>
     </tr> 
     {% endfor %}

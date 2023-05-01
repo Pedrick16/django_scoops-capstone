@@ -1070,7 +1070,7 @@ def unreturned_product(request):
 
 @login_required(login_url='landing_page:login')
 def returned_product(request):
-    return_product = Return_product.objects.filter(return_status= "returned")
+    return_product = Return_product.objects.filter(return_status= "returned").order_by('-id')
     context ={
         'return_product':return_product 
     }
@@ -1079,8 +1079,11 @@ def returned_product(request):
 
 @login_required(login_url='landing_page:login')
 def returned_completed(request, id):
+    now = datetime.now()
     return_product = Return_product.objects.get(pk = id)
+    return_product.return_completed_date = now
     return_product.return_status = "returned"
+
     return_product.save()
 
     return redirect('admin_site:returned_product')

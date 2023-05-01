@@ -70,6 +70,7 @@ class Return_product(models.Model):
     reseller_name =  models.CharField(null=True,max_length=200, verbose_name='Reseller Name')
     reason = models.TextField(null=True, verbose_name='Reason')
     return_date =     models.CharField(max_length=200, null=True,verbose_name='Return Date')
+    return_completed_date =  models.DateField(null=True, blank=True, verbose_name='Returned Completed')
     return_status =  models.CharField(max_length=200, choices=STATUS, verbose_name='Status')
 
     def __str__(self):
