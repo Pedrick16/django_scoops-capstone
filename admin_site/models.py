@@ -113,7 +113,8 @@ class Cart(models.Model):
 class Cart_Payment(models.Model):
     STATUS = (("Printed","Printed"),("not Print","not Print"))
     cart_user = models.CharField(max_length=200, null=False, default=None, verbose_name='Role')
-    cart_no = models.CharField(max_length=200, null=True,  verbose_name='Pos No')
+    pos_number = models.CharField(max_length=200, null=True,  verbose_name='Pos Number')
+    cart_no = models.CharField(max_length=200, null=True,  verbose_name='cart No')
     cart_TotalAmount =  models.BigIntegerField(null=True, verbose_name='Total Amount')
     cart_cash = models.BigIntegerField( null=True, verbose_name='Cash')
     cart_change = models.BigIntegerField(null=True, verbose_name='change')

@@ -15,7 +15,7 @@
     <table class="table table-hover">
         <thead>
             <tr>
-                <th>Sales No</th>
+                <th>Transaction No</th>
                 <th>Sales</th>
                 <th>Date</th>
             </tr>
@@ -23,7 +23,7 @@
             <tbody>
                 {% for list in transaction %}
                 <tr>
-                    <td>{{ list.id }}</td>
+                    <td>{{ list.transaction_no}}</td>
                     <td>&#8369;{{ list.transaction_totalprice|floatformat:2|intcomma}}</td>
                     <td>{{ list.created_at}}</td>
                 </tr>

@@ -718,7 +718,8 @@ def pos_receipt_process(request):
                 #     return_product.return_status = "returned"
                 #     return_product.save()
 
-
+  
+            
             pos_payment = Cart_Payment.objects.get(id = get_paymentID)
             pos_payment.cart_status = "Printed"
             pos_payment.save()
@@ -734,6 +735,7 @@ def pos_addreceipt(request):
     if request.method == "POST":
 
         #saving to pos payment in databse
+        pos_number = 'S4UPOS'+str(random.randint(1111111,9999999))
         pos_id = request.POST['get_id']
 
 
@@ -741,9 +743,14 @@ def pos_addreceipt(request):
             messages.error(request,('receipt still not done'))
             return redirect('admin_site:pos')
         else:
+        
+            while Cart_Payment.objects.filter(pos_number = pos_number) is None:
+                pos_number = 'S4UPOS'+str(random.randint(1111111,9999999))
+
             new_Cart_Payment = Cart_Payment()
             new_Cart_Payment.cart_user = request.user.role
             new_Cart_Payment.cart_no = pos_id
+            new_Cart_Payment.pos_number = pos_number
             new_Cart_Payment.cart_TotalAmount = request.POST.get('total_amount')
             new_Cart_Payment.cart_cash = request.POST.get('cash')
             new_Cart_Payment.cart_change = request.POST.get('change')
@@ -990,6 +997,7 @@ def Transaction_orders(request):
     return render(request, 'admin_site/transaction/orders.html', context)
 
 
+
 @login_required(login_url='landing_page:login') 
 def Transaction_outshipping(request):
     list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = "Out for Shipping")).order_by('-id')
@@ -997,6 +1005,7 @@ def Transaction_outshipping(request):
         'list_transaction':list_transaction
     }
     return render(request, 'admin_site/transaction/orders.html', context)
+
 
 
 
@@ -1066,6 +1075,7 @@ def unreturned_product(request):
         'return_product':return_product 
     }
     return render(request,'admin_site/transaction/unreturned_products.html',context)
+
 
 
 @login_required(login_url='landing_page:login')

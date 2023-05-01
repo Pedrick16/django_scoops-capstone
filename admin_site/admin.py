@@ -24,7 +24,7 @@ class CartView(admin.ModelAdmin):
     search_fields = ['cart_user','cart_pcode', 'cart_category', 'cart_name', 'cart_unit','cart_reseller_price','cart_price','cart_quantity''cart_amount']
 
 class Cart_PaymentView(admin.ModelAdmin):
-    list_display = ['cart_user','cart_TotalAmount','cart_cash','cart_change','cart_status','cart_date']
+    list_display = ['cart_user', 'pos_number','cart_TotalAmount','cart_cash','cart_change','cart_status','cart_date']
     search_fields =  ['cart_user','cart_TotalAmount','cart_cash','cart_change','cart_status','cart_date']
 class TransactionView(admin.ModelAdmin):
     list_display = ['transaction_no','transaction_user','transaction_fname','transaction_lname','transaction_address','transaction_contactno','transaction_totalprice','transaction_doption','created_at','transaction_preferred_date','transaction_delivered','transaction_orderstatus']
