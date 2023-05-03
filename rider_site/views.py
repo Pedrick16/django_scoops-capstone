@@ -3,7 +3,8 @@ from admin_site.models import *
 from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth.decorators import login_required
-from django.db.models import Sum
+from django.db.models import Sum, Q
+
 
 
 # Create your views here.
@@ -51,7 +52,7 @@ def orders_completed(request, orderid):
 @login_required(login_url='landing_page:login') 
 def transaction_orders(request):
     status = "Out for Shipping"
-    list_transaction = Transaction.objects.filter(transaction_orderstatus = status).order_by('-id')
+    list_transaction = Transaction.objects.filter(Q(transaction_orderstatus = status) & Q(transaction_doption = "delivery")).order_by('-id')
     context = {
         'list_transaction':list_transaction
     }
