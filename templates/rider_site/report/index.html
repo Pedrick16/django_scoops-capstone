@@ -40,6 +40,11 @@
     {% if list_transaction %} 
     <tbody>
         {% for list in list_transaction %}
+        
+        {% if list.transaction_doption == "delivery" %}
+            
+        
+            
         <tr>
             <td>{{ list.transaction_no }}</td>
             <td>{{ list.transaction_fname }}</td>
@@ -54,6 +59,7 @@
             <td>{{ list.transaction_delivered }}</td>
             <td>{{ list.transaction_orderstatus }}</td>
         </tr>
+        {% endif %}
         {% endfor %}
     </tbody>
     {% endif %}
