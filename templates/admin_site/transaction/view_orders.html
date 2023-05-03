@@ -79,7 +79,12 @@
         {% endif %}
         
         
-        {% if list_transaction.transaction_orderstatus == "Pending" %}
+        {% if list_transaction.transaction_doption == "delivery" %}
+            
+
+            
+        
+        {% if list_transaction.transaction_orderstatus == "Pending"  %}
             
         <form action="{% url 'admin_site:delivery_process' %}" method="POST" class="text-end">
             {% csrf_token %}
@@ -96,13 +101,26 @@
         </form>
         {% endif %}
 
+
+
         <br>
         <br>
+        {% endif %}
+
+        {% if list_transaction.transaction_doption == "pickup" %}
+        {% if list_transaction.transaction_orderstatus == "Pending"  %}
+        <form action="{% url 'admin_site:completed_process' %}" method="POST" class="text-end">
+            {% csrf_token %}
+            <input type="hidden" value="{{ list_transaction.transaction_no}}" name="transaction_no">
+            <button class="btn btn-dark">Completed</button>
+        </form>
+        {% endif %}
+        {% endif %}
    
-  
-      
    
     </div>
+    <br>
+    <br>
 {% endif %}    
 
 {% endblock content %}
