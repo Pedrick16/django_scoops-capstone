@@ -74,11 +74,11 @@ def add_useraccount(request):
 
 
 def register(request, inquiryid):
+    reseller = Reseller.objects.get(id = inquiryid)
+    status = "active"
     if request.method =="POST":
-        reseller = Reseller.objects.get(id = inquiryid)
-        status = "active"
-        check_sign = SignUpForm()
         form = SignUpForm(request.POST)
+
 
         if form.is_valid():
             form.save()
@@ -90,14 +90,14 @@ def register(request, inquiryid):
         
         
     else:
-        form = SignUpForm()
+        form = SignUpForm(instance=reseller, initial={'email':reseller.reseller_email})
     return render(request, 'admin_site/user/register.html',{'form':form})      
 
 
 #list reseller
 @login_required(login_url='landing_page:login')
 def list_reseller(request):
-    list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "active") 
+    list_reseller = Reseller.objects.order_by('-id').filter(reseller_status = "active").order_by('-id')
     context = {'list_reseller':list_reseller}
     return render(request, 'admin_site/user/list_reseller.html', context)
 
@@ -296,9 +296,9 @@ def send_email(request,id):
 def send_email_reseller(request,id):
     reseller = Reseller.objects.get(pk = id)
 
-    email_reseller = reseller.reseller_email
+    email = reseller.reseller_email
 
-    user = User.objects.get(email = email_reseller)
+    user = User.objects.get(email = email)
     if request.method == "POST":
         email = request.POST['email']
         tile_email = "your inquiry successfully approved"
@@ -336,6 +336,9 @@ def process_inquiry(request):
         business_permit = request.FILES.get('business_permit')
         #inserting to database
         if Reseller.objects.filter(reseller_email = email):
+            messages.success(request,("Email already Exist"))
+            return redirect('landing_page:inquiry_reseller')
+        elif User.objects.filter(email = email):
             messages.success(request,("Email already Exist"))
             return redirect('landing_page:inquiry_reseller')
         else:
