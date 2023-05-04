@@ -1,6 +1,7 @@
 {% extends 'admin_site/base.html' %}
 
 {% block content %}
+{% load static %}
 
 {% for field in form %}
     
@@ -29,5 +30,6 @@
     
     <input type="submit"  value="Register" class="btn btn-pill text-white btn-block btn-primary">
 </form>
+<script src="{% static 'js/add_account.js' %}"></script>
 {% endblock content %}
     
